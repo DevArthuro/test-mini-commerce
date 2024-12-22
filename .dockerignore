@@ -1,2 +1,12 @@
 assets
 README.md
+node_modules
+.turbo
+*/dist
+.git
+apps/api/dist
+apps/api/node_modules
+apps/api/.turbo
+apps/client/dist
+apps/client/node_modules
+apps/client/.turbo
