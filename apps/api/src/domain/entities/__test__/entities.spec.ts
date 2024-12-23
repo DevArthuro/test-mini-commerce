@@ -10,6 +10,8 @@ import { Customer } from '../customer.entity';
 import { mockCustomer } from './mocks/customer.mock';
 import { Product } from '../product.entity';
 import { mockProduct } from './mocks/product.mock';
+import { Order, OrderStatus, VISIBILITY_ORDER_INFO } from '../order.entity';
+import { mockOrder } from './mocks/order.mock';
 
 describe('Test all entities', () => {
   describe('Card Entity', () => {
@@ -170,6 +172,146 @@ describe('Test all entities', () => {
       };
 
       expect(product.toValue()).toEqual(productFormatResult);
+    });
+  });
+  describe('Order Entity', () => {
+    const delivery = new Delivery(
+      mockCustomer.delivery.id,
+      mockCustomer.delivery.countryCode,
+      mockCustomer.delivery.country,
+      mockCustomer.delivery.region,
+      mockCustomer.delivery.city,
+      mockCustomer.delivery.address,
+    );
+    const card = new Card(
+      mockCustomer.card.id,
+      mockCustomer.card.number,
+      mockCustomer.card.cvc,
+      mockCustomer.card.expMonth,
+      mockCustomer.card.expYear,
+      mockCustomer.card.cardName,
+    );
+
+    const customer = new Customer(
+      mockCustomer.id,
+      delivery,
+      card,
+      mockCustomer.name,
+      mockCustomer.lastName,
+      mockCustomer.email,
+      mockCustomer.phoneNumber,
+      mockCustomer.typeDocument,
+      mockCustomer.document,
+    );
+
+    const product = new Product(
+      mockProduct.id,
+      mockProduct.name,
+      mockProduct.description,
+      mockProduct.stock,
+      mockProduct.price,
+      mockProduct.imageUrl,
+    );
+
+    const mockResultCalculate = () => {
+      const total = mockOrder.product.price * mockOrder.quantity;
+      const totalFeeDelivery = total * mockOrder.feeDelivery;
+      const totalFeeBought = total * mockOrder.feeBought;
+
+      return total + totalFeeDelivery + totalFeeBought;
+    };
+
+    it('It should create a new order', () => {
+      const order = new Order(
+        mockOrder.id,
+        customer,
+        product,
+        mockOrder.feeDelivery,
+        mockOrder.feeBought,
+        mockOrder.tokenizedCard,
+        mockOrder.reference,
+        mockOrder.quantity,
+        mockOrder.status,
+      );
+      expect(order).toBeInstanceOf(Order);
+      expect(order.quantity).toEqual(mockOrder.quantity);
+      expect(order.customer.card).toEqual(mockCard);
+    });
+
+    it('It should calculate total order', () => {
+      const order = new Order(
+        mockOrder.id,
+        customer,
+        product,
+        mockOrder.feeDelivery,
+        mockOrder.feeBought,
+        mockOrder.tokenizedCard,
+        mockOrder.reference,
+        mockOrder.quantity,
+        mockOrder.status,
+      );
+
+      expect(order.toCalculateOrder()).toEqual(mockResultCalculate());
+
+      order.toCalculateOrder = jest.fn();
+      order.toCalculateOrder();
+
+      expect(order.toCalculateOrder).toHaveBeenCalled();
+    });
+
+    it('It should be show is order state is finalized', () => {
+      const order = new Order(
+        mockOrder.id,
+        customer,
+        product,
+        mockOrder.feeDelivery,
+        mockOrder.feeBought,
+        mockOrder.tokenizedCard,
+        mockOrder.reference,
+        mockOrder.quantity,
+        OrderStatus.PENDING,
+      );
+
+      expect(order.isFinalized()).toBe(false);
+
+      const order2 = new Order(
+        mockOrder.id,
+        customer,
+        product,
+        mockOrder.feeDelivery,
+        mockOrder.feeBought,
+        mockOrder.tokenizedCard,
+        mockOrder.reference,
+        mockOrder.quantity,
+        OrderStatus.FAILED,
+      );
+
+      expect(order2.isFinalized()).toBe(true);
+    });
+
+    it('It should have the visibility Info', () => {
+      const order = new Order(
+        mockOrder.id,
+        customer,
+        product,
+        mockOrder.feeDelivery,
+        mockOrder.feeBought,
+        mockOrder.tokenizedCard,
+        mockOrder.reference,
+        mockOrder.quantity,
+        mockOrder.status,
+      );
+
+      const orderFormatResult: VISIBILITY_ORDER_INFO = {
+        customer: customer.toValue(),
+        product: product.toValue(),
+        totalOrder: mockResultCalculate(),
+        reference: mockOrder.reference,
+        quantity: mockOrder.quantity,
+        status: mockOrder.status,
+      };
+
+      expect(order.toValue()).toEqual(orderFormatResult);
     });
   });
 });
