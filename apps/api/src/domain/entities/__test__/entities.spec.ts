@@ -12,6 +12,12 @@ import { Product } from '../product.entity';
 import { mockProduct } from './mocks/product.mock';
 import { Order, OrderStatus, VISIBILITY_ORDER_INFO } from '../order.entity';
 import { mockOrder } from './mocks/order.mock';
+import {
+  Transaction,
+  TransactionStatus,
+  VISIBILITY_TRANSACTION_INFO,
+} from '../transaction.entity';
+import { mockTransaction } from './mocks/transaction.mock';
 
 describe('Test all entities', () => {
   describe('Card Entity', () => {
@@ -312,6 +318,127 @@ describe('Test all entities', () => {
       };
 
       expect(order.toValue()).toEqual(orderFormatResult);
+    });
+  });
+  describe('Transaction Entity', () => {
+    const delivery = new Delivery(
+      mockCustomer.delivery.id,
+      mockCustomer.delivery.countryCode,
+      mockCustomer.delivery.country,
+      mockCustomer.delivery.region,
+      mockCustomer.delivery.city,
+      mockCustomer.delivery.address,
+    );
+    const card = new Card(
+      mockCustomer.card.id,
+      mockCustomer.card.number,
+      mockCustomer.card.cvc,
+      mockCustomer.card.expMonth,
+      mockCustomer.card.expYear,
+      mockCustomer.card.cardName,
+    );
+
+    const customer = new Customer(
+      mockCustomer.id,
+      delivery,
+      card,
+      mockCustomer.name,
+      mockCustomer.lastName,
+      mockCustomer.email,
+      mockCustomer.phoneNumber,
+      mockCustomer.typeDocument,
+      mockCustomer.document,
+    );
+
+    const product = new Product(
+      mockProduct.id,
+      mockProduct.name,
+      mockProduct.description,
+      mockProduct.stock,
+      mockProduct.price,
+      mockProduct.imageUrl,
+    );
+    const order = new Order(
+      mockOrder.id,
+      customer,
+      product,
+      mockOrder.feeDelivery,
+      mockOrder.feeBought,
+      mockOrder.tokenizedCard,
+      mockOrder.reference,
+      mockOrder.quantity,
+      mockOrder.status,
+    );
+
+    it('should create a new transaction', () => {
+      const transaction = new Transaction(
+        mockTransaction.id,
+        order,
+        mockTransaction.status,
+        mockTransaction.referenceService,
+        mockTransaction.finalizedAt,
+      );
+
+      expect(transaction).toBeInstanceOf(Transaction);
+      expect(transaction.id).toEqual(transaction.id);
+      expect(transaction.order).toEqual(order);
+      expect(transaction.status).toEqual(transaction.status);
+    });
+
+    it('should return true if the transaction is finalized', () => {
+      const transaction = new Transaction(
+        mockTransaction.id,
+        order,
+        TransactionStatus.APPROVED,
+        mockTransaction.referenceService,
+        new Date(mockTransaction.finalizedAt),
+      );
+
+      expect(transaction.isFinalized()).toBe(true);
+    });
+
+    it('should return false if the transaction is pending', () => {
+      const transaction = new Transaction(
+        mockTransaction.id,
+        order,
+        TransactionStatus.PENDING,
+        mockTransaction.referenceService,
+        new Date(mockTransaction.finalizedAt),
+      );
+
+      expect(transaction.isFinalized()).toBe(false);
+    });
+
+    it('should calculate the total transaction amount', () => {
+      const transaction = new Transaction(
+        mockTransaction.id,
+        order,
+        mockTransaction.status,
+        mockTransaction.referenceService,
+        new Date(mockTransaction.finalizedAt),
+      );
+
+      const expectedTotal = order.toCalculateOrder();
+      expect(transaction.toTotalTransaction()).toEqual(expectedTotal);
+    });
+
+    it('should return the visible information of the transaction', () => {
+      const transaction = new Transaction(
+        mockTransaction.id,
+        order,
+        mockTransaction.status,
+        mockTransaction.referenceService,
+        new Date(mockTransaction.finalizedAt),
+      );
+
+      const expectedVisibility: VISIBILITY_TRANSACTION_INFO = {
+        id: mockTransaction.id,
+        order: order.toValue(),
+        status: mockTransaction.status,
+        finalizedAt: new Date(mockTransaction.finalizedAt),
+      };
+
+      expect(transaction.toValue()).toEqual(expectedVisibility);
     });
   });
 });
