@@ -54,3 +54,5 @@ pnpm-lock.yaml
 /.history
 
 dist
+prisma/migrations
+.env

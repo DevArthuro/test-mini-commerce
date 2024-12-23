@@ -10,3 +10,33 @@ services:
       - "8080:3000"
     environment:
       - NODE_ENV=Development
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/minicommerce?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - commerce_network
+  
+  postgres:
+    container_name: postgres
+    image: postgres:16rc1
+    restart: "always"
+    ports:
+      - 5432:5432
+    volumes:
+      - "./database:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=minicommerce
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "minicommerce"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 30s
+    networks:
+      - commerce_network
+
+networks:
+  commerce_network: {}

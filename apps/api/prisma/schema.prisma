@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  stock       Int
+  price       Decimal   @db.Decimal(10, 2)
+  imageUrl    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  Order Order[]
+}
+
+model Delivery {
+  id          String    @id @default(uuid())
+  countryCode String
+  country     String
+  region      String
+  city        String
+  address     String
+  Customer Customer?
+}
+
+model Card {
+  id           String    @id @default(uuid())
+  number       String
+  cvc          String
+  expMonth     String    @unique
+  expYear      String
+  cardName     String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Customer     Customer?
+}
+
+model Customer {
+  id           String    @id @default(uuid())
+  cardId       String    @unique
+  deliveryId   String    @unique
+  name         String
+  lastname     String
+  email        String    @unique
+  phoneNumber  String
+  typeDocument String
+  document     String    @unique
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  card         Card      @relation(fields: [cardId], references: [id])
+  delivery     Delivery  @relation(fields: [deliveryId], references: [id])
+  Order Order[]
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  productId    String
+  customerId   String     
+  feeDelivery  Decimal     @db.Decimal(10, 2)
+  feeBought    Decimal     @db.Decimal(10, 2)
+  reference    String      @unique
+  quantity     Int
+  tokenizedCard String
+  status       String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  product      Product     @relation(fields: [productId], references: [id])
+  customer     Customer    @relation(fields: [customerId], references: [id])
+  transaction  Transaction[]
+}
+
+model Transaction {
+  id               String    @id @default(uuid())
+  orderId          String
+  status           String
+  referencePayment String    @unique
+  finalizedAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  order            Order     @relation(fields: [orderId], references: [id])
+}
