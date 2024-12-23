@@ -16,6 +16,7 @@ export class Customer {
 
   public toValue(): VISIBILITY_CUSTOMER_INFO {
     return {
+      id: this.id,
       delivery: this.delivery.toValue(),
       card: this.card.toValue(),
       fullName: `${this.name} ${this.lastname}`,
@@ -27,6 +28,7 @@ export class Customer {
 }
 
 export interface VISIBILITY_CUSTOMER_INFO {
+  id: string;
   delivery: VISIBILITY_DELIVERY_INFO;
   card: VISIBILITY_CARD_INFO;
   fullName: string;
