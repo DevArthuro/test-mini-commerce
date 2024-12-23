@@ -1,4 +1,4 @@
-import { Order } from './order.entity';
+import { Order, VISIBILITY_ORDER_INFO } from './order.entity';
 
 export class Transaction {
   constructor(
@@ -6,12 +6,36 @@ export class Transaction {
     public readonly order: Order,
     public readonly status: TransactionStatus,
     public readonly referenceService: string,
-    public readonly finalizedAt: number,
+    public readonly finalizedAt: Date,
   ) {}
+
+  public isFinalized(): boolean {
+    return this.status !== TransactionStatus.PENDING;
+  }
+
+  public toTotalTransaction(): number {
+    return this.order.toCalculateOrder();
+  }
+
+  public toValue(): VISIBILITY_TRANSACTION_INFO {
+    return {
+      id: this.id,
+      order: this.order.toValue(),
+      status: this.status,
+      finalizedAt: this.finalizedAt,
+    };
+  }
 }
 
 export enum TransactionStatus {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
+}
+
+export interface VISIBILITY_TRANSACTION_INFO {
+  id: string;
+  order: VISIBILITY_ORDER_INFO;
+  status: TransactionStatus;
+  finalizedAt: Date;
 }
