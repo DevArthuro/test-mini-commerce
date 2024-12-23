@@ -1,9 +1,13 @@
 import { Card } from '../entities/card.entity';
 import { Order } from '../entities/order.entity';
+import {
+  PaymentTokenized,
+  PaymentTransaction,
+} from '../entities/payment.entity';
 import { Transaction } from '../entities/transaction.entity';
 
-export interface PaymentGatewayPort<T> {
-  TokenizedCard(data: Card): Promise<T>;
-  createPaymentIntent(order: Order): Promise<T>;
-  confirmPayment(transaction: Transaction): Promise<T>;
+export interface PaymentGatewayPort {
+  TokenizedCard(data: Card): Promise<PaymentTokenized | null>;
+  createPaymentIntent(order: Order): Promise<PaymentTransaction | null>;
+  confirmPayment(transaction: Transaction): Promise<Transaction>;
 }

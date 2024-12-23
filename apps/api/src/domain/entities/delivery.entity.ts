@@ -10,6 +10,7 @@ export class Delivery {
 
   public toValue(): VISIBILITY_DELIVERY_INFO {
     return {
+      id: this.id,
       country: this.country,
       region: this.region,
       city: this.city,
@@ -19,6 +20,7 @@ export class Delivery {
 }
 
 export interface VISIBILITY_DELIVERY_INFO {
+  id: string;
   country: string;
   region: string;
   city: string;
