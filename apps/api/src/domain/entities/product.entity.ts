@@ -10,6 +10,7 @@ export class Product {
 
   public toValue(): PRODUCT_VISIBILITY_INFO {
     return {
+      id: this.id,
       name: this.name,
       description: this.description,
       stock: this.stock,
@@ -20,6 +21,7 @@ export class Product {
 }
 
 export interface PRODUCT_VISIBILITY_INFO {
+  id: string;
   name: string;
   description: string;
   stock: number;

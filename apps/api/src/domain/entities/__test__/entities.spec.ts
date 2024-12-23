@@ -84,6 +84,7 @@ describe('Test all entities', () => {
       );
 
       const deliveryResult: VISIBILITY_DELIVERY_INFO = {
+        id: mockDelivery.id,
         country: mockDelivery.country,
         region: mockDelivery.region,
         city: mockDelivery.city,
@@ -133,6 +134,7 @@ describe('Test all entities', () => {
 
     it('It should be visibility info', () => {
       const customerFormatResult: VISIBILITY_CUSTOMER_INFO = {
+        id: mockCustomer.id,
         delivery: delivery.toValue(),
         card: card.toValue(),
         fullName: `${mockCustomer.name} ${mockCustomer.lastName}`,
@@ -170,6 +172,7 @@ describe('Test all entities', () => {
       );
 
       const productFormatResult: PRODUCT_VISIBILITY_INFO = {
+        id: mockProduct.id,
         name: mockProduct.name,
         description: mockProduct.description,
         stock: mockProduct.stock,
