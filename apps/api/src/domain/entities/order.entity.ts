@@ -1,5 +1,4 @@
 import { Customer } from './customer.entity';
-import { Delivery } from './delivery.entity';
 import { Product } from './product.entity';
 
 export class Order {
@@ -7,9 +6,9 @@ export class Order {
     public readonly id: string,
     public readonly customer: Customer,
     public readonly product: Product,
-    public readonly delivery: Delivery,
     public readonly feeDelivery: number,
     public readonly feeBought: number,
+    public readonly tokenizedCard: string,
     public readonly reference: string,
     public readonly quantity: number,
     public readonly status: OrderStatus,
