@@ -1,6 +1,6 @@
-import { PaymentGatewayPort } from 'src/domain/ports/paymentGateway.port';
-import { VISIBILITY_TRANSACTION_INFO } from 'src/domain/entities/transaction.entity';
-import { TransactionRepository } from 'src/domain/repositories/transaction.repository';
+import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
+import { VISIBILITY_TRANSACTION_INFO } from 'src/payments/domain/entities/transaction.entity';
+import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
 import { updateTransactionDTO } from '../dto/updateTransaction.dto';
 
 export class updateTransactionCase {
