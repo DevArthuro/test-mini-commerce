@@ -14,6 +14,21 @@ export class Order {
     public readonly status: OrderStatus,
     public readonly transactions: string,
   ) {}
+
+  public getTokenizedCard(): string {
+    return this.tokenizedCard;
+  }
+
+  public getCustomer(): Customer {
+    return this.customer;
+  }
+
+  public toCalculateOrder(): number {
+    const totalProduct = this.product.price * this.quantity;
+    const totalFeeDelivery = totalProduct * this.feeDelivery;
+    const totalFeeBought = totalProduct * this.feeBought;
+    return totalProduct + totalFeeDelivery + totalFeeBought;
+  }
 }
 
 export enum OrderStatus {
