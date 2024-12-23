@@ -1,8 +1,8 @@
-import { OrderRepository } from 'src/domain/repositories/order.repository';
-import { PaymentGatewayPort } from 'src/domain/ports/paymentGateway.port';
+import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
+import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
 import { CreateTransactionDTO } from '../dto/createTransaction.dto';
-import { VISIBILITY_TRANSACTION_INFO } from 'src/domain/entities/transaction.entity';
-import { TransactionRepository } from 'src/domain/repositories/transaction.repository';
+import { VISIBILITY_TRANSACTION_INFO } from 'src/payments/domain/entities/transaction.entity';
+import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
 
 export class CreateTransactionCase {
   constructor(

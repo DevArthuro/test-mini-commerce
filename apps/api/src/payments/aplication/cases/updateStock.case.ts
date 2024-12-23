@@ -1,4 +1,4 @@
-import { ProductRepository } from 'src/domain/repositories/product.repository';
+import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
 import { UpdateStockDTO } from '../dto/updateStock.dto';
 
 export class UpdateStockCase {

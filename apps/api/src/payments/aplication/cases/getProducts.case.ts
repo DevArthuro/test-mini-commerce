@@ -1,5 +1,5 @@
-import { ProductRepository } from 'src/domain/repositories/product.repository';
-import { PRODUCT_VISIBILITY_INFO } from 'src/domain/entities/product.entity';
+import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
+import { PRODUCT_VISIBILITY_INFO } from 'src/payments/domain/entities/product.entity';
 
 export class GetProductsCase {
   constructor(private readonly productRepository: ProductRepository) {}

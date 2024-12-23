@@ -1,11 +1,11 @@
-import { CustomerRepository } from 'src/domain/repositories/customer.repository';
-import { OrderRepository } from 'src/domain/repositories/order.repository';
-import { ProductRepository } from 'src/domain/repositories/product.repository';
+import { CustomerRepository } from 'src/payments/domain/repositories/customer.repository';
+import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
+import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
 import { CreateOrderDTO } from '../dto/createOrder.dto';
-import { VISIBILITY_ORDER_INFO } from 'src/domain/entities/order.entity';
-import { CardRepository } from 'src/domain/repositories/card.repository';
-import { DeliveryRepository } from 'src/domain/repositories/delivery.repository';
-import { PaymentGatewayPort } from 'src/domain/ports/paymentGateway.port';
+import { VISIBILITY_ORDER_INFO } from 'src/payments/domain/entities/order.entity';
+import { CardRepository } from 'src/payments/domain/repositories/card.repository';
+import { DeliveryRepository } from 'src/payments/domain/repositories/delivery.repository';
+import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
 
 export class CreateOrderCase {
   constructor(
