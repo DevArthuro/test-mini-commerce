@@ -1,6 +1,8 @@
 import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
 import { UpdateStockDTO } from '../dto/updateStock.dto';
+import { Injectable } from 'src/shared/injectable';
 
+@Injectable()
 export class UpdateStockCase {
   constructor(private readonly productRepository: ProductRepository) {}
 
