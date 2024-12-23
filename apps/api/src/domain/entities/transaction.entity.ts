@@ -1,4 +1,6 @@
-export class Order {
+import { Order } from './order.entity';
+
+export class Transaction {
   constructor(
     public readonly id: string,
     public readonly order: Order,
