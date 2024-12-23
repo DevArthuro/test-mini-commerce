@@ -1,14 +1,10 @@
-import { Card } from '../card.entity';
+import { Card, VISIBILITY_CARD_INFO } from '../card.entity';
 import { mockCard } from './mocks/card.mock';
-import type { VISIBILITY_CARD_INFO } from '../card.entity';
-import type { VISIBILITY_DELIVERY_INFO } from '../delivery.entity';
-import type { VISIBILITY_CUSTOMER_INFO } from '../customer.entity';
-import type { PRODUCT_VISIBILITY_INFO } from '../product.entity';
-import { Delivery } from '../delivery.entity';
+import { Delivery, VISIBILITY_DELIVERY_INFO } from '../delivery.entity';
 import { mockDelivery } from './mocks/delivery.mock';
-import { Customer } from '../customer.entity';
+import { Customer, VISIBILITY_CUSTOMER_INFO } from '../customer.entity';
 import { mockCustomer } from './mocks/customer.mock';
-import { Product } from '../product.entity';
+import { Product, PRODUCT_VISIBILITY_INFO } from '../product.entity';
 import { mockProduct } from './mocks/product.mock';
 import { Order, OrderStatus, VISIBILITY_ORDER_INFO } from '../order.entity';
 import { mockOrder } from './mocks/order.mock';
