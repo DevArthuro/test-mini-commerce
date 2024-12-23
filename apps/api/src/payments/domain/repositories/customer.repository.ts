@@ -3,11 +3,11 @@ import { Customer } from '../entities/customer.entity';
 import { Delivery } from '../entities/delivery.entity';
 import { Card } from '../entities/card.entity';
 
-export interface CustomerRepository {
-  createCustomer(
+export abstract class CustomerRepository {
+  abstract createCustomer(
     customer: CustomerInterface,
     delivery: Delivery,
     card: Card,
   ): Promise<Customer>;
-  findById(id: string): Promise<Customer | null>;
+  abstract findById(id: string): Promise<Customer | null>;
 }
