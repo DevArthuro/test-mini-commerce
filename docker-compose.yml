@@ -5,7 +5,7 @@ services:
     build:
       context: .
     container_name: turbo_app
-    command: ["node", "apps/api/dist/main.js"]
+    command: ["/bin/sh", "-c", "npm run prisma:migrate --workspace api && npm run prisma:seed --workspace api && npm run start:prod --workspace api"]
     ports:
       - "8080:3000"
     environment:
@@ -23,8 +23,6 @@ services:
     restart: "always"
     ports:
       - 5432:5432
-    volumes:
-      - "./database:/var/lib/postgresql/data"
     environment:
       - POSTGRES_DB=minicommerce
       - POSTGRES_USER=postgres
