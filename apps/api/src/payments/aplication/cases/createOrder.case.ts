@@ -41,8 +41,6 @@ export class CreateOrderCase {
       product,
     );
 
-    console.log(order.toValue());
-
     return order.toValue();
   }
 }

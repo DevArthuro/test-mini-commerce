@@ -11,6 +11,8 @@ services:
     environment:
       - NODE_ENV=Development
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/minicommerce?schema=public
+    env_file:
+      - ./apps/api/.env
     depends_on:
       postgres:
         condition: service_healthy

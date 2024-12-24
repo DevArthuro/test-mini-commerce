@@ -16,12 +16,17 @@ import { Wompi } from '../adapters/services/wompi-payment.service';
 import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
 import { OrderController } from '../adapters/controllers/order.controller';
 import { CreateOrderCase } from 'src/payments/aplication/cases/createOrder.case';
+import { CreateTransactionCase } from 'src/payments/aplication/cases/createTransaction.case';
+import { PaymentController } from '../adapters/controllers/payment.controller';
+import { InMemoryTransactionRepository } from '../adapters/repositories/transaction.repository.impl';
+import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
 
 @Module({
-  controllers: [ProductController, OrderController],
+  controllers: [ProductController, OrderController, PaymentController],
   providers: [
     GetProductsCase,
     CreateOrderCase,
+    CreateTransactionCase,
     InMemoryProductRepository,
     {
       provide: ProductRepository,
@@ -52,8 +57,13 @@ import { CreateOrderCase } from 'src/payments/aplication/cases/createOrder.case'
       provide: PaymentGatewayPort,
       useClass: Wompi,
     },
+    InMemoryTransactionRepository,
+    {
+      provide: TransactionRepository,
+      useClass: InMemoryTransactionRepository,
+    },
   ],
-  exports: [GetProductsCase, CreateOrderCase],
+  exports: [GetProductsCase, CreateOrderCase, CreateTransactionCase],
   imports: [PrismaModule],
 })
 export class PaymentModule {}
