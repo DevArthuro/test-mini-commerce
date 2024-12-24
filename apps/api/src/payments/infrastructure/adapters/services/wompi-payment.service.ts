@@ -12,16 +12,11 @@ import {
   ResponseMerchants,
   ResponseTokenizedCard,
   ResponseTransaction,
-  TransactionStatus,
   TypeDocument,
 } from './interfaces/wompi';
 import { Injectable } from '@nestjs/common';
 import axios, { Axios, AxiosError } from 'axios';
 import { Order } from 'src/payments/domain/entities/order.entity';
-import {
-  Transaction,
-  TransactionStatusPayment,
-} from 'src/payments/domain/entities/transaction.entity';
 
 @Injectable()
 export class Wompi implements PaymentGatewayPort {
@@ -146,21 +141,6 @@ export class Wompi implements PaymentGatewayPort {
       );
 
       const statusSerialize = transaction.data.data.status;
-      let parceStatus: TransactionStatusPayment;
-
-      switch (statusSerialize) {
-        case TransactionStatus.APPROVED:
-          parceStatus = TransactionStatusPayment.APPROVED;
-          break;
-        case TransactionStatus.PENDING:
-          parceStatus = TransactionStatusPayment.PENDING;
-          break;
-        case TransactionStatus.DECLINED:
-        case TransactionStatus.ERROR:
-        case TransactionStatus.VOIDED:
-          parceStatus = TransactionStatusPayment.PENDING;
-          break;
-      }
 
       const paymentTransactionEntity = new PaymentTransaction(
         transaction.data.data.id,
@@ -169,7 +149,7 @@ export class Wompi implements PaymentGatewayPort {
         transaction.data.data.amount_in_cents,
         transaction.data.data.currency,
         String(transaction.data.data.payment_method),
-        parceStatus,
+        statusSerialize,
       );
 
       console.log(paymentTransactionEntity.toValue());
@@ -180,49 +160,49 @@ export class Wompi implements PaymentGatewayPort {
     }
   }
 
-  async confirmPayment(
-    transaction: Transaction,
-  ): Promise<PaymentTransaction | null> {
-    try {
-      const transactionResponse =
-        await this.axiosIntance.get<ResponseTransaction>(
-          `/transactions/${transaction.id}`,
-        );
+  // async confirmPayment(
+  //   transaction: Transaction,
+  // ): Promise<PaymentTransaction | null> {
+  //   try {
+  //     const transactionResponse =
+  //       await this.axiosIntance.get<ResponseTransaction>(
+  //         `/transactions/${transaction.id}`,
+  //       );
 
-      const statusSerialize = transactionResponse.data.data.status;
-      let parceStatus: TransactionStatusPayment;
+  //     const statusSerialize = transactionResponse.data.data.status;
+  //     let parceStatus: TransactionStatusPayment;
 
-      switch (statusSerialize) {
-        case TransactionStatus.APPROVED:
-          parceStatus = TransactionStatusPayment.APPROVED;
-          break;
-        case TransactionStatus.PENDING:
-          parceStatus = TransactionStatusPayment.PENDING;
-          break;
-        case TransactionStatus.DECLINED:
-        case TransactionStatus.ERROR:
-        case TransactionStatus.VOIDED:
-          parceStatus = TransactionStatusPayment.PENDING;
-          break;
-      }
+  //     switch (statusSerialize) {
+  //       case TransactionStatus.APPROVED:
+  //         parceStatus = TransactionStatusPayment.APPROVED;
+  //         break;
+  //       case TransactionStatus.PENDING:
+  //         parceStatus = TransactionStatusPayment.PENDING;
+  //         break;
+  //       case TransactionStatus.DECLINED:
+  //       case TransactionStatus.ERROR:
+  //       case TransactionStatus.VOIDED:
+  //         parceStatus = TransactionStatusPayment.PENDING;
+  //         break;
+  //     }
 
-      const paymentTransactionEntity = new PaymentTransaction(
-        transactionResponse.data.data.id,
-        transactionResponse.data.data.created_at,
-        transactionResponse.data.data.finalized_at,
-        transactionResponse.data.data.amount_in_cents,
-        transactionResponse.data.data.currency,
-        String(transactionResponse.data.data.payment_method),
-        parceStatus,
-      );
+  //     const paymentTransactionEntity = new PaymentTransaction(
+  //       transactionResponse.data.data.id,
+  //       transactionResponse.data.data.created_at,
+  //       transactionResponse.data.data.finalized_at,
+  //       transactionResponse.data.data.amount_in_cents,
+  //       transactionResponse.data.data.currency,
+  //       String(transactionResponse.data.data.payment_method),
+  //       parceStatus,
+  //     );
 
-      return paymentTransactionEntity;
-    } catch (error) {
-      const errorAxios = error instanceof AxiosError;
-      if (errorAxios) {
-        console.log(errorAxios);
-      }
-      throw new Error('Unkonwn error');
-    }
-  }
+  //     return paymentTransactionEntity;
+  //   } catch (error) {
+  //     const errorAxios = error instanceof AxiosError;
+  //     if (errorAxios) {
+  //       console.log(errorAxios);
+  //     }
+  //     throw new Error('Unkonwn error');
+  //   }
+  // }
 }
