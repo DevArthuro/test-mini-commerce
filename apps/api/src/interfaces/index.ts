@@ -1,3 +1,5 @@
+import { TransactionStatus } from 'src/payments/domain/entities/transaction.entity';
+
 export interface CardInterface {
   number: string;
   cvc: string;
@@ -38,5 +40,6 @@ export interface OrderInteface {
 
 export interface TransactionInterface {
   referenceService: string;
+  status: TransactionStatus;
   finalizedAt: Date;
 }
