@@ -13,26 +13,33 @@ import { v4 } from 'uuid';
 export class InMemoryOrderRepository implements OrderRepository {
   constructor(private prisma: PrismaService) {}
 
-  private parsePrismaClientToEntity(order: any): Order {
+  private async parsePrismaClientToEntity(order: any): Promise<Order> {
+    console.log(order);
+    const delivery = await this.prisma.delivery.findUnique({
+      where: { id: order.customer.deliveryId },
+    });
+    const card = await this.prisma.card.findUnique({
+      where: { id: order.customer.cardId },
+    });
     return new Order(
       order.id,
       new Customer(
-        order.customerCreated.id,
+        order.customer.id,
         new Delivery(
-          order.customer.delivery.id,
-          order.customer.delivery.countryCode,
-          order.customer.delivery.address,
-          order.customer.delivery.region,
-          order.customer.delivery.city,
-          order.customer.delivery.address,
+          delivery.id,
+          delivery.countryCode,
+          delivery.address,
+          delivery.region,
+          delivery.city,
+          delivery.address,
         ),
         new Card(
-          order.customer.card.id,
-          order.customer.card.number,
-          order.customer.card.cvc,
-          order.customer.card.expMonth,
-          order.customer.card.expYear,
-          order.customer.card.cardName,
+          card.id,
+          card.number,
+          card.cvc,
+          card.expMonth,
+          card.expYear,
+          card.cardName,
         ),
         order.customer.name,
         order.customer.lastname,

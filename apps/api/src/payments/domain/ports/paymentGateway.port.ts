@@ -6,8 +6,10 @@ import {
 } from '../entities/payment.entity';
 import { Transaction } from '../entities/transaction.entity';
 
-export interface PaymentGatewayPort {
-  TokenizedCard(data: Card): Promise<PaymentTokenized | null>;
-  createPaymentIntent(order: Order): Promise<PaymentTransaction | null>;
-  confirmPayment(transaction: Transaction): Promise<Transaction>;
+export abstract class PaymentGatewayPort {
+  abstract getTokenizedCard(data: Card): Promise<PaymentTokenized | null>;
+  // abstract createPaymentIntent(
+  //    order: Order,
+  // ): Promise<PaymentTransaction | null>;
+  // abstract confirmPayment(transaction: Transaction): Promise<Transaction>;
 }
