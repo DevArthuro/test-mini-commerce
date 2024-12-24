@@ -31,7 +31,7 @@ export class CreateOrderCase {
       delivery,
       card,
     );
-    const payment = await this.paymentAdapter.TokenizedCard(card);
+    const payment = await this.paymentAdapter.getTokenizedCard(card);
     if (!payment) {
       throw new Error('Payment Tokenized Error to generate');
     }
@@ -40,6 +40,8 @@ export class CreateOrderCase {
       customer,
       product,
     );
+
+    console.log(order.toValue());
 
     return order.toValue();
   }
