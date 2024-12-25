@@ -3,7 +3,7 @@ import {
   CardInterface,
   CustomerInterface,
   DeliveryInterface,
-} from 'src/interfaces';
+} from '../../../../interfaces';
 
 export class CreateOrderDTO {
   @IsString()

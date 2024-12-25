@@ -1,4 +1,4 @@
-import { DeliveryInterface } from 'src/interfaces';
+import { DeliveryInterface } from '../../../../interfaces';
 import { Delivery } from '../entities/delivery.entity';
 
 export abstract class DeliveryRepository {

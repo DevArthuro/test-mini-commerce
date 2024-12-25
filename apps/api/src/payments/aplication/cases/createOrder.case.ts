@@ -7,6 +7,19 @@ import { CardRepository } from 'src/payments/domain/repositories/card.repository
 import { DeliveryRepository } from 'src/payments/domain/repositories/delivery.repository';
 import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
 import { Injectable } from 'src/shared/injectable';
+import {
+  ERROR_ORDER_TYPE,
+  OrderException,
+} from 'src/payments/domain/errors/OrderExeption.error';
+import {
+  ERROR_PRODUCTS_TYPE,
+  ProductsException,
+} from 'src/payments/domain/errors/ProductsExeption.error';
+import {
+  ERROR_PAYMENTS_TYPE,
+  PaymentsException,
+} from 'src/payments/domain/errors/PaymentsExeption.error';
+import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class CreateOrderCase {
@@ -20,27 +33,66 @@ export class CreateOrderCase {
   ) {}
 
   async execute(dto: CreateOrderDTO): Promise<VISIBILITY_ORDER_INFO | null> {
-    const card = await this.cardRepository.createCard(dto.cardInfo);
+    let card;
+    let delivery;
+    let customer;
+    let payment;
+
+    try {
+      card = await this.cardRepository.createCard(dto.cardInfo);
+      delivery = await this.deliveryRepository.createDelivery(dto.delivery);
+      customer = await this.customerRepository.createCustomer(
+        dto.customer,
+        delivery,
+        card,
+      );
+    } catch (error) {
+      if (error instanceof PrismaClientValidationError) {
+        throw new OrderException(
+          (error as Error).message,
+          ERROR_ORDER_TYPE.ORDER_UNKNOWN_DATA,
+        );
+      }
+      throw error;
+    }
     const product = await this.productRepository.findById(dto.productId);
     if (!product) {
-      throw new Error('Product not found');
+      throw new ProductsException(
+        'Products not found',
+        ERROR_PRODUCTS_TYPE.PRODUCTS_NOT_FOUND,
+      );
     }
-    const delivery = await this.deliveryRepository.createDelivery(dto.delivery);
-    const customer = await this.customerRepository.createCustomer(
-      dto.customer,
-      delivery,
-      card,
-    );
-    const payment = await this.paymentAdapter.getTokenizedCard(card);
-    if (!payment) {
-      throw new Error('Payment Tokenized Error to generate');
+    if (product.stock < dto.quantity) {
+      throw new ProductsException(
+        'The stock is not available',
+        ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
+      );
     }
-    const order = await this.orderRepository.create(
-      { quantity: dto.quantity, tokenizedCard: payment.tokenizedCard },
-      customer,
-      product,
-    );
+    try {
+      payment = await this.paymentAdapter.getTokenizedCard(card);
+    } catch (error) {
+      console.log(error.message);
+      throw new PaymentsException(
+        'The card is not processed',
+        ERROR_PAYMENTS_TYPE.PAYMENT_NOT_TOKENIZED,
+      );
+    }
+    try {
+      const order = await this.orderRepository.create(
+        { quantity: dto.quantity, tokenizedCard: payment.tokenizedCard },
+        customer,
+        product,
+      );
 
-    return order.toValue();
+      return order.toValue();
+    } catch (error) {
+      if (error instanceof PrismaClientValidationError) {
+        throw new OrderException(
+          (error as Error).message,
+          ERROR_ORDER_TYPE.ORDER_NOT_CREATED,
+        );
+      }
+      throw error;
+    }
   }
 }
