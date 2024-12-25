@@ -1,6 +1,6 @@
 import { Body, Controller, NotFoundException, Post } from '@nestjs/common';
 import { CreateTransactionCase } from 'src/payments/aplication/cases/createTransaction.case';
-import { CreateTransactionDTO } from 'src/payments/domain/dto/createTransaction.dto';
+import { CreateTransactionDTO } from 'src/payments/aplication/dto/createTransaction.dto';
 
 @Controller('transactions')
 export class PaymentController {

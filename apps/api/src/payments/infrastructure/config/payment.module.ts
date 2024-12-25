@@ -20,6 +20,7 @@ import { CreateTransactionCase } from 'src/payments/aplication/cases/createTrans
 import { PaymentController } from '../adapters/controllers/payment.controller';
 import { InMemoryTransactionRepository } from '../adapters/repositories/transaction.repository.impl';
 import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
+import { GetOrderByReference } from 'src/payments/aplication/cases/getOrderByReference.case';
 
 @Module({
   controllers: [ProductController, OrderController, PaymentController],
@@ -28,6 +29,7 @@ import { TransactionRepository } from 'src/payments/domain/repositories/transact
     CreateOrderCase,
     CreateTransactionCase,
     InMemoryProductRepository,
+    GetOrderByReference,
     {
       provide: ProductRepository,
       useClass: InMemoryProductRepository,
@@ -63,7 +65,12 @@ import { TransactionRepository } from 'src/payments/domain/repositories/transact
       useClass: InMemoryTransactionRepository,
     },
   ],
-  exports: [GetProductsCase, CreateOrderCase, CreateTransactionCase],
+  exports: [
+    GetProductsCase,
+    CreateOrderCase,
+    CreateTransactionCase,
+    GetOrderByReference,
+  ],
   imports: [PrismaModule],
 })
 export class PaymentModule {}

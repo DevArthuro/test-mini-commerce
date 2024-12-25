@@ -1,7 +1,7 @@
 import { CustomerRepository } from 'src/payments/domain/repositories/customer.repository';
 import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
 import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
-import { CreateOrderDTO } from '../../domain/dto/createOrder.dto';
+import { CreateOrderDTO } from '../dto/createOrder.dto';
 import { VISIBILITY_ORDER_INFO } from 'src/payments/domain/entities/order.entity';
 import { CardRepository } from 'src/payments/domain/repositories/card.repository';
 import { DeliveryRepository } from 'src/payments/domain/repositories/delivery.repository';
@@ -58,8 +58,8 @@ export class CreateOrderCase {
     const product = await this.productRepository.findById(dto.productId);
     if (!product) {
       throw new ProductsException(
-        'Products not found',
-        ERROR_PRODUCTS_TYPE.PRODUCTS_NOT_FOUND,
+        'Product not found',
+        ERROR_PRODUCTS_TYPE.PRODUCT_NOT_FOUND,
       );
     }
     if (product.stock < dto.quantity) {
@@ -71,9 +71,8 @@ export class CreateOrderCase {
     try {
       payment = await this.paymentAdapter.getTokenizedCard(card);
     } catch (error) {
-      console.log(error.message);
       throw new PaymentsException(
-        'The card is not processed',
+        error.message,
         ERROR_PAYMENTS_TYPE.PAYMENT_NOT_TOKENIZED,
       );
     }
