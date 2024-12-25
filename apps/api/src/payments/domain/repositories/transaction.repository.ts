@@ -1,4 +1,4 @@
-import { TransactionInterface } from 'src/interfaces';
+import { TransactionInterface } from '../../../../interfaces';
 import { Transaction, TransactionStatus } from '../entities/transaction.entity';
 import { Order } from '../entities/order.entity';
 

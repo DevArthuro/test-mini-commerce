@@ -1,4 +1,4 @@
-import { CustomerInterface } from 'src/interfaces';
+import { CustomerInterface } from '../../../../interfaces';
 import { Customer } from '../entities/customer.entity';
 import { Delivery } from '../entities/delivery.entity';
 import { Card } from '../entities/card.entity';

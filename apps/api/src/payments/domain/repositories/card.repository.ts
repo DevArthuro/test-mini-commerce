@@ -1,4 +1,4 @@
-import { CardInterface } from 'src/interfaces';
+import { CardInterface } from '../../../../interfaces';
 import { Card } from '../entities/card.entity';
 
 export abstract class CardRepository {

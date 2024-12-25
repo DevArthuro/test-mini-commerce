@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OrderInteface } from 'src/interfaces';
+import { OrderInteface } from '../../../../../interfaces';
 import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';
@@ -86,6 +86,8 @@ export class InMemoryOrderRepository implements OrderRepository {
         product: true,
       },
     });
+
+    if (!orderCreated) throw new Error('The order is not created');
 
     return this.parsePrismaClientToEntity(orderCreated);
   }

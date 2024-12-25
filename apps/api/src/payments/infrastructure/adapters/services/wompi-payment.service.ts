@@ -57,7 +57,10 @@ export class Wompi implements PaymentGatewayPort {
         tokenizedCard.data.data.expires_at,
       );
     } catch (error) {
-      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error('WOMPI_ERROR');
+      }
+      throw error;
     }
   }
 

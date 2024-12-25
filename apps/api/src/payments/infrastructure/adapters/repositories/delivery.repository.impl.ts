@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DeliveryInterface } from 'src/interfaces';
+import { DeliveryInterface } from '../../../../../interfaces';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';
 import { DeliveryRepository } from 'src/payments/domain/repositories/delivery.repository';
 import { PrismaService } from 'src/prisma/prisma.service';
