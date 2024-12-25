@@ -1,8 +1,8 @@
-import { CustomerInterface } from '../../../../interfaces';
 import { Customer } from '../entities/customer.entity';
 import { Delivery } from '../entities/delivery.entity';
 import { Card } from '../entities/card.entity';
 import { Injectable } from '@nestjs/common';
+import { CustomerInterface } from '../dto/customer.dto';
 
 @Injectable()
 export abstract class CustomerRepository {
