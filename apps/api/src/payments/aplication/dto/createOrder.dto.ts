@@ -1,8 +1,8 @@
 import { IsNumber, IsObject, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { CardInterface } from './card.dto';
-import { CustomerInterface } from './customer.dto';
-import { DeliveryInterface } from './delivery.dto';
+import { CardInterface } from 'src/payments/domain/dto/card.dto';
+import { CustomerInterface } from 'src/payments/domain/dto/customer.dto';
+import { DeliveryInterface } from 'src/payments/domain/dto/delivery.dto';
 
 export class CreateOrderDTO {
   @ApiProperty()
