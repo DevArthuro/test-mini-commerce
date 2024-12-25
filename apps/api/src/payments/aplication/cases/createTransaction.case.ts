@@ -1,6 +1,6 @@
 import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
 import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
-import { CreateTransactionDTO } from '../dto/createTransaction.dto';
+import { CreateTransactionDTO } from '../../domain/dto/createTransaction.dto';
 import { VISIBILITY_TRANSACTION_INFO } from 'src/payments/domain/entities/transaction.entity';
 import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
 import { Injectable } from 'src/shared/injectable';
