@@ -1,7 +1,7 @@
 import { CustomerRepository } from 'src/payments/domain/repositories/customer.repository';
 import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
 import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
-import { CreateOrderDTO } from '../dto/createOrder.dto';
+import { CreateOrderDTO } from '../../domain/dto/createOrder.dto';
 import { VISIBILITY_ORDER_INFO } from 'src/payments/domain/entities/order.entity';
 import { CardRepository } from 'src/payments/domain/repositories/card.repository';
 import { DeliveryRepository } from 'src/payments/domain/repositories/delivery.repository';
