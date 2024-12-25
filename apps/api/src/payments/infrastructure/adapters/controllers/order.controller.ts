@@ -1,13 +1,19 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
+  Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { CreateOrderCase } from 'src/payments/aplication/cases/createOrder.case';
-import { CreateOrderDTO } from 'src/payments/domain/dto/createOrder.dto';
+import { GetOrderByReference } from 'src/payments/aplication/cases/getOrderByReference.case';
+import { CreateOrderDTO } from 'src/payments/aplication/dto/createOrder.dto';
+import { GetOrderByReferenceDTO } from 'src/payments/aplication/dto/getOrderByReference.dto';
 import { OrderException } from 'src/payments/domain/errors/OrderExeption.error';
 import { PaymentsException } from 'src/payments/domain/errors/PaymentsExeption.error';
 import { ProductsException } from 'src/payments/domain/errors/ProductsExeption.error';
@@ -15,7 +21,10 @@ import { ProductsException } from 'src/payments/domain/errors/ProductsExeption.e
 @ApiTags('Orders')
 @Controller('orders')
 export class OrderController {
-  constructor(private readonly createOrderCase: CreateOrderCase) {}
+  constructor(
+    private readonly createOrderCase: CreateOrderCase,
+    private readonly getOrderByReference: GetOrderByReference,
+  ) {}
 
   @Post('create')
   @ApiOperation({ summary: 'Create order and tokenized card' })
@@ -26,30 +35,63 @@ export class OrderController {
     status: 500,
     description: 'Internal Server Error: Unexpected error.',
   })
-  async createOrderC(@Body() dto: CreateOrderDTO) {
+  async createOrder(@Body() dto: CreateOrderDTO, @Res() res: Response) {
     try {
       const order = await this.createOrderCase.execute(dto);
-      return order;
+      return res
+        .json({ data: order, status: HttpStatus.CREATED, error: false })
+        .status(HttpStatus.CREATED);
     } catch (error) {
       if (error instanceof ProductsException) {
-        return new HttpException(
-          'Id product is not available.',
-          HttpStatus.BAD_REQUEST,
+        throw new HttpException(
+          { message: error.getTypeError(), error: true },
+          HttpStatus.NOT_FOUND,
         );
       }
       if (error instanceof PaymentsException) {
-        return new HttpException(
-          'Card is not processed.',
+        throw new HttpException(
+          { message: error.getTypeError(), error: true },
           HttpStatus.BAD_REQUEST,
         );
       }
       if (error instanceof OrderException) {
-        return new HttpException(
-          'Order is not created.',
+        throw new HttpException(
+          { message: error.getTypeError(), error: true },
           HttpStatus.BAD_REQUEST,
         );
       }
-      return new HttpException(
+      throw new HttpException(
+        'Unexpected error.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get('/:orderReference')
+  @ApiOperation({ summary: 'Get order by Id' })
+  @ApiResponse({ status: 200, description: 'Order Found.' })
+  @ApiResponse({ status: 404, description: 'Order not found' })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error: Unexpected error.',
+  })
+  async getOrderReference(
+    @Param() params: GetOrderByReferenceDTO,
+    @Res() res: Response,
+  ) {
+    try {
+      const order = await this.getOrderByReference.execute(params);
+      return res
+        .json({ data: order, error: false, status: HttpStatus.OK })
+        .status(HttpStatus.OK);
+    } catch (error) {
+      if (error instanceof OrderException) {
+        throw new HttpException(
+          { message: error.getTypeError(), error: true },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
         'Unexpected error.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
