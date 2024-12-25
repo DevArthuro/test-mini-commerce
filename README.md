@@ -235,7 +235,7 @@ El proyecto utiliza **Prisma ORM** para la gestión de datos, con un esquema que
 }
 ```
 
-<img src="./assets/transaction.png.png" />
+<img src="./assets/transaction.png" />
 
 ### Consultar Transacción
 

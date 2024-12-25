@@ -1,4 +1,4 @@
-import { OrderInteface } from 'src/interfaces';
+import { OrderInteface } from '../../../../interfaces';
 import { Order, OrderStatus } from '../entities/order.entity';
 import { Customer } from '../entities/customer.entity';
 import { Product } from '../entities/product.entity';
