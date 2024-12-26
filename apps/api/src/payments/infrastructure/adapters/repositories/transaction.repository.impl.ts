@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TransactionInterface } from '../../../../../interfaces';
+import { TransactionInterface } from 'src/payments/domain/dto/transaction.dto';
 import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';

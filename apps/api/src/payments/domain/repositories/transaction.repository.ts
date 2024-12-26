@@ -1,6 +1,6 @@
-import { TransactionInterface } from '../../../../interfaces';
 import { Transaction, TransactionStatus } from '../entities/transaction.entity';
 import { Order } from '../entities/order.entity';
+import { TransactionInterface } from '../dto/transaction.dto';
 
 export abstract class TransactionRepository {
   abstract create(
