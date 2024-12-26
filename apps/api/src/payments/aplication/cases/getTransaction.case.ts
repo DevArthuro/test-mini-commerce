@@ -56,6 +56,7 @@ export class GetTransactionCase {
       transactionUpdated = await this.transactionRepository.updateStatus(
         transaction.id,
         paymentIntent.status,
+        paymentIntent.finalizedAt,
       );
 
       if (!transactionUpdated) {
@@ -85,6 +86,7 @@ export class GetTransactionCase {
         await this.transactionRepository.updateStatus(
           transaction.id,
           TransactionStatus.PENDING,
+          null,
         );
         throw new OrderException(
           error.message,

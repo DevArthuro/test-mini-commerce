@@ -79,7 +79,7 @@ export class PaymentController {
     try {
       const transaction = await this.GetTransactionCase.execute(dto);
       return response
-        .json({ data: transaction, status: HttpStatus.CREATED, error: false })
+        .json({ data: transaction, status: HttpStatus.OK, error: false })
         .status(HttpStatus.OK);
     } catch (error) {
       if (error instanceof PaymentsException) {

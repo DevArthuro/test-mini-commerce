@@ -13,5 +13,5 @@ export class ProductsException extends Error {
 export enum ERROR_PRODUCTS_TYPE {
   PRODUCT_NOT_FOUND = 'Product not found',
   PRODUCTS_NOT_FOUND = 'Products not found',
-  STOCK_NOT_AVAILABLE = 'The stock request is nos available',
+  STOCK_NOT_AVAILABLE = 'The stock request is not available',
 }
