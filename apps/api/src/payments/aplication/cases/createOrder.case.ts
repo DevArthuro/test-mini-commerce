@@ -6,7 +6,6 @@ import { VISIBILITY_ORDER_INFO } from 'src/payments/domain/entities/order.entity
 import { CardRepository } from 'src/payments/domain/repositories/card.repository';
 import { DeliveryRepository } from 'src/payments/domain/repositories/delivery.repository';
 import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
-import { Injectable } from 'src/shared/injectable';
 import {
   ERROR_ORDER_TYPE,
   OrderException,
@@ -20,6 +19,7 @@ import {
   PaymentsException,
 } from 'src/payments/domain/errors/PaymentsExeption.error';
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CreateOrderCase {
