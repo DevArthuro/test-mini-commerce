@@ -66,20 +66,21 @@ export class GetTransactionCase {
       }
 
       try {
-        await this.orderRepository.updateStatus(
+        const orderUpdated = await this.orderRepository.updateStatus(
           transactionUpdated.order.id,
           transaction.order.serializeOrderStatus(transactionUpdated.status),
         );
 
-        if (
-          transaction.order.serializeOrderStatus(transaction.status) ===
-          OrderStatus.PAID
-        ) {
+        if (orderUpdated.status === OrderStatus.PAID) {
           await this.productRespository.updateStock(
             transactionUpdated.order.product.id,
             transactionUpdated.order.quantity,
           );
         }
+
+        transactionUpdated = await this.transactionRepository.findById(
+          dto.transactionId,
+        );
       } catch (error) {
         await this.transactionRepository.updateStatus(
           transaction.id,
