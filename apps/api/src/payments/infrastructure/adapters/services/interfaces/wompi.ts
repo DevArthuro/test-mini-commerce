@@ -85,7 +85,7 @@ export interface ResponseTransaction {
       };
       installments: number;
     };
-    status: TransactionStatus;
+    status: TransactionStatusWompi;
     status_message: null;
     billing_data: null;
     shipping_address: {
@@ -168,6 +168,10 @@ export enum CardType {
   CREDIT = 'CREDIT',
 }
 
-export enum TransactionStatus {
+export enum TransactionStatusWompi {
   PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  VOIDED = 'VOIDED',
+  DECLINED = 'DECLINED',
+  ERROR = 'ERROR',
 }

@@ -13,6 +13,5 @@ export class OrderException extends Error {
 export enum ERROR_ORDER_TYPE {
   ORDER_NOT_FOUND = 'Order not found',
   ORDER_NOT_CREATED = 'the order is not created',
-  ORDER_NOT_UPDATED = 'ORDER_NOT_UPDATED',
   ORDER_UNKNOWN_DATA = 'Verify the data requirement',
 }

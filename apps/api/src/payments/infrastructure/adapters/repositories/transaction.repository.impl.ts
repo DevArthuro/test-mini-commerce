@@ -126,7 +126,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
     const order = transaction.order;
 
     return new Transaction(
-      transaction.referencePayment,
+      transaction.id,
       new Order(
         order.id,
         new Customer(
