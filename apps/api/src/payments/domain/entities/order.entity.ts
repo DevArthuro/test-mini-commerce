@@ -1,5 +1,6 @@
 import { Customer, VISIBILITY_CUSTOMER_INFO } from './customer.entity';
 import { Product, PRODUCT_VISIBILITY_INFO } from './product.entity';
+import { TransactionStatus } from './transaction.entity';
 
 export class Order {
   constructor(
@@ -31,6 +32,20 @@ export class Order {
 
   public isFinalized(): boolean {
     return this.status !== OrderStatus.PENDING;
+  }
+
+  public serializeOrderStatus(
+    transactionStatus: TransactionStatus,
+  ): OrderStatus {
+    switch (transactionStatus) {
+      case TransactionStatus.PENDING:
+        return OrderStatus.PENDING;
+      case TransactionStatus.APPROVED:
+        return OrderStatus.PAID;
+      case TransactionStatus.FINALIZED:
+      case TransactionStatus.REJECTED:
+        return OrderStatus.FAILED;
+    }
   }
 
   public toValue(): VISIBILITY_ORDER_INFO {

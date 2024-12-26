@@ -151,9 +151,7 @@ export class Wompi implements PaymentGatewayPort {
     }
   }
 
-  async confirmPayment(
-    transaction: Transaction,
-  ): Promise<PaymentTransaction | null> {
+  async confirmPayment(transaction: Transaction): Promise<Transaction> {
     try {
       const transactionResponse =
         await this.axiosIntance.get<ResponseTransaction>(
@@ -164,17 +162,15 @@ export class Wompi implements PaymentGatewayPort {
         transactionResponse.data.data.status,
       );
 
-      const paymentTransactionEntity = new PaymentTransaction(
+      const TransactionEntity = new Transaction(
         transactionResponse.data.data.id,
-        transactionResponse.data.data.created_at,
-        transactionResponse.data.data.finalized_at,
-        transactionResponse.data.data.amount_in_cents,
-        transactionResponse.data.data.currency,
-        String(transactionResponse.data.data.payment_method),
+        transaction.order,
         statusSerialize,
+        transactionResponse.data.data.id,
+        transactionResponse.data.data.finalized_at,
       );
 
-      return paymentTransactionEntity;
+      return TransactionEntity;
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error('WOMPI_ERROR');

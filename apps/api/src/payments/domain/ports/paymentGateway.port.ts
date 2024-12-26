@@ -11,5 +11,5 @@ export abstract class PaymentGatewayPort {
   abstract createPaymentIntent(
     order: Order,
   ): Promise<PaymentTransaction | null>;
-  // abstract confirmPayment(transaction: Transaction): Promise<Transaction>;
+  abstract confirmPayment(transaction: Transaction): Promise<Transaction>;
 }
