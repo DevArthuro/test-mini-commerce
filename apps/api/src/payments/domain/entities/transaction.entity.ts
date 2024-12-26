@@ -6,7 +6,7 @@ export class Transaction {
     public readonly order: Order,
     public readonly status: TransactionStatus,
     public readonly referenceService: string,
-    public readonly finalizedAt: Date,
+    public readonly finalizedAt: Date | null,
   ) {}
 
   public isFinalized(): boolean {
@@ -31,6 +31,7 @@ export enum TransactionStatus {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
+  FINALIZED = 'FINALIZED',
 }
 
 export interface VISIBILITY_TRANSACTION_INFO {

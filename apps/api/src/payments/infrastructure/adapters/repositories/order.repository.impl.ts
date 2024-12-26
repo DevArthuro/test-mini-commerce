@@ -14,7 +14,6 @@ export class InMemoryOrderRepository implements OrderRepository {
   constructor(private prisma: PrismaService) {}
 
   private async parsePrismaClientToEntity(order: any): Promise<Order> {
-    console.log(order);
     const delivery = await this.prisma.delivery.findUnique({
       where: { id: order.customer.deliveryId },
     });

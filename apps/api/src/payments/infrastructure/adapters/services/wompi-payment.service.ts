@@ -12,11 +12,16 @@ import {
   ResponseMerchants,
   ResponseTokenizedCard,
   ResponseTransaction,
+  TransactionStatusWompi,
   TypeDocument,
 } from './interfaces/wompi';
 import { Injectable } from '@nestjs/common';
 import axios, { Axios, AxiosError } from 'axios';
 import { Order } from 'src/payments/domain/entities/order.entity';
+import {
+  Transaction,
+  TransactionStatus,
+} from 'src/payments/domain/entities/transaction.entity';
 
 @Injectable()
 export class Wompi implements PaymentGatewayPort {
@@ -64,19 +69,6 @@ export class Wompi implements PaymentGatewayPort {
     }
   }
 
-  private async generateSignature(order: Order): Promise<string> {
-    const secretConcat = `${order.reference}${order.toCalculateOrder() * 100}COP${this.wompiIntegrityKey}`;
-
-    const encondedText = new TextEncoder().encode(secretConcat);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', encondedText);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
-
-    return hashHex;
-  }
-
   async createPaymentIntent(order: Order): Promise<PaymentTransaction | null> {
     let tokenAuthAcceptTratments: string | null;
     let tokenAcceptTerms: string | null;
@@ -95,8 +87,6 @@ export class Wompi implements PaymentGatewayPort {
       console.log((error as AxiosError).message);
       return;
     }
-
-    console.log('pass here');
 
     const signature = await this.generateSignature(order);
 
@@ -143,8 +133,6 @@ export class Wompi implements PaymentGatewayPort {
         },
       );
 
-      const statusSerialize = transaction.data.data.status;
-
       const paymentTransactionEntity = new PaymentTransaction(
         transaction.data.data.id,
         transaction.data.data.created_at,
@@ -152,60 +140,79 @@ export class Wompi implements PaymentGatewayPort {
         transaction.data.data.amount_in_cents,
         transaction.data.data.currency,
         String(transaction.data.data.payment_method),
-        statusSerialize,
+        this.getStatusSerialized(transaction.data.data.status),
       );
 
-      console.log(paymentTransactionEntity.toValue());
+      console.log(paymentTransactionEntity);
 
       return paymentTransactionEntity;
     } catch (error) {
-      console.log((error as AxiosError)?.toJSON());
+      if (error instanceof AxiosError) {
+        throw new Error('WOMPI_ERROR');
+      }
+      throw error;
     }
   }
 
-  // async confirmPayment(
-  //   transaction: Transaction,
-  // ): Promise<PaymentTransaction | null> {
-  //   try {
-  //     const transactionResponse =
-  //       await this.axiosIntance.get<ResponseTransaction>(
-  //         `/transactions/${transaction.id}`,
-  //       );
+  async confirmPayment(
+    transaction: Transaction,
+  ): Promise<PaymentTransaction | null> {
+    try {
+      const transactionResponse =
+        await this.axiosIntance.get<ResponseTransaction>(
+          `/transactions/${transaction.referenceService}`,
+        );
 
-  //     const statusSerialize = transactionResponse.data.data.status;
-  //     let parceStatus: TransactionStatusPayment;
+      const statusSerialize = this.getStatusSerialized(
+        transactionResponse.data.data.status,
+      );
 
-  //     switch (statusSerialize) {
-  //       case TransactionStatus.APPROVED:
-  //         parceStatus = TransactionStatusPayment.APPROVED;
-  //         break;
-  //       case TransactionStatus.PENDING:
-  //         parceStatus = TransactionStatusPayment.PENDING;
-  //         break;
-  //       case TransactionStatus.DECLINED:
-  //       case TransactionStatus.ERROR:
-  //       case TransactionStatus.VOIDED:
-  //         parceStatus = TransactionStatusPayment.PENDING;
-  //         break;
-  //     }
+      const paymentTransactionEntity = new PaymentTransaction(
+        transactionResponse.data.data.id,
+        transactionResponse.data.data.created_at,
+        transactionResponse.data.data.finalized_at,
+        transactionResponse.data.data.amount_in_cents,
+        transactionResponse.data.data.currency,
+        String(transactionResponse.data.data.payment_method),
+        statusSerialize,
+      );
 
-  //     const paymentTransactionEntity = new PaymentTransaction(
-  //       transactionResponse.data.data.id,
-  //       transactionResponse.data.data.created_at,
-  //       transactionResponse.data.data.finalized_at,
-  //       transactionResponse.data.data.amount_in_cents,
-  //       transactionResponse.data.data.currency,
-  //       String(transactionResponse.data.data.payment_method),
-  //       parceStatus,
-  //     );
+      return paymentTransactionEntity;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error('WOMPI_ERROR');
+      }
+      throw new Error('Unkonwn error');
+    }
+  }
 
-  //     return paymentTransactionEntity;
-  //   } catch (error) {
-  //     const errorAxios = error instanceof AxiosError;
-  //     if (errorAxios) {
-  //       console.log(errorAxios);
-  //     }
-  //     throw new Error('Unkonwn error');
-  //   }
-  // }
+  private async generateSignature(order: Order): Promise<string> {
+    const secretConcat = `${order.reference}${order.toCalculateOrder() * 100}COP${this.wompiIntegrityKey}`;
+
+    const encondedText = new TextEncoder().encode(secretConcat);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encondedText);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    return hashHex;
+  }
+
+  private getStatusSerialized(
+    status: TransactionStatusWompi,
+  ): TransactionStatus {
+    switch (status) {
+      case TransactionStatusWompi.APPROVED:
+        return TransactionStatus.APPROVED;
+      case TransactionStatusWompi.PENDING:
+        return TransactionStatus.PENDING;
+      case TransactionStatusWompi.DECLINED:
+      case TransactionStatusWompi.VOIDED:
+      case TransactionStatusWompi.ERROR:
+        return TransactionStatus.REJECTED;
+      default:
+        return TransactionStatus.FINALIZED;
+    }
+  }
 }
