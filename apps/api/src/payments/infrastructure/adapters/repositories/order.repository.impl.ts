@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OrderInteface } from '../../../../../interfaces';
+import { OrderInteface } from 'src/payments/domain/dto/order.dto';
 import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';
