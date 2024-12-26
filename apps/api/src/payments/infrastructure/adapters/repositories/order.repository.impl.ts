@@ -73,8 +73,8 @@ export class InMemoryOrderRepository implements OrderRepository {
       data: {
         customerId: customer.id,
         productId: product.id,
-        feeBought: 0.5,
-        feeDelivery: 0.5,
+        feeBought: 0.03,
+        feeDelivery: 0.05,
         quantity: order.quantity,
         reference: `Mini_commerce_${v4().slice(-8)}`,
         status: OrderStatus.PENDING,
