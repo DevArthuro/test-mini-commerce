@@ -84,8 +84,7 @@ export class Wompi implements PaymentGatewayPort {
       tokenAcceptTerms =
         confirmUserPermissions.data.data.presigned_acceptance.acceptance_token;
     } catch (error) {
-      console.log((error as AxiosError).message);
-      return;
+      throw new Error(error.message);
     }
 
     const signature = await this.generateSignature(order);
@@ -142,8 +141,6 @@ export class Wompi implements PaymentGatewayPort {
         String(transaction.data.data.payment_method),
         this.getStatusSerialized(transaction.data.data.status),
       );
-
-      console.log(paymentTransactionEntity);
 
       return paymentTransactionEntity;
     } catch (error) {
