@@ -1,6 +1,8 @@
 assets
 README.md
 node_modules
+apps/api/node_modules
+apps/client/node_modules
 .turbo
 */dist
 .git
