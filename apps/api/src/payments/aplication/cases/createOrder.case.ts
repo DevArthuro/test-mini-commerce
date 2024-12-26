@@ -62,7 +62,7 @@ export class CreateOrderCase {
         ERROR_PRODUCTS_TYPE.PRODUCT_NOT_FOUND,
       );
     }
-    if (dto.quantity > 0 && product.stock < dto.quantity) {
+    if (dto.quantity <= 0 || product.stock < dto.quantity) {
       throw new ProductsException(
         'The stock is not available',
         ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
