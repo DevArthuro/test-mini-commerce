@@ -5,7 +5,6 @@ import {
   VISIBILITY_TRANSACTION_INFO,
 } from 'src/payments/domain/entities/transaction.entity';
 import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
-import { Injectable } from 'src/shared/injectable';
 import {
   ERROR_PAYMENTS_TYPE,
   PaymentsException,
@@ -18,6 +17,7 @@ import {
   OrderException,
 } from 'src/payments/domain/errors/OrderExeption.error';
 import { GetTransactionByIdDTO } from '../dto/getTransaction.dto';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GetTransactionCase {
