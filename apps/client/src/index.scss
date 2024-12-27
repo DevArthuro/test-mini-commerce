@@ -1,0 +1,57 @@
+@import './styles/base/base';
+@import './styles/base/reset';
+
+// Components
+
+@import './styles/components/app';
+
+// Utilities
+
+@import './styles/utilities/mixins';
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1em;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+  background: $white;
+  box-sizing: border-box;
+  text-align: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 240px;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+.container-center {
+  @include flex-container(center, center);
+}
+
+.container{
+  @extend .container-center;
+  flex-wrap: wrap;
+
+  &:nth-child(3) {
+    margin-top: 5rem;
+    }
+}
+
+.body-container{
+  max-width: 1200px;
+  flex-direction: column;
+  align-items: center;
+  margin: .7em auto; 
+}
+
+.main-container {
+  min-height: 100vh;
+}
+
+.container-justify {
+  @include flex-container(center, space-between);
+}
