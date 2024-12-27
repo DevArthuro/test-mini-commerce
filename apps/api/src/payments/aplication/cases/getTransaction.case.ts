@@ -72,8 +72,8 @@ export class GetTransactionCase {
           transaction.order.serializeOrderStatus(transactionUpdated.status),
         );
 
-        if (orderUpdated.status === OrderStatus.PAID) {
-          await this.productRespository.updateStock(
+        if (orderUpdated.status === OrderStatus.FAILED) {
+          await this.productRespository.updateStockIncrease(
             transactionUpdated.order.product.id,
             transactionUpdated.order.quantity,
           );

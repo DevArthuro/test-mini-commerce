@@ -1,7 +1,11 @@
 import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
 import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
 import { CreateTransactionDTO } from '../dto/createTransaction.dto';
-import { VISIBILITY_TRANSACTION_INFO } from 'src/payments/domain/entities/transaction.entity';
+import {
+  Transaction,
+  TransactionStatus,
+  VISIBILITY_TRANSACTION_INFO,
+} from 'src/payments/domain/entities/transaction.entity';
 import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
 import {
   ERROR_PAYMENTS_TYPE,
@@ -12,6 +16,7 @@ import {
   OrderException,
 } from 'src/payments/domain/errors/OrderExeption.error';
 import { Injectable } from '@nestjs/common';
+import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
 
 @Injectable()
 export class CreateTransactionCase {
@@ -19,13 +24,14 @@ export class CreateTransactionCase {
     private readonly transactionRepository: TransactionRepository,
     private readonly orderRepository: OrderRepository,
     private readonly paymentAdapter: PaymentGatewayPort,
+    private readonly productRepository: ProductRepository,
   ) {}
 
   async execute(
     dto: CreateTransactionDTO,
   ): Promise<VISIBILITY_TRANSACTION_INFO | null> {
     let paymentIntent;
-    let transaction;
+    let transaction: Transaction;
 
     const order = await this.orderRepository.findByReference(
       dto.orderReference,
@@ -68,6 +74,18 @@ export class CreateTransactionCase {
         ERROR_PAYMENTS_TYPE.PAYMENT_IS_NOT_ALLOWED,
       );
     }
+
+    if (
+      transaction.status === TransactionStatus.PENDING ||
+      transaction.status === TransactionStatus.APPROVED
+    ) {
+      await this.productRepository.updateStockDecrease(
+        transaction.order.product.id,
+        transaction.order.quantity,
+      );
+    }
+
+    transaction = await this.transactionRepository.findById(transaction.id);
 
     return transaction.toValue();
   }
