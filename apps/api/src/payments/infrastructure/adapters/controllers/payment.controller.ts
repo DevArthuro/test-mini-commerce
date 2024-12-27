@@ -19,6 +19,7 @@ import {
   ERROR_PAYMENTS_TYPE,
   PaymentsException,
 } from 'src/payments/domain/errors/PaymentsExeption.error';
+import { ProductsException } from 'src/payments/domain/errors/ProductsExeption.error';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -54,6 +55,9 @@ export class PaymentController {
         throw new HttpException(error.getTypeError(), HttpStatus.BAD_REQUEST);
       }
       if (error instanceof OrderException) {
+        throw new HttpException(error.getTypeError(), HttpStatus.NOT_FOUND);
+      }
+      if (error instanceof ProductsException) {
         throw new HttpException(error.getTypeError(), HttpStatus.NOT_FOUND);
       }
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
