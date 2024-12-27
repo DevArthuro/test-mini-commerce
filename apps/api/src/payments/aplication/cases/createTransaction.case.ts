@@ -17,6 +17,10 @@ import {
 } from 'src/payments/domain/errors/OrderExeption.error';
 import { Injectable } from '@nestjs/common';
 import { ProductRepository } from 'src/payments/domain/repositories/product.repository';
+import {
+  ERROR_PRODUCTS_TYPE,
+  ProductsException,
+} from 'src/payments/domain/errors/ProductsExeption.error';
 
 @Injectable()
 export class CreateTransactionCase {
@@ -36,6 +40,15 @@ export class CreateTransactionCase {
     const order = await this.orderRepository.findByReference(
       dto.orderReference,
     );
+
+    const product = await this.productRepository.findById(order.product.id);
+
+    if (product.stock < order.quantity) {
+      throw new ProductsException(
+        'product stock not available',
+        ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
+      );
+    }
 
     if (!order) {
       throw new OrderException(
