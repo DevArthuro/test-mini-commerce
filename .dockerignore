@@ -12,3 +12,4 @@ apps/api/.turbo
 apps/client/dist
 apps/client/node_modules
 apps/client/.turbo
+apps/client/tsconfig.tsbuildinfo
