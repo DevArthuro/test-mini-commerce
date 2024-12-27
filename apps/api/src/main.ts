@@ -11,6 +11,11 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN ?? '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Accept',
+  });
   const config = new DocumentBuilder()
     .setTitle('Payments Api')
     .setDescription('This api manage the order and payments integration')
