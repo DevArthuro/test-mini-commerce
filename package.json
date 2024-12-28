@@ -16,6 +16,8 @@
     "apps/*"
   ],
   "devDependencies": {
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
     "@types/uuid": "^10.0.0",
     "identity-obj-proxy": "^3.0.0",
     "turbo": "^2.3.3",
