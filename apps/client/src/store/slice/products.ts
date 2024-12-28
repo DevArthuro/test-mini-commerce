@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Product, ResponseProduct } from '../../types/products'
-import axios from 'axios'
+import { Product } from '../../types/products'
+import { Products } from '../../services/products';
 
 const initialStore: { products: Product[]; loading: boolean; error: string } = {
 	products: [],
@@ -8,16 +8,14 @@ const initialStore: { products: Product[]; loading: boolean; error: string } = {
 	error: '',
 }
 
+const ProductService = new Products()
+
 export const fetchPoducts = createAsyncThunk('products/fetch', async () => {
-	try {
-		const response = await axios.get<ResponseProduct>(
-			`${import.meta.env.VITE_BASE_API_URL}/products`
-        )
-        console.log(response.data)
-		return response.data.data
-	} catch (error) {
-		return (error as Error).message
+	const response = await ProductService.getProducts()
+	if (typeof response === "string" ) {
+		throw new Error("error to fech products")
 	}
+	return response.data
 })
 
 export const productSlice = createSlice({
