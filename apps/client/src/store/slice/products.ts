@@ -31,9 +31,9 @@ export const productSlice = createSlice({
 				state.loading = false
 				state.products = action.payload as Product[]
 			})
-			.addCase(fetchPoducts.rejected, (state, action) => {
+			.addCase(fetchPoducts.rejected, (state) => {
 				state.loading = false
-				state.error = action.payload as string
+				state.error = "Has ocurred and error to fetch products" 
 			})
 	},
 })
