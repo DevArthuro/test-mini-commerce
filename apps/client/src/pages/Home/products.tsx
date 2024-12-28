@@ -1,6 +1,12 @@
+import { useSelector } from "react-redux"
+import { RootState } from "../../store/store"
+
 const ProductsPage = () => {
+
+  const products = useSelector((state: RootState) => state.products.products)
+
   return (
-    <div>index</div>
+    <div>{JSON.stringify(products)}</div>
   )
 }
 
