@@ -204,8 +204,12 @@ const ModalBuyProduct = () => {
                 errorsField.delivery?.country?.message
               }
               register={register}
-              name="delivery.countryCode" // Usamos un único campo para manejar el código y el país
+              name="delivery.countryCode"
               className="modal-form__input"
+              onChange={(code: string, country: string) => {
+                setValue("delivery.countryCode", code);
+                setValue("delivery.country", country);
+              }}
             />
             <FormField
               label="Region"
