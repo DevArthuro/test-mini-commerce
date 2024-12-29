@@ -17,14 +17,21 @@ const initialStore: {
 
 const OrdersIntance = new Orders();
 
-export const createOrder = createAsyncThunk(
+export const fetchCreateOrder = createAsyncThunk(
   "createOrder/fetch",
-  async (body: RequestBodyCreateOrder) => {
-    const order = await OrdersIntance.createOrder(body);
-    if (typeof order === "string") {
-      throw new Error(order);
+  async (body: RequestBodyCreateOrder, {rejectWithValue}) => {
+    try {
+      const order = await OrdersIntance.createOrder(body);
+
+      if (typeof order === "string") {
+        throw new Error(order);
+      }
+      return order;
+    } catch (error) {
+      return rejectWithValue(
+        (error as Error).message ?? "Error to create order"
+      );
     }
-    return order;
   }
 );
 
@@ -34,17 +41,18 @@ export const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createOrder.pending, (state) => {
+      .addCase(fetchCreateOrder.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createOrder.fulfilled, (state, action) => {
+      .addCase(fetchCreateOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.data = action.payload as Pick<ResponseCreateOrder, "data">;
       })
-      .addCase(createOrder.rejected, (state) => {
+        .addCase(fetchCreateOrder.rejected, (state, action) => {
+          console.log(action.payload)
         state.loading = false;
         state.data = null;
-        state.error = "Has ocurred and error to fetch products";
+        state.error = action.payload as string;
       });
   },
 });
