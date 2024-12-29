@@ -6,7 +6,7 @@ import {
 } from "../../types/payments";
 
 const initialStore: {
-  data: ResponseCreatePayment["data"] | null;
+    data: { transactionId: string | null;  transaction: ResponseCreatePayment["data"]} | null;
   loading: boolean;
   error: string;
 } = {
@@ -64,11 +64,10 @@ export const transactionSlice = createSlice({
       .addCase(fetchCreateTransaction.fulfilled, (state, action) => {
         state.loading = false;
         state.error = "";
-        state.data = action.payload as ResponseCreatePayment["data"];
+        state.data = { transactionId: action.payload.id, transaction: action.payload};
       })
       .addCase(fetchCreateTransaction.rejected, (state, action) => {
         state.loading = false;
-        state.data = null;
         state.error = action.payload as string;
       })
       .addCase(fetchtransactionById.pending, (state) => {
@@ -78,11 +77,13 @@ export const transactionSlice = createSlice({
       .addCase(fetchtransactionById.fulfilled, (state, action) => {
         state.loading = false;
         state.error = "";
-        state.data = action.payload as ResponseCreatePayment["data"];
+        state.data = {
+          transactionId: action.payload.id,
+          transaction: action.payload,
+        };
       })
       .addCase(fetchtransactionById.rejected, (state, action) => {
         state.loading = false;
-        state.data = null;
         state.error = action.payload as string;
       });
   },

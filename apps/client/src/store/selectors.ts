@@ -13,7 +13,9 @@ export const orderDataIdOrder = (state: RootState) => state.orders.data?.orderId
 export const orderDataById = (state: RootState) => state.orders.data?.order;
 
 /** Transactions */
-export const transactionData = (state: RootState) => state.transactions.data;
+export const transactionData = (state: RootState) => state.transactions.data?.transaction;
+export const transactionId = (state: RootState) =>
+  state.transactions.data?.transactionId;
 export const transactionIsLoading = (state: RootState) =>
   state.transactions.loading;
 export const transactionError = (state: RootState) => state.transactions.error;
