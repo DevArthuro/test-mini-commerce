@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import { ROUTES } from "./utils/route"
+import "./globals.scss"
 
 function App() {
 	return (
