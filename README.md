@@ -8,15 +8,7 @@
 
 ### Variables de Entorno
 
-The `.env` file should be created at the `apps/api` level and contain the necessary configurations. An example of a `.env` file is as follows:
-
-```env
-DATABASE_URL=postgresql://postgres:postgres@postgres:5432/minicommerce?schema=public
-PUBLIC_WOMPI_KEY=#pub key wompi
-PRIVATE_WOMPI_KEY=#prv key wompi
-BASE_URL_WOMPI=#base url api wompi
-INTEGRITY_KEY_WOMPI=#integrity key wompi
-```
+attached to the email
 
 ### Cli execution
 
