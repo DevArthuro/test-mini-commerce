@@ -10,7 +10,7 @@ interface Route {
   Component: LazyExoticComponent<JSXElement> | JSXElement;
 }
 
-const productsLazy = lazy(() => import("../pages/Home/products"));
+const productsLazy = lazy(() => import("../pages/Home"));
 
 export const ROUTES: Route[] = [
 	{
