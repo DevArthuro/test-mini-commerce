@@ -34,11 +34,16 @@ const CountrySelector = forwardRef<HTMLSelectElement, CountrySelectorProps>(
           ref={ref}
           {...register(name)}
           className={`modal-form__select ${error ? "modal-form__select--error" : ""}`}
-          onChange={(e) => { onChangeSelect(e.target.value) }}
+          onChange={(e) => {
+            onChangeSelect(e.target.value);
+          }}
           defaultValue={"CO"}
         >
           {countries.map((country) => (
-            <option key={country.countryCode} value={country.countryCode}>
+            <option
+              key={`${country.countryCode}-${country.countryNameEn}`}
+              value={country.countryCode}
+            >
               {country.countryNameEn} - {country.countryNameLocal}
             </option>
           ))}
