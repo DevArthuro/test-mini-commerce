@@ -163,11 +163,11 @@ export class Wompi implements PaymentGatewayPort {
       );
 
       const TransactionEntity = new Transaction(
-        transactionResponse.data.data.id,
+        transaction.id,
         transaction.order,
         statusSerialize,
         transactionResponse.data.data.id,
-        transactionResponse.data.data.finalized_at,
+        transactionResponse.data.data.finalized_at
       );
 
       return TransactionEntity;

@@ -46,7 +46,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
   }
 
   async findById(id: string): Promise<Transaction | null> {
-    const transaction = await this.prisma.transaction.findUnique({
+    const transaction = await this.prisma.transaction.findFirst({
       where: { id },
       include: {
         order: {
