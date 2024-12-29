@@ -48,7 +48,9 @@ const ProductCard: React.FC<Product> = ({
           <p className="custom-card__description">{description}</p>
         </div>
         <div className="custom-card__footer">
-          <span className="custom-card__price">${price.toFixed(2)}</span>
+          <span className="custom-card__price">
+            ${quantity === 0 ? price : price * quantity}
+          </span>
           <Counter
             decrease={decreaseQuantity}
             increase={increaseQuantity}

@@ -3,13 +3,14 @@ import { Outlet } from "react-router-dom";
 import "./navbar.scss";
 import { useSelector } from "react-redux";
 import { ordersData } from "../store/selectors";
+import Loading from "./loading";
 
 const Navbar = () => {
 
   const orderData = useSelector(ordersData);
 
   return (
-    <>
+    <div className="main__app">
       <div className="navbar">
         <div className="navbar__container">
           <div className="navbar__brand">
@@ -20,10 +21,11 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      <Suspense fallback={<h1>Loading...</h1>}>
+      <Suspense fallback={<Loading />}>
         <Outlet />
       </Suspense>
-    </>
+      <Loading />
+    </div>
   );
 };
 

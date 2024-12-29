@@ -1,12 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Orders } from "../../services/orders";
-import {
-  RequestBodyCreateOrder,
-  ResponseCreateOrder,
-} from "../../types/orders";
+import { RequestBodyCreateOrder } from "../../types/orders";
 
 const initialStore: {
-  data: Pick<ResponseCreateOrder, "data"> | null;
+  data: { orderId: string } | null;
   loading: boolean;
   error: string;
 } = {
@@ -19,14 +16,14 @@ const OrdersIntance = new Orders();
 
 export const fetchCreateOrder = createAsyncThunk(
   "createOrder/fetch",
-  async (body: RequestBodyCreateOrder, {rejectWithValue}) => {
+  async (body: RequestBodyCreateOrder, { rejectWithValue }) => {
     try {
       const order = await OrdersIntance.createOrder(body);
 
       if (typeof order === "string") {
         throw new Error(order);
       }
-      return order;
+      return order.reference;
     } catch (error) {
       return rejectWithValue(
         (error as Error).message ?? "Error to create order"
@@ -46,10 +43,10 @@ export const orderSlice = createSlice({
       })
       .addCase(fetchCreateOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload as Pick<ResponseCreateOrder, "data">;
+        state.data = { orderId: action.payload };
       })
-        .addCase(fetchCreateOrder.rejected, (state, action) => {
-          console.log(action.payload)
+      .addCase(fetchCreateOrder.rejected, (state, action) => {
+        console.log(action.payload);
         state.loading = false;
         state.data = null;
         state.error = action.payload as string;
