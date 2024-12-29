@@ -10,7 +10,7 @@ const persistConfig = {
   key: "root",
   storage,
   congfig: {
-    whitelist: ["orders"],
+    whitelist: ["orders", "products", "transactions"],
   },
 };
 
