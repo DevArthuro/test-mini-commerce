@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import "./summary.scss";
 import { OrderStatus } from "../../types/orders";
 import { fetchCreateTransaction } from "../../store/slice/transactions";
+import Loading from "../../components/loading";
 
 const SummaryPage = () => {
   const transaction = useSelector(transactionData);
@@ -33,12 +34,12 @@ const SummaryPage = () => {
   }, []);
 
   useEffect(() => {
-    if (orderId) {
+    if (orderId && !orders) {
       dispatch(fetchOrderByReference(orderId));
     } else if (isError || !orderId) {
       navigation("/");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   if (isError) {
@@ -46,7 +47,11 @@ const SummaryPage = () => {
   }
 
   if (transaction) {
-    navigation("/checkout")
+    navigation("/checkout");
+  }
+
+  if (!orders) {
+    return <Loading />
   }
 
   const handleSubmitPay = () => {
@@ -54,6 +59,11 @@ const SummaryPage = () => {
       dispatch(fetchCreateTransaction({ orderReference: orders?.reference }));
     }
   };
+
+  const totalPrice = orders?.product.price * orders?.quantity;
+  const deliveryFee = totalPrice * 0.05;
+  const storeFee = totalPrice * 0.03;
+  const grandTotal = totalPrice + deliveryFee + storeFee;
 
   return (
     <div className="summary">
@@ -128,6 +138,16 @@ const SummaryPage = () => {
             </p>
             <p>
               <strong>Total:</strong> ${orders.totalOrder}
+            </p>
+            <p>
+              <strong>Delivery Fee (5%):</strong> ${deliveryFee.toFixed(2)}
+            </p>
+            <p>
+              <strong>Store Fee (3%):</strong> ${storeFee.toFixed(2)}
+            </p>
+            <hr />
+            <p>
+              <strong>Grand Total:</strong> ${grandTotal.toFixed(2)}
             </p>
           </div>
           <button className="summary__pay-button" onClick={handleSubmitPay}>
