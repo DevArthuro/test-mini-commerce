@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { RequestBodyCreateOrder, ResponseCreateOrder } from "../types/orders";
 
 export class Orders {
@@ -17,7 +17,10 @@ export class Orders {
       >(`/orders/create`, body);
       return response.data.data;
     } catch (error) {
-      return (error as Error).message;
+      if (error instanceof AxiosError) {
+        return error.response?.data.message;
+      }
+      return "the orders is not created";
     }
   }
 }
