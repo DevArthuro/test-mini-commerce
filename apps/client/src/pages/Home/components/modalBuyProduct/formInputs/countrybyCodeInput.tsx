@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo, useState } from "react";
+import { forwardRef, useCallback, useMemo } from "react";
 import { all } from "country-codes-list";
 
 interface CountrySelectorProps {
