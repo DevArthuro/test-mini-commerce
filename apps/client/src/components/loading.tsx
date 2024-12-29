@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
-import { ordersLoading, productsLoading } from "../store/selectors";
+import { ordersLoading, productsLoading, transactionIsLoading } from "../store/selectors";
 
 const Loading: React.FC<{isActive?: boolean}> = ({isActive}) => {
   const isProductLoading = useSelector(productsLoading);
   const isOrderLoading = useSelector(ordersLoading);
+  const isTransactionLoading = useSelector(transactionIsLoading);
 
-  const isLoading = isProductLoading || isOrderLoading || isActive;
+  const isLoading =
+    isTransactionLoading || isProductLoading || isOrderLoading || isActive;
 
   return (
     <>

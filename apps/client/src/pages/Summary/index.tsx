@@ -3,31 +3,34 @@ import {
   orderDataById,
   orderDataIdOrder,
   ordersError,
+  transactionData,
 } from "../../store/selectors";
 import { useCallback, useEffect } from "react";
 import { fetchOrderByReference } from "../../store/slice/orders";
 import { AppDispatch } from "../../store/store";
 import { useNavigate } from "react-router-dom";
-import "./summary.scss"
+import "./summary.scss";
 import { OrderStatus } from "../../types/orders";
+import { fetchCreateTransaction } from "../../store/slice/transactions";
 
 const SummaryPage = () => {
+  const transaction = useSelector(transactionData);
   const orderId = useSelector(orderDataIdOrder);
   const orders = useSelector(orderDataById);
   const isError = useSelector(ordersError);
   const dispatch = useDispatch<AppDispatch>();
-    const navigation = useNavigate();
-    
-    const showAccecibleStatus = useCallback((status: OrderStatus) => {
-        switch (status) {
-            case OrderStatus.PENDING:
-                return "pendiente del pago"
-            case OrderStatus.FAILED:
-                return "cancelado"
-            case OrderStatus.PAID:
-                return "pagado"
-        }
-    }, [])
+  const navigation = useNavigate();
+
+  const showAccecibleStatus = useCallback((status: OrderStatus) => {
+    switch (status) {
+      case OrderStatus.PENDING:
+        return "pendiente del pago";
+      case OrderStatus.FAILED:
+        return "cancelado";
+      case OrderStatus.PAID:
+        return "pagado";
+    }
+  }, []);
 
   useEffect(() => {
     if (orderId) {
@@ -40,6 +43,16 @@ const SummaryPage = () => {
   if (isError) {
     navigation("/");
   }
+
+  if (transaction) {
+    navigation("/checkout")
+  }
+
+  const handleSubmitPay = () => {
+    if (orders?.reference) {
+      dispatch(fetchCreateTransaction({ orderReference: orders?.reference }));
+    }
+  };
 
   return (
     <div className="summary">
@@ -116,7 +129,9 @@ const SummaryPage = () => {
               <strong>Total:</strong> ${orders.totalOrder}
             </p>
           </div>
-          <button className="summary__pay-button">Pay</button>
+          <button className="summary__pay-button" onClick={handleSubmitPay}>
+            Pay
+          </button>
         </div>
       ) : (
         <p className="summary__error">Order not found</p>

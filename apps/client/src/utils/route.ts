@@ -12,6 +12,7 @@ interface Route {
 
 const productsLazy = lazy(() => import("../pages/Home"));
 const summaryLazy = lazy(() => import("../pages/Summary"));
+const checkoutLazy = lazy(() => import("../pages/Checkout"))
 
 export const ROUTES: Route[] = [
   {
@@ -27,5 +28,12 @@ export const ROUTES: Route[] = [
     path: "sumary",
     appearance: "summary",
     Component: summaryLazy,
+  },
+  {
+    id: "root.checkout",
+    href: "/checkout",
+    path: "checkout",
+    appearance: "checkout",
+    Component: checkoutLazy,
   },
 ];
