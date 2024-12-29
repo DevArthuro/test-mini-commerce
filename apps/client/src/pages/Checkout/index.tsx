@@ -33,7 +33,7 @@ const Checkout = () => {
         dispatch(clearStateProduct())
         dispatch(clearStateTransaction())
         navigation("/navigate");
-      }, 5000);
+      }, 4000);
 
       return () => clearTimeout(redirectTimer);
     }
@@ -53,7 +53,6 @@ const Checkout = () => {
     status,
   } = transaction;
 
-  // Cálculos
   const totalPrice = price * quantity;
   const deliveryFee = totalPrice * 0.05;
   const storeFee = totalPrice * 0.03;
