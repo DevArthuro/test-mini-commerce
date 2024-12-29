@@ -3,8 +3,10 @@ import { RootState } from "../../store/store";
 import ProductCard from "./components/productCard";
 import ModalBuyProduct from "./components/modalBuyProduct";
 import { ContextModalProvider } from "../../context/modalConext";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./products.scss";
+import { orderDataIdOrder } from "../../store/selectors";
+import { useNavigate } from "react-router-dom";
 
 const ProductsPage = () => {
   const [modalState, setModalState] = useState({
@@ -12,6 +14,18 @@ const ProductsPage = () => {
     openModal: false,
     quantity: 0,
   });
+  const orderId = useSelector(orderDataIdOrder);
+  const products = useSelector((state: RootState) => state.products.data);
+  const isError = useSelector((state: RootState) => state.products.error);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(orderId);
+    if (orderId) {
+      navigate("/summary");
+    }
+  }, [orderId]);
 
   const openModal = useCallback((idProduct: string, quantity: number) => {
     setModalState((prev) => ({
@@ -30,14 +44,6 @@ const ProductsPage = () => {
       quantity: 0,
     }));
   }, []);
-
-  const products = useSelector((state: RootState) => state.products.data);
-  const isLoading = useSelector((state: RootState) => state.products.loading);
-  const isError = useSelector((state: RootState) => state.products.error);
-
-  if (isLoading) {
-    return <div className="loading">Loading...</div>;
-  }
 
   return (
     <div className="products">
