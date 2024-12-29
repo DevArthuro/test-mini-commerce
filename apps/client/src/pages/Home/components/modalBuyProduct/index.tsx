@@ -9,9 +9,10 @@ import CountrySelector from "./formInputs/countrybyCodeInput";
 import DocumentTypeSelector from "./formInputs/customSelectTypeDocument";
 import { useContext } from "react";
 import { contextModalState } from "../../../../context/modalConext";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store/store";
 import { fetchCreateOrder } from "../../../../store/slice/orders";
+import { ordersLoading } from "../../../../store/selectors";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -75,6 +76,9 @@ const paymentSchema = z.object({
 });
 
 const ModalBuyProduct = () => {
+
+  const orderIsLoading = useSelector(ordersLoading)
+  
   const {
     register,
     handleSubmit,
@@ -259,7 +263,11 @@ const ModalBuyProduct = () => {
             />
           </section>
           <div></div>
-          <button className="modal-form__button" type="submit">
+          <button
+            className="modal-form__button"
+            type="submit"
+            disabled={orderIsLoading}
+          >
             Go to the summary
           </button>
         </form>
