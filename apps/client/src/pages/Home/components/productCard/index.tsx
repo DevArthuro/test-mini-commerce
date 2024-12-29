@@ -2,6 +2,7 @@ import { useCallback, useContext, useState } from "react";
 import { Product } from "../../../../types/products";
 import Counter from "./counter";
 import { contextModalState } from "../../../../context/modalConext";
+import "./productCard.scss";
 
 const ProductCard: React.FC<Product> = ({
   name,
@@ -11,13 +12,10 @@ const ProductCard: React.FC<Product> = ({
   price,
   stock,
 }) => {
-  /** State */
   const [quantity, setQuantity] = useState(0);
 
-  /** Context */
   const { openModal, handlerOpenModal } = useContext(contextModalState);
 
-  /** Handlers */
   const handlerBuyProduct = useCallback(() => {
     alert(quantity);
     handlerOpenModal(id, quantity);
@@ -32,30 +30,42 @@ const ProductCard: React.FC<Product> = ({
   }, []);
 
   return (
-    <section>
-      <article>
-        <img src={imageUrl} alt={name} width={350} height={350} />
-      </article>
-      <article>
-        <h2>{name}</h2>
-      </article>
-      <article>
-        <p>{description}</p>
-        <p>Price: ${price}</p>
-        <p>Units available: {stock}</p>
-        <Counter
-          quantity={quantity}
-          decrease={decreaseQuantity}
-          increase={increaseQuantity}
-          limitStock={stock}
-        />
-      </article>
-      <article>
-        <button onClick={handlerBuyProduct} disabled={openModal}>
-          Pay with credit card
+    <div className="custom-card">
+      <div className="custom-card__image-container">
+        <img src={imageUrl} alt={name} className="custom-card__image" />
+        {stock < 5 && stock > 0 && (
+          <span className="custom-card__stock-alert">
+            Only {stock} left in stock!
+          </span>
+        )}
+        {stock === 0 && (
+          <span className="custom-card__stock-alert">Not available</span>
+        )}
+        <span className="custom-card__stock-available">{stock}</span>
+      </div>
+      <div className="custom-card__content">
+        <div className="custom-card__header">
+          <p className="custom-card__title">{name}</p>
+          <p className="custom-card__description">{description}</p>
+        </div>
+        <div className="custom-card__footer">
+          <span className="custom-card__price">${price.toFixed(2)}</span>
+          <Counter
+            decrease={decreaseQuantity}
+            increase={increaseQuantity}
+            limitStock={stock}
+            quantity={quantity}
+          />
+        </div>
+        <button
+          className={`custom-card_button ${quantity === 0 ? "custom-card_button-disabled" : null}`}
+          disabled={quantity === 0 || openModal}
+          onClick={handlerBuyProduct}
+        >
+          {quantity > 0 ? "Pay with credit card" : `Increase the counter`}
         </button>
-      </article>
-    </section>
+      </div>
+    </div>
   );
 };
 
