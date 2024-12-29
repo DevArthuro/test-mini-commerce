@@ -53,16 +53,22 @@ export const fetchOrderByReference = createAsyncThunk(
 export const orderSlice = createSlice({
   name: "order",
   initialState: initialStore,
-  reducers: {},
+  reducers: {
+    clearStateOrder: (state) => {
+      state.data = null;
+      state.loading = false;
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCreateOrder.pending, (state) => {
         state.loading = true;
-        state.error = ""
+        state.error = "";
       })
       .addCase(fetchCreateOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = ""
+        state.error = "";
         state.data = { orderId: action.payload, order: null };
       })
       .addCase(fetchCreateOrder.rejected, (state, action) => {
@@ -75,7 +81,7 @@ export const orderSlice = createSlice({
       })
       .addCase(fetchOrderByReference.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = ""
+        state.error = "";
         state.data = {
           orderId: state.data?.orderId as string,
           order: action.payload as ResponseCreateOrder["data"],
@@ -88,5 +94,7 @@ export const orderSlice = createSlice({
       });
   },
 });
+
+export const { clearStateOrder } = orderSlice.actions;
 
 export default orderSlice.reducer;

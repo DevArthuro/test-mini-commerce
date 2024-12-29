@@ -131,7 +131,7 @@ const SummaryPage = () => {
             </p>
           </div>
           <button className="summary__pay-button" onClick={handleSubmitPay}>
-            Pay
+            Confirm
           </button>
         </div>
       ) : (

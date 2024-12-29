@@ -54,7 +54,13 @@ export const fetchtransactionById = createAsyncThunk(
 export const transactionSlice = createSlice({
   name: "order",
   initialState: initialStore,
-  reducers: {},
+  reducers: {
+    clearStateTransaction: (state) => {
+      state.data = null;
+      state.loading = false;
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCreateTransaction.pending, (state) => {
@@ -64,7 +70,10 @@ export const transactionSlice = createSlice({
       .addCase(fetchCreateTransaction.fulfilled, (state, action) => {
         state.loading = false;
         state.error = "";
-        state.data = { transactionId: action.payload.id, transaction: action.payload};
+        state.data = {
+          transactionId: action.payload.id,
+          transaction: action.payload,
+        };
       })
       .addCase(fetchCreateTransaction.rejected, (state, action) => {
         state.loading = false;
@@ -88,5 +97,7 @@ export const transactionSlice = createSlice({
       });
   },
 });
+
+export const { clearStateTransaction } = transactionSlice.actions;
 
 export default transactionSlice.reducer;
