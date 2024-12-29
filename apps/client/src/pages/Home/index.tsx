@@ -21,10 +21,10 @@ const ProductsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(orderId);
     if (orderId) {
       navigate("/summary");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   const openModal = useCallback((idProduct: string, quantity: number) => {
