@@ -20,9 +20,13 @@
     overflow-y: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-    @media (min-width: 320px) and (max-width: 375px) {
+    @media (min-width: 350px) and (max-width: 599px) {
       max-width: 90%;
       padding: 1rem;
+    }
+
+    @media (min-width: 600px) and (max-width: 900px) {
+      padding: 1.5rem;
     }
   }
 }
@@ -43,6 +47,7 @@
     &--split {
       display: flex;
       gap: 1rem;
+      justify-content: space-between;
     }
   }
 
@@ -61,10 +66,9 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
-      width: 100%; /* Asegura que el input ocupe todo el ancho */
+      width: 100%;
     }
 
-    /* Estilo para select */
     .modal-form__select {
       padding: 0.75rem;
       border: 1px solid #ccc;
@@ -72,7 +76,7 @@
       font-size: 1rem;
       background-color: #fff;
       transition: border-color 0.3s ease;
-      width: 100%; /* Asegura que el select ocupe todo el ancho */
+      width: 100%;
     }
 
     .input-error {
@@ -81,8 +85,8 @@
     }
 
     .modal-form__error-container {
-      min-height: 20px; /* Reserva espacio para el error */
-      height: 20px; /* Establece altura fija para evitar que los campos se muevan */
+      min-height: 20px;
+      height: 20px;
       display: flex;
       align-items: flex-start;
       justify-content: flex-start;
@@ -92,8 +96,8 @@
       color: #dc3545;
       margin-top: 0.25rem;
       font-size: 0.875rem;
-      word-wrap: break-word; /* Evita que los errores se salgan de la caja */
-      white-space: normal; /* Permite el salto de línea dentro del error */
+      word-wrap: break-word;
+      white-space: normal;
     }
   }
 
@@ -105,14 +109,18 @@
     display: flex;
     gap: 1rem;
     width: 100%;
+
+    @media (max-width: 599px) {
+      flex-direction: column;
+    }
   }
 
   &__expire {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    width: 50%;
-    justify-content: center; /* Centra los elementos dentro de la caja */
+    width: 50%; 
+    justify-content: center;
 
     input {
       width: 3rem;
@@ -121,9 +129,15 @@
     }
 
     .modal-form__slash {
-      font-size: 1.5rem; /* Aumenta el tamaño del símbolo '/' */
+      font-size: 1.5rem;
       color: #333;
       font-weight: bold;
+    }
+
+    @media (max-width: 599px) {
+      width: 100%;
+      gap: 1rem;
+      flex-direction: row;
     }
   }
 
@@ -138,7 +152,81 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: darken(#007bff, 10%);
+      opacity: 0.5;
+
     }
+  }
+}
+
+.modal-form__input--type-document {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+
+  .modal-form__input--type {
+    width: 20%;
+  }
+
+  .modal-form__input--document {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.875rem;
+      color: #333;
+    }
+
+    input {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 100%;
+    }
+  }
+}
+
+
+@media (max-width: 599px) {
+  .modal-form__expire {
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .modal-form__expire input {
+    width: 48%;
+    font-size: 1rem;
+  }
+
+  .modal-form__input--half {
+    width: 100%; 
+  }
+
+  .modal-form__card-info {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+  .modal-form__expire {
+    gap: 1rem;
+    .modal-form__slash {
+      font-size: 1.5rem;
+    }
+  }
+
+  .modal-form__card-info {
+    flex-direction: row;
+  }
+
+  .modal-form__expire input {
+    width: 50%; 
+  }
+
+  .modal-form__input--half {
+    width: 50%;
   }
 }

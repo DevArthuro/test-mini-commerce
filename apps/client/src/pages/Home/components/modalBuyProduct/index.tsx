@@ -6,6 +6,7 @@ import { FieldErrors, useForm } from "react-hook-form";
 import { ModalFormValues } from "../../../../types/modalForm";
 import CustomPhoneInput from "./formInputs/customPhoneInput";
 import CountrySelector from "./formInputs/countrybyCodeInput";
+import DocumentTypeSelector from "./formInputs/customSelectTypeDocument";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -27,7 +28,6 @@ export const paymentSchema = z.object({
           message: "Invalid month",
         }
       ),
-
     expYear: z
       .string()
       .regex(/^\d{4}$/, "Invalid year")
@@ -45,7 +45,6 @@ export const paymentSchema = z.object({
           message: `The year is past`,
         }
       ),
-
     cardName: z.string().min(3, "Card name is required"),
   }),
   customer: z.object({
@@ -53,7 +52,12 @@ export const paymentSchema = z.object({
     lastname: z.string().min(2, "Last name is required"),
     email: z.string().email("Invalid email"),
     phoneNumber: z.string().regex(/^\+[1-9]\d{1,14}$/, "Invalid phone number"),
-    typeDocument: z.string().min(1, "Document type is required"),
+    typeDocument: z.enum(
+      ["PP", "RUC", "RG", "OTHER", "RC", "TI", "CC", "TE", "CE", "NIT", "DNI"],
+      {
+        message: "Invalid document type",
+      }
+    ),
     document: z.string().min(5, "Document number is required"),
   }),
   delivery: z.object({
@@ -64,6 +68,7 @@ export const paymentSchema = z.object({
     address: z.string().min(5, "Address is required"),
   }),
 });
+
 
 const ModalBuyProduct = () => {
   const {
@@ -170,20 +175,24 @@ const ModalBuyProduct = () => {
               error={errorsField.customer?.phoneNumber?.message}
               className="modal-form__input"
             />
-            <FormField
-              label="Document Type"
-              error={errorsField.customer?.typeDocument?.message}
-              {...register("customer.typeDocument")}
-              as="input"
-              className="modal-form__input"
-            />
-            <FormField
-              label="Document Number"
-              error={errorsField.customer?.document?.message}
-              {...register("customer.document")}
-              as="input"
-              className="modal-form__input"
-            />
+            <section className="modal-form__section">
+              <div className="modal-form__input--type-document">
+                <DocumentTypeSelector
+                  label="Document Type"
+                  error={errorsField.customer?.typeDocument?.message}
+                  register={register}
+                  name="customer.typeDocument"
+                  className="modal-form__input--type"
+                />
+                <FormField
+                  label="Document Number"
+                  error={errorsField.customer?.document?.message}
+                  {...register("customer.document")}
+                  as="input"
+                  className="modal-form__input--document"
+                />
+              </div>
+            </section>
           </section>
 
           <h2 className="modal-form__title">Delivery Information</h2>
