@@ -4,15 +4,14 @@ interface DocumentTypeSelectorProps {
   label: string;
   error?: string;
   className?: string;
-  register: any; // React Hook Form register
-  name: string; // Nombre del campo para el registro
+  register: any;
+  name: string;
 }
 
-export const documentTypes: string[] = [
+const documentTypes: string[] = [
   "PP",
   "RUC",
   "RG",
-  "OTHER",
   "RC",
   "TI",
   "CC",
@@ -20,6 +19,7 @@ export const documentTypes: string[] = [
   "CE",
   "NIT",
   "DNI",
+  "OTHER",
 ];
 
 const DocumentTypeSelector = forwardRef<
@@ -33,6 +33,7 @@ const DocumentTypeSelector = forwardRef<
         ref={ref}
         {...register(name)}
         className={`modal-form__select ${error ? "modal-form__select--error" : ""}`}
+        defaultValue={"CC"}
       >
         <option value="">Select a document type</option>
         {documentTypes.map((doc) => (

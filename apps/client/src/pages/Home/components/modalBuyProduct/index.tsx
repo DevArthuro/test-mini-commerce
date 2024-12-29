@@ -12,7 +12,7 @@ const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 const currentMonth = currentDate.getMonth() + 1;
 
-export const paymentSchema = z.object({
+const paymentSchema = z.object({
   cardInfo: z.object({
     number: z.string().regex(/^\d{16}$/, "Invalid card number"),
     cvc: z.string().regex(/^\d{3,4}$/, "Invalid CVC"),
