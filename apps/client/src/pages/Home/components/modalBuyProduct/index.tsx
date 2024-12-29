@@ -53,7 +53,7 @@ const paymentSchema = z.object({
     name: z.string().min(2, "Name is required"),
     lastname: z.string().min(2, "Last name is required"),
     email: z.string().email("Invalid email"),
-    phoneNumber: z.string().regex(/^\+[1-9]\d{1,14}$/, "Invalid phone number"),
+    phoneNumber: z.string().regex(/^\+[1-9]\d{1,14}$/, "Invalid phone number").min(12, "Invalid phone number"),
     typeDocument: z.enum(
       ["PP", "RUC", "RG", "OTHER", "RC", "TI", "CC", "TE", "CE", "NIT", "DNI"],
       {
@@ -63,8 +63,6 @@ const paymentSchema = z.object({
     document: z.string().min(5, "Document number is required"),
   }),
   delivery: z.object({
-    countryCode: z.string().min(2, "Country code is required"),
-    country: z.string().min(2, "Country is required"),
     region: z.string().min(2, "Region is required"),
     city: z.string().min(2, "City is required"),
     address: z.string().min(5, "Address is required"),
