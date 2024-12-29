@@ -4,18 +4,30 @@ import {
   orderDataIdOrder,
   ordersError,
 } from "../../store/selectors";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { fetchOrderByReference } from "../../store/slice/orders";
 import { AppDispatch } from "../../store/store";
 import { useNavigate } from "react-router-dom";
 import "./summary.scss"
+import { OrderStatus } from "../../types/orders";
 
 const SummaryPage = () => {
   const orderId = useSelector(orderDataIdOrder);
   const orders = useSelector(orderDataById);
   const isError = useSelector(ordersError);
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigate();
+    const navigation = useNavigate();
+    
+    const showAccecibleStatus = useCallback((status: OrderStatus) => {
+        switch (status) {
+            case OrderStatus.PENDING:
+                return "pendiente del pago"
+            case OrderStatus.FAILED:
+                return "cancelado"
+            case OrderStatus.PAID:
+                return "pagado"
+        }
+    }, [])
 
   useEffect(() => {
     if (orderId) {
@@ -86,19 +98,22 @@ const SummaryPage = () => {
               <strong>Description:</strong> {orders.product.description}
             </p>
             <p>
+              <strong>Unit price:</strong> ${orders.product.price}
+            </p>
+            <p>
               <strong>Quantity:</strong> {orders.quantity}
             </p>
           </div>
           <div className="summary__section">
             <h2 className="summary__subtitle">Order Summary</h2>
             <p>
-              <strong>Status:</strong> {orders.status}
-            </p>
-            <p>
-              <strong>Total:</strong> ${orders.totalOrder}
+              <strong>Status:</strong> {showAccecibleStatus(orders.status)}
             </p>
             <p>
               <strong>Reference:</strong> {orders.reference}
+            </p>
+            <p>
+              <strong>Total:</strong> ${orders.totalOrder}
             </p>
           </div>
           <button className="summary__pay-button">Pay</button>
