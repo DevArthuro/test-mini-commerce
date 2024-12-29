@@ -23,4 +23,18 @@ export class Orders {
       return "the orders is not created";
     }
   }
+
+  public async getOrderByReference(id: string): Promise<ResponseCreateOrder["data"] | string> {
+    try {
+      const response = await this.fetchInstance.get<ResponseCreateOrder>(
+        `/orders/${id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return error.response?.data.message;
+      }
+      return "the orders is not created";
+    }
+  }
 }
