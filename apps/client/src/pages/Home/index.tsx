@@ -1,53 +1,66 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import ProductCard from "./components/productCard/counter";
+import ProductCard from "./components/productCard";
 import ModalBuyProduct from "./components/modalBuyProduct";
 import { ContextModalProvider } from "../../context/modalConext";
 import { useCallback, useState } from "react";
-import "./products.scss"
+import "./products.scss";
 
 const ProductsPage = () => {
-
   const [modalState, setModalState] = useState({
     idProduct: "",
     openModal: false,
-    quantity: 0
-  })
+    quantity: 0,
+  });
 
   const openModal = useCallback((idProduct: string, quantity: number) => {
-    setModalState((prev) => ({...prev, idProduct, openModal: true, quantity}))
-  }, [])
+    setModalState((prev) => ({
+      ...prev,
+      idProduct,
+      openModal: true,
+      quantity,
+    }));
+  }, []);
 
   const closeModal = useCallback(() => {
-    setModalState((prev) => ({...prev, openModal: false, idProduct: '', quantity: 0}))
-  }, [])
+    setModalState((prev) => ({
+      ...prev,
+      openModal: false,
+      idProduct: "",
+      quantity: 0,
+    }));
+  }, []);
 
   const products = useSelector((state: RootState) => state.products.products);
   const isLoading = useSelector((state: RootState) => state.products.loading);
   const isError = useSelector((state: RootState) => state.products.error);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   return (
-    <div>
-      <ContextModalProvider value={{
-        ...modalState,
-        handlerOpenModal: openModal,
-        handlerCloseModal: closeModal
-      }}>
+    <div className="products">
+      <ContextModalProvider
+        value={{
+          ...modalState,
+          handlerOpenModal: openModal,
+          handlerCloseModal: closeModal,
+        }}
+      >
         <div>
           {isError ? (
-            <p>something is wrong</p>
+            <p className="products__error">Something went wrong</p>
           ) : (
             <div>
               {products.length > 0 ? (
-                products.map((prouct) => (
-                  <ProductCard {...prouct} key={prouct.id} />
-                ))
+                <div className="products__grid">
+                  {products.map((product) => (
+                    <ProductCard {...product} key={product.id} />
+                  ))}
+                </div>
               ) : (
-                <p>Any products available</p>
+                <p className="products__no-products">Any products available</p>
               )}
             </div>
           )}

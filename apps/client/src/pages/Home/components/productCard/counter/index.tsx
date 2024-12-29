@@ -10,12 +10,20 @@ const Counter: React.FC<{
   const isActiveIncrease = useMemo(() => quantity === limitStock, [quantity]);
 
   return (
-    <section>
-      <button onClick={decrease} disabled={isActiveDecrease}>
+    <section className="counter">
+      <button
+        className={`counter__button counter__button--decrease ${isActiveDecrease ? "counter__button--disabled" : ""}`}
+        onClick={decrease}
+        disabled={isActiveDecrease}
+      >
         -
       </button>
-      <span>{quantity}</span>
-      <button onClick={increase} disabled={isActiveIncrease}>
+      <span className="counter__display">{quantity}</span>
+      <button
+        className={`counter__button counter__button--increase ${isActiveIncrease ? "counter__button--disabled" : ""}`}
+        onClick={increase}
+        disabled={isActiveIncrease}
+      >
         +
       </button>
     </section>
