@@ -31,12 +31,13 @@ export interface CardInfo {
 export interface ResponseCreatePayment {
   data: {
     id: string;
-    payment: {
+    order: {
       customer: CustomerPayment;
       product: Product;
       paymentAmount: number;
       reference: string;
       status: PaymentStatus;
+      quantity: number;
       paymentDate: string | null;
     };
     status: PaymentStatus;
