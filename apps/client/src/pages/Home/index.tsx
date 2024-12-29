@@ -1,16 +1,15 @@
-import { all } from "country-codes-list"
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import ModalBuyProduct from "./components/modalBuyProduct";
 import { ContextModalProvider } from "../../context/modalConext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import "./products.scss"
 
 const ProductsPage = () => {
 
   const [modalState, setModalState] = useState({
     idProduct: "",
-    openModal: true,
+    openModal: false,
     quantity: 0
   })
 
