@@ -28,15 +28,11 @@ export const productSlice = createSlice({
   name: "products",
   initialState: initialStore,
   reducers: {
-    saveProductSelected: (
-      state,
-      action: { payload: saveProductSelectType }
-    ) => {
-      state.productSelected = {
-        idProduct: action.payload.idProduct,
-        quantity: action.payload.quantity,
-      };
-    },
+    clearStateProduct: (state) => {
+      state.data = []
+      state.loading = false
+      state.error = ''
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -58,6 +54,6 @@ export const productSlice = createSlice({
   },
 });
 
-export const { saveProductSelected } = productSlice.actions
+export const { clearStateProduct } = productSlice.actions
 
 export default productSlice.reducer

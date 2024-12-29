@@ -3,9 +3,12 @@ import { transactionData, transactionId } from "../../store/selectors";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../store/store";
-import { fetchtransactionById } from "../../store/slice/transactions";
+import { clearStateTransaction, fetchtransactionById } from "../../store/slice/transactions";
 import { PaymentStatus } from "../../types/payments";
-import "./checkout.scss";
+import "./checkout.scss"; // Agrega los estilos necesarios
+import Loading from "../../components/loading";
+import { clearStateOrder } from "../../store/slice/orders";
+import { clearStateProduct } from "../../store/slice/products";
 
 const Checkout = () => {
   const transaction = useSelector(transactionData);
@@ -17,14 +20,28 @@ const Checkout = () => {
     if (!transaction) {
       navigation("/");
     }
+
     if (IdTransaction && transaction?.status === PaymentStatus.PENDING) {
-      dispatch(fetchtransactionById(IdTransaction));
+      const timer = setTimeout(() => {
+        dispatch(fetchtransactionById(IdTransaction));
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    } else {
+      const redirectTimer = setTimeout(() => {
+        dispatch(clearStateOrder())
+        dispatch(clearStateProduct())
+        dispatch(clearStateTransaction())
+        navigation("/navigate");
+      }, 5000);
+
+      return () => clearTimeout(redirectTimer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transaction, IdTransaction]);
 
   if (!transaction) {
-    return <div>Loading...</div>;
+    return <Loading isActive={true} />;
   }
 
   const {
@@ -36,6 +53,7 @@ const Checkout = () => {
     status,
   } = transaction;
 
+  // Cálculos
   const totalPrice = price * quantity;
   const deliveryFee = totalPrice * 0.05;
   const storeFee = totalPrice * 0.03;

@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
 import ProductCard from "./components/productCard";
 import ModalBuyProduct from "./components/modalBuyProduct";
 import { ContextModalProvider } from "../../context/modalConext";
@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import "./products.scss";
 import { orderDataIdOrder } from "../../store/selectors";
 import { useNavigate } from "react-router-dom";
+import { fetchPoducts } from "../../store/slice/products";
 
 const ProductsPage = () => {
   const [modalState, setModalState] = useState({
@@ -14,6 +15,7 @@ const ProductsPage = () => {
     openModal: false,
     quantity: 0,
   });
+  const dispatch = useDispatch<AppDispatch>()
   const orderId = useSelector(orderDataIdOrder);
   const products = useSelector((state: RootState) => state.products.data);
   const isError = useSelector((state: RootState) => state.products.error);
@@ -23,6 +25,9 @@ const ProductsPage = () => {
   useEffect(() => {
     if (orderId) {
       navigate("/summary");
+    }
+    if (products.length === 0) {
+      dispatch(fetchPoducts());
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
