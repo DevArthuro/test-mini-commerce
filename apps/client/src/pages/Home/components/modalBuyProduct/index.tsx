@@ -27,7 +27,7 @@ const paymentSchema = z.object({
       .string()
       .regex(/^(0[1-9]|1[0-2])$/, "Invalid month")
       .refine(
-        (value) => {
+        (value: string) => {
           const month = parseInt(value);
           return month >= 1 && month <= 12;
         },
@@ -39,7 +39,7 @@ const paymentSchema = z.object({
       .string()
       .regex(/^\d{4}$/, "Invalid year")
       .refine(
-        (value) => {
+        (value: string) => {
           const year = parseInt(value);
           if (year < currentYear) return false;
           if (year === currentYear) {
@@ -58,7 +58,10 @@ const paymentSchema = z.object({
     name: z.string().min(2, "Name is required"),
     lastname: z.string().min(2, "Last name is required"),
     email: z.string().email("Invalid email"),
-    phoneNumber: z.string().regex(/^\+[1-9]\d{1,14}$/, "Invalid phone number").min(12, "Invalid phone number"),
+    phoneNumber: z
+      .string()
+      .regex(/^\+[1-9]\d{1,14}$/, "Invalid phone number")
+      .min(12, "Invalid phone number"),
     typeDocument: z.enum(
       ["PP", "RUC", "RG", "OTHER", "RC", "TI", "CC", "TE", "CE", "NIT", "DNI"],
       {
@@ -83,10 +86,10 @@ const ModalBuyProduct = () => {
   const navigate = useNavigate()
   
   useEffect(() => {
-    console.log(orderId)
     if (orderId) {
       navigate("/summary");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId])
 
   const {
@@ -104,6 +107,7 @@ const ModalBuyProduct = () => {
   const { handlerCloseModal, idProduct, quantity } =
     useContext(contextModalState);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     dispatch(fetchCreateOrder({
       productId: idProduct,
