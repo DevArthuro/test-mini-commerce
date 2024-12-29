@@ -80,3 +80,39 @@
     }
   }
 }
+.modal-form {
+  &__input {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      color: #333;
+    }
+
+    .modal-form__select {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: #fff;
+      transition: border-color 0.3s ease;
+
+      &:hover {
+        border-color: #007bff;
+      }
+
+      &--error {
+        border-color: #dc3545;
+        background-color: #ffe6e6;
+      }
+    }
+
+    .modal-form__error {
+      color: #dc3545;
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+    }
+  }
+}
