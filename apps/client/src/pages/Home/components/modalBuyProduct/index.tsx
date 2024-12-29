@@ -1,9 +1,9 @@
-import "./modalBuyProduct.scss"
+import "./modalBuyProduct.scss";
 
 import FormField from "./formInputs/formField";
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { FieldErrors, useForm } from "react-hook-form"
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldErrors, useForm } from "react-hook-form";
 import { ModalFormValues } from "../../../../types/modalForm";
 import CustomPhoneInput from "./formInputs/customPhoneInput";
 
@@ -40,7 +40,7 @@ const ModalBuyProduct = () => {
     handleSubmit,
     formState: { errors },
     watch,
-    setValue
+    setValue,
   } = useForm({
     resolver: zodResolver(paymentSchema),
   });
@@ -52,119 +52,142 @@ const ModalBuyProduct = () => {
   const errorsField = errors as FieldErrors<ModalFormValues>;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Card Information</h2>
-      <section>
-        <FormField
-          label="Number"
-          error={errorsField.cardInfo?.number?.message}
-          {...register("cardInfo.number")}
-          as="input"
-        />
-        <FormField
-          label="CVC"
-          error={errorsField.cardInfo?.cvc?.message}
-          {...register("cardInfo.cvc")}
-          as="input"
-        />
-        <FormField
-          label="Expire month"
-          error={errorsField.cardInfo?.expMonth?.message}
-          {...register("cardInfo.expMonth")}
-          as="input"
-        />
-        <FormField
-          label="Expire year"
-          error={errorsField.cardInfo?.expYear?.message}
-          {...register("cardInfo.expYear")}
-          as="input"
-        />
-        <FormField
-          label="Holder name"
-          error={errorsField.cardInfo?.cardName?.message}
-          {...register("cardInfo.cardName")}
-          as="input"
-        />
-      </section>
+    <div className="modal">
+      <div className="modal__content">
+        <form className="modal-form" onSubmit={handleSubmit(onSubmit)}>
+          <h2 className="modal-form__title">Card Information</h2>
+          <section className="modal-form__section">
+            <FormField
+              label="Number"
+              error={errorsField.cardInfo?.number?.message}
+              {...register("cardInfo.number")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="CVC"
+              error={errorsField.cardInfo?.cvc?.message}
+              {...register("cardInfo.cvc")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Expire month"
+              error={errorsField.cardInfo?.expMonth?.message}
+              {...register("cardInfo.expMonth")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Expire year"
+              error={errorsField.cardInfo?.expYear?.message}
+              {...register("cardInfo.expYear")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Holder name"
+              error={errorsField.cardInfo?.cardName?.message}
+              {...register("cardInfo.cardName")}
+              as="input"
+              className="modal-form__input"
+            />
+          </section>
 
-      <h2>Customer Information</h2>
-      <section>
-        <FormField
-          label="Name"
-          error={errorsField.customer?.name?.message}
-          {...register("customer.name")}
-          as="input"
-        />
-        <FormField
-          label="Last Name"
-          error={errorsField.customer?.lastname?.message}
-          {...register("customer.lastname")}
-          as="input"
-        />
-        <FormField
-          label="Email"
-          error={errorsField.customer?.email?.message}
-          {...register("customer.email")}
-          as="input"
-        />
-        <CustomPhoneInput
-          label="Phone Number"
-          value={watch("customer.phoneNumber")}
-          onChange={(value: string) => {setValue("customer.phoneNumber", value)}}
-          error={errorsField.customer?.phoneNumber?.message}
-        />
-        <FormField
-          label="Document Type"
-          error={errorsField.customer?.typeDocument?.message}
-          {...register("customer.typeDocument")}
-          as="input"
-        />
-        <FormField
-          label="Document Number"
-          error={errorsField.customer?.document?.message}
-          {...register("customer.document")}
-          as="input"
-        />
-      </section>
+          <h2 className="modal-form__title">Customer Information</h2>
+          <section className="modal-form__section">
+            <FormField
+              label="Name"
+              error={errorsField.customer?.name?.message}
+              {...register("customer.name")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Last Name"
+              error={errorsField.customer?.lastname?.message}
+              {...register("customer.lastname")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Email"
+              error={errorsField.customer?.email?.message}
+              {...register("customer.email")}
+              as="input"
+              className="modal-form__input"
+            />
+            <CustomPhoneInput
+              label="Phone Number"
+              value={watch("customer.phoneNumber")}
+              onChange={(value: string) => {
+                setValue("customer.phoneNumber", value);
+              }}
+              error={errorsField.customer?.phoneNumber?.message}
+              className="modal-form__input"
+            />
+            <FormField
+              label="Document Type"
+              error={errorsField.customer?.typeDocument?.message}
+              {...register("customer.typeDocument")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Document Number"
+              error={errorsField.customer?.document?.message}
+              {...register("customer.document")}
+              as="input"
+              className="modal-form__input"
+            />
+          </section>
 
-      <h2>Delivery Information</h2>
-      <section>
-        <FormField
-          label="Country Code"
-          error={errorsField.delivery?.countryCode?.message}
-          {...register("delivery.countryCode")}
-          as="input"
-        />
-        <FormField
-          label="Country"
-          error={errorsField.delivery?.country?.message}
-          {...register("delivery.country")}
-          as="input"
-        />
-        <FormField
-          label="Region"
-          error={errorsField.delivery?.region?.message}
-          {...register("delivery.region")}
-          as="input"
-        />
-        <FormField
-          label="City"
-          error={errorsField.delivery?.city?.message}
-          {...register("delivery.city")}
-          as="input"
-        />
-        <FormField
-          label="Address"
-          error={errorsField.delivery?.address?.message}
-          {...register("delivery.address")}
-          as="input"
-        />
-      </section>
+          <h2 className="modal-form__title">Delivery Information</h2>
+          <section className="modal-form__section">
+            <FormField
+              label="Country Code"
+              error={errorsField.delivery?.countryCode?.message}
+              {...register("delivery.countryCode")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Country"
+              error={errorsField.delivery?.country?.message}
+              {...register("delivery.country")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Region"
+              error={errorsField.delivery?.region?.message}
+              {...register("delivery.region")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="City"
+              error={errorsField.delivery?.city?.message}
+              {...register("delivery.city")}
+              as="input"
+              className="modal-form__input"
+            />
+            <FormField
+              label="Address"
+              error={errorsField.delivery?.address?.message}
+              {...register("delivery.address")}
+              as="input"
+              className="modal-form__input"
+            />
+          </section>
 
-      <button type="submit">Submit</button>
-    </form>
+          <button className="modal-form__button" type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
 export default ModalBuyProduct;
-
