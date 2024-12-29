@@ -5,8 +5,8 @@ interface CountrySelectorProps {
   label: string;
   error?: string;
   className?: string;
-  register: any; // React Hook Form register
-  name: string; // Nombre del campo para el registro
+  register: any;
+  name: string; 
 }
 
 const CountrySelector = forwardRef<HTMLSelectElement, CountrySelectorProps>(

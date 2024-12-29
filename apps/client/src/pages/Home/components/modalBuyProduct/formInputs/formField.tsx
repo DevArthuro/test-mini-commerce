@@ -19,7 +19,6 @@ interface SelectProps
 }
 
 type FormFieldProps = InputProps | SelectProps;
-
 const FormField = forwardRef<
   HTMLInputElement | HTMLSelectElement,
   FormFieldProps
@@ -31,16 +30,20 @@ const FormField = forwardRef<
         <input
           ref={ref as React.Ref<HTMLInputElement>}
           {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+          className={error ? "input-error" : ""}
         />
       ) : (
         <select
           ref={ref as React.Ref<HTMLSelectElement>}
           {...(props as React.SelectHTMLAttributes<HTMLSelectElement>)}
+          className={error ? "input-error" : ""}
         >
           {children}
         </select>
       )}
-      {error && <p>{error}</p>}
+      <div className="modal-form__error-container">
+        {error && <p className="modal-form__error">{error}</p>}
+      </div>
     </div>
   );
 });
