@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Product } from '../../types/products'
 import { Products } from '../../services/products';
 
-const initialStore: { products: Product[]; loading: boolean; error: string } = {
-	products: [],
+const initialStore: { data: Product[]; loading: boolean; error: string } = {
+	data: [],
 	loading: false,
 	error: '',
 }
@@ -29,7 +29,7 @@ export const productSlice = createSlice({
 			})
             .addCase(fetchPoducts.fulfilled, (state, action) => {
 				state.loading = false
-				state.products = action.payload as Product[]
+				state.data = action.payload as Product[]
 			})
 			.addCase(fetchPoducts.rejected, (state) => {
 				state.loading = false

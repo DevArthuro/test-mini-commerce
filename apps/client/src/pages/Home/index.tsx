@@ -31,7 +31,7 @@ const ProductsPage = () => {
     }));
   }, []);
 
-  const products = useSelector((state: RootState) => state.products.products);
+  const products = useSelector((state: RootState) => state.products.data);
   const isLoading = useSelector((state: RootState) => state.products.loading);
   const isError = useSelector((state: RootState) => state.products.error);
 
