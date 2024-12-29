@@ -51,7 +51,7 @@ export const fetchtransactionById = createAsyncThunk(
   }
 );
 
-export const orderSlice = createSlice({
+export const transactionSlice = createSlice({
   name: "order",
   initialState: initialStore,
   reducers: {},
@@ -88,4 +88,4 @@ export const orderSlice = createSlice({
   },
 });
 
-export default orderSlice.reducer;
+export default transactionSlice.reducer;

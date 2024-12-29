@@ -42,13 +42,17 @@ export const productSlice = createSlice({
     builder
       .addCase(fetchPoducts.pending, (state) => {
         state.loading = true;
+        state.error = ""
+        state.data = []
       })
       .addCase(fetchPoducts.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = ""
         state.data = action.payload as Product[];
       })
       .addCase(fetchPoducts.rejected, (state) => {
         state.loading = false;
+        state.data = []
         state.error = "Has ocurred and error to fetch products";
       });
   },
