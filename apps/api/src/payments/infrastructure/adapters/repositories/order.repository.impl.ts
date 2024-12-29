@@ -27,7 +27,7 @@ export class InMemoryOrderRepository implements OrderRepository {
         new Delivery(
           delivery.id,
           delivery.countryCode,
-          delivery.address,
+          delivery.country,
           delivery.region,
           delivery.city,
           delivery.address,
