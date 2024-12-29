@@ -38,6 +38,7 @@ const SummaryPage = () => {
     } else if (isError || !orderId) {
       navigation("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   if (isError) {
