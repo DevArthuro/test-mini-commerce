@@ -42,7 +42,7 @@ export const paymentSchema = z.object({
           return true;
         },
         {
-          message: `Year must be greater than or equal to ${currentYear}`,
+          message: `The year is past`,
         }
       ),
 
