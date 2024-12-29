@@ -152,7 +152,7 @@ const ModalBuyProduct = () => {
             />
           </section>
 
-          <h2 className="modal-form__title">Customer Information</h2>
+          <h2 className="modal-form__title">Personal Information</h2>
           <section className="modal-form__section">
             <FormField
               label="Name"
@@ -184,7 +184,6 @@ const ModalBuyProduct = () => {
               onChange={(value: string) => {
                 setValue("customer.phoneNumber", value);
               }}
-              error={errorsField.customer?.phoneNumber?.message}
               className="modal-form__input"
             />
             <section className="modal-form__section">
@@ -194,14 +193,14 @@ const ModalBuyProduct = () => {
                   error={errorsField.customer?.typeDocument?.message}
                   register={register}
                   name="customer.typeDocument"
-                  className="modal-form__input--type"
+                  className="modal-form__input modal-form__input--type"
                 />
                 <FormField
                   label="Document Number"
                   error={errorsField.customer?.document?.message}
                   {...register("customer.document")}
                   as="input"
-                  className="modal-form__input--document"
+                  className="modal-form__input modal-form__input--document"
                   placeholder="type your document..."
                 />
               </div>
@@ -212,10 +211,6 @@ const ModalBuyProduct = () => {
           <section className="modal-form__section">
             <CountrySelector
               label="Country"
-              error={
-                errorsField.delivery?.countryCode?.message ||
-                errorsField.delivery?.country?.message
-              }
               register={register}
               name="delivery.countryCode"
               className="modal-form__input"

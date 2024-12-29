@@ -12,7 +12,6 @@ interface CustomPhoneInputProps {
 const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
   value,
   onChange,
-  error,
   label,
   className
 }) => {
@@ -24,10 +23,11 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
         countryCallingCodeEditable={false}
         defaultCountry="CO"
         value={value}
-        onChange={onChange}
+        onChange={(e) => onChange(e)}
         placeholder="type your phone  number..."
+        limitMaxLength={true}
       />
-      {error && <p>{error}</p>}
+      {value && value.length < 13 && <p>Phone number is required</p>}
     </div>
   );
 }
