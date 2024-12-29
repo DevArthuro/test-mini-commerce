@@ -17,11 +17,11 @@ const Navbar = () => {
             <h1>MiniCommerce.com</h1>
           </div>
           <div className="navbar__right">
-            {orderData && <button className="navbar__button">Ver pedido</button>}
+            {orderData?.orderId && <button className="navbar__button">Ver pedido</button>}
           </div>
         </div>
       </div>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading isActive={true} />}>
         <Outlet />
       </Suspense>
       <Loading />

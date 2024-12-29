@@ -7,12 +7,13 @@ import { ModalFormValues } from "../../../../types/modalForm";
 import CustomPhoneInput from "./formInputs/customPhoneInput";
 import CountrySelector from "./formInputs/countrybyCodeInput";
 import DocumentTypeSelector from "./formInputs/customSelectTypeDocument";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { contextModalState } from "../../../../context/modalConext";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store/store";
 import { fetchCreateOrder } from "../../../../store/slice/orders";
-import { ordersLoading } from "../../../../store/selectors";
+import { orderDataIdOrder, ordersLoading } from "../../../../store/selectors";
+import { useNavigate } from "react-router-dom";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -77,8 +78,17 @@ const paymentSchema = z.object({
 
 const ModalBuyProduct = () => {
 
+  const orderId = useSelector(orderDataIdOrder);
   const orderIsLoading = useSelector(ordersLoading)
+  const navigate = useNavigate()
   
+  useEffect(() => {
+    console.log(orderId)
+    if (orderId) {
+      navigate("/summary");
+    }
+  }, [orderId])
+
   const {
     register,
     handleSubmit,
@@ -106,6 +116,7 @@ const ModalBuyProduct = () => {
     }));
   };
 
+    
   const errorsField = errors as FieldErrors<ModalFormValues>;
 
   return (
