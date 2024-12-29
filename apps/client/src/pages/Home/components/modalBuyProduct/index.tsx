@@ -1,20 +1,51 @@
 import "./modalBuyProduct.scss";
-
 import FormField from "./formInputs/formField";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { ModalFormValues } from "../../../../types/modalForm";
 import CustomPhoneInput from "./formInputs/customPhoneInput";
+import CountrySelector from "./formInputs/countrybyCodeInput";
+
+const currentDate = new Date();
+const currentYear = currentDate.getFullYear();
+const currentMonth = currentDate.getMonth() + 1;
 
 export const paymentSchema = z.object({
   cardInfo: z.object({
     number: z.string().regex(/^\d{16}$/, "Invalid card number"),
     cvc: z.string().regex(/^\d{3,4}$/, "Invalid CVC"),
-    expMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, "Invalid month"),
+    expMonth: z
+      .string()
+      .regex(/^(0[1-9]|1[0-2])$/, "Invalid month")
+      .refine(
+        (value) => {
+          const month = parseInt(value);
+          return month >= 1 && month <= 12;
+        },
+        {
+          message: "Invalid month",
+        }
+      ),
+
     expYear: z
       .string()
-      .regex(/^(202[5-9]|20[3-9]\d|2[1-9]\d{2}|[3-9]\d{3})$/, "Invalid year"),
+      .regex(/^\d{4}$/, "Invalid year")
+      .refine(
+        (value) => {
+          const year = parseInt(value);
+          if (year < currentYear) return false;
+          if (year === currentYear) {
+            const month = parseInt(value);
+            return month >= currentMonth;
+          }
+          return true;
+        },
+        {
+          message: `Year must be greater than or equal to ${currentYear}`,
+        }
+      ),
+
     cardName: z.string().min(3, "Card name is required"),
   }),
   customer: z.object({
@@ -58,35 +89,48 @@ const ModalBuyProduct = () => {
           <h2 className="modal-form__title">Card Information</h2>
           <section className="modal-form__section">
             <FormField
-              label="Number"
+              label="Card Number"
               error={errorsField.cardInfo?.number?.message}
               {...register("cardInfo.number")}
               as="input"
               className="modal-form__input"
             />
+          </section>
+
+          <section className="modal-form__section modal-form__section--split">
+            <div className="modal-form__card-info">
+              <FormField
+                label="CVC"
+                error={errorsField.cardInfo?.cvc?.message}
+                {...register("cardInfo.cvc")}
+                as="input"
+                className="modal-form__input modal-form__input--half"
+              />
+              <div className="modal-form__expire">
+                <FormField
+                  label="Expire month"
+                  error={errorsField.cardInfo?.expMonth?.message}
+                  {...register("cardInfo.expMonth")}
+                  as="input"
+                  className="modal-form__input modal-form__input--expire"
+                  placeholder="MM"
+                />
+                <span className="modal-form__slash">/</span>
+                <FormField
+                  label="Expire year"
+                  error={errorsField.cardInfo?.expYear?.message}
+                  {...register("cardInfo.expYear")}
+                  as="input"
+                  className="modal-form__input modal-form__input--expire"
+                  placeholder="YYYY"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="modal-form__section">
             <FormField
-              label="CVC"
-              error={errorsField.cardInfo?.cvc?.message}
-              {...register("cardInfo.cvc")}
-              as="input"
-              className="modal-form__input"
-            />
-            <FormField
-              label="Expire month"
-              error={errorsField.cardInfo?.expMonth?.message}
-              {...register("cardInfo.expMonth")}
-              as="input"
-              className="modal-form__input"
-            />
-            <FormField
-              label="Expire year"
-              error={errorsField.cardInfo?.expYear?.message}
-              {...register("cardInfo.expYear")}
-              as="input"
-              className="modal-form__input"
-            />
-            <FormField
-              label="Holder name"
+              label="Card Holder Name"
               error={errorsField.cardInfo?.cardName?.message}
               {...register("cardInfo.cardName")}
               as="input"
