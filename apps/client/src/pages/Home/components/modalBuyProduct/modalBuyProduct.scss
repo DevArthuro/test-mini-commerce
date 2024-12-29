@@ -1,4 +1,7 @@
 $primary-color: #4caf50;
+$scrollbar-bg: #f0f0f0; 
+$scrollbar-thumb: #888;
+$scrollbar-thumb-hover: #555; 
 
 .modal {
   position: fixed;
@@ -11,16 +14,35 @@ $primary-color: #4caf50;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-
+  
   &__content {
-    background-color: #fff;
+    background-color: #f0f0f0;
     border-radius: 12px;
     padding: 2rem;
     width: 90%;
     max-width: 600px;
     max-height: 90%;
-    overflow-y: auto;
+    overflow-y: auto; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+    ::-webkit-scrollbar {
+      width: 8px; 
+    }
+
+    ::-webkit-scrollbar-track {
+      background: $scrollbar-bg;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: $scrollbar-thumb; 
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: $scrollbar-thumb-hover; 
+    }
 
     @media (min-width: 350px) and (max-width: 599px) {
       max-width: 90%;
@@ -155,7 +177,6 @@ $primary-color: #4caf50;
 
     &:hover {
       opacity: 0.5;
-
     }
   }
 }
@@ -190,62 +211,9 @@ $primary-color: #4caf50;
   }
 }
 
-
-@media (max-width: 599px) {
-  .modal-form__expire {
-    flex-direction: row;
-    gap: 1rem;
-    width: 100%;
-  }
-
-  .modal-form__expire input {
-    width: 48%;
-    font-size: 1rem;
-  }
-
-  .modal-form__input--half {
-    width: 100%; 
-  }
-
-  .modal-form__card-info {
-    flex-direction: column;
-  }
-}
-
-@media (min-width: 600px) and (max-width: 900px) {
-  .modal-form__expire {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    .modal-form__slash {
-      font-size: 1.5rem;
-    }
-    .modal-form__input {
-      &--expire {
-        width: 120px;
-        display: inline;
-      }
-    }
-  }
-
-  .modal-form__card-info {
-    flex-direction: row;
-  }
-
-  .modal-form__expire input {
-    width: 50%; 
-  }
-
-  .modal-form__input--half {
-    width: 50%;
-  }
-}
-
 @media (max-width: 599px) {
   .modal__content {
-    max-width: 360px; /* Ajusta el ancho máximo del modal para pantallas menores a 400px */
+    max-width: 360px; 
   }
 
   .modal-form__expire {
@@ -270,8 +238,8 @@ $primary-color: #4caf50;
 
 @media (max-width: 400px) {
   .modal__content {
-    max-width: 360px; /* Asegúrate de que el modal no ocupe más de 360px en pantallas de 400px o menos */
-    padding: 1rem; /* Reduce el padding si es necesario */
+    max-width: 360px; 
+    padding: 1rem; 
   }
 }
 
@@ -314,6 +282,7 @@ $primary-color: #4caf50;
   width: 100%; 
   text-align: center; 
   font-weight: bold; 
+
   &:hover {
     opacity: 0.8; 
   }

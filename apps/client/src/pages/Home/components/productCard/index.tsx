@@ -17,7 +17,6 @@ const ProductCard: React.FC<Product> = ({
   const { openModal, handlerOpenModal } = useContext(contextModalState);
 
   const handlerBuyProduct = useCallback(() => {
-    alert(quantity);
     handlerOpenModal(id, quantity);
   }, [quantity]);
 

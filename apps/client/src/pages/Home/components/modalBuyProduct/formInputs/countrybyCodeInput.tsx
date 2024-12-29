@@ -43,7 +43,6 @@ const CountrySelector = forwardRef<HTMLSelectElement, CountrySelectorProps>(
             </option>
           ))}
         </select>
-        {error && <p className="modal-form__error">{error}</p>}
       </div>
     );
   }
