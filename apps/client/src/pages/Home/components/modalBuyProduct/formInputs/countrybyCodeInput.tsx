@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo } from "react";
+import { forwardRef, useCallback, useEffect, useMemo } from "react";
 import { all } from "country-codes-list";
 
 interface CountrySelectorProps {
@@ -26,6 +26,11 @@ const CountrySelector = forwardRef<HTMLSelectElement, CountrySelectorProps>(
       onChange(searchCodeSelected.code, searchCodeSelected.country);
       return value
     }
+
+    // Select default value
+    useEffect(() => {
+      onChangeSelect("CO")
+    }, [])
 
     return (
       <div className={`modal-form__input ${className}`}>
