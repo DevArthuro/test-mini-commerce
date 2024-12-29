@@ -9,3 +9,5 @@ export const productsError = (state: RootState) => state.products.error;
 export const ordersData = (state: RootState) => state.orders.data;
 export const ordersLoading = (state: RootState) => state.orders.loading;
 export const ordersError = (state: RootState) => state.orders.error;
+export const orderDataIdOrder = (state: RootState) => state.orders.data?.orderId;
+export const orderDataById = (state: RootState) => state.orders.data?.order;
