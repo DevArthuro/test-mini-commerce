@@ -144,18 +144,14 @@ const ModalBuyProduct = () => {
 
           <h2 className="modal-form__title">Delivery Information</h2>
           <section className="modal-form__section">
-            <FormField
-              label="Country Code"
-              error={errorsField.delivery?.countryCode?.message}
-              {...register("delivery.countryCode")}
-              as="input"
-              className="modal-form__input"
-            />
-            <FormField
+            <CountrySelector
               label="Country"
-              error={errorsField.delivery?.country?.message}
-              {...register("delivery.country")}
-              as="input"
+              error={
+                errorsField.delivery?.countryCode?.message ||
+                errorsField.delivery?.country?.message
+              }
+              register={register}
+              name="delivery.countryCode" // Usamos un único campo para manejar el código y el país
               className="modal-form__input"
             />
             <FormField

@@ -1,23 +1,39 @@
+import { forwardRef, useMemo } from "react";
 import { all } from "country-codes-list";
-import { useMemo } from "react";
 
-const countrybyCodeInput = () => {
-  const countries = useMemo(() => {
-    return all();
-  }, []);
+interface CountrySelectorProps {
+  label: string;
+  error?: string;
+  className?: string;
+  register: any; // React Hook Form register
+  name: string; // Nombre del campo para el registro
+}
 
-  return (
-    <select>
-      {countries.map((country) => (
-        <option key={country.countryCode}>
-          <img src={country.flag} alt="flag" />
-          <p>
-            {country.countryNameEn} - {country.countryNameLocal}
-          </p>
-        </option>
-      ))}
-    </select>
-  );
-};
+const CountrySelector = forwardRef<HTMLSelectElement, CountrySelectorProps>(
+  ({ label, error, className = "", register, name }, ref) => {
+    const countries = useMemo(() => all(), []);
 
-export default countrybyCodeInput;
+    return (
+      <div className={`modal-form__input ${className}`}>
+        <label className="modal-form__label">{label}</label>
+        <select
+          ref={ref}
+          {...register(name)}
+          className={`modal-form__select ${error ? "modal-form__select--error" : ""}`}
+        >
+          <option value="">Select a country</option>
+          {countries.map((country) => (
+            <option key={country.countryCode} value={country.countryCode}>
+              {country.countryNameEn} - {country.countryNameLocal}
+            </option>
+          ))}
+        </select>
+        {error && <p className="modal-form__error">{error}</p>}
+      </div>
+    );
+  }
+);
+
+CountrySelector.displayName = "CountrySelector";
+
+export default CountrySelector;
