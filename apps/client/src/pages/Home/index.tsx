@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import ProductCard from "./components/productCard/counter";
 import ModalBuyProduct from "./components/modalBuyProduct";
 import { ContextModalProvider } from "../../context/modalConext";
 import { useCallback, useState } from "react";
@@ -21,7 +22,9 @@ const ProductsPage = () => {
     setModalState((prev) => ({...prev, openModal: false, idProduct: '', quantity: 0}))
   }, [])
 
+  const products = useSelector((state: RootState) => state.products.products);
   const isLoading = useSelector((state: RootState) => state.products.loading);
+  const isError = useSelector((state: RootState) => state.products.error);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -34,7 +37,7 @@ const ProductsPage = () => {
         handlerOpenModal: openModal,
         handlerCloseModal: closeModal
       }}>
-        {/* <div>
+        <div>
           {isError ? (
             <p>something is wrong</p>
           ) : (
@@ -48,8 +51,8 @@ const ProductsPage = () => {
               )}
             </div>
           )}
-        </div> */}
-        <ModalBuyProduct />
+        </div>
+        {modalState.openModal && <ModalBuyProduct />}
       </ContextModalProvider>
     </div>
   );

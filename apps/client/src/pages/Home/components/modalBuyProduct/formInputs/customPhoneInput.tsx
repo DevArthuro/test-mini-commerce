@@ -25,6 +25,7 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
         defaultCountry="CO"
         value={value}
         onChange={onChange}
+        placeholder="type your phone  number..."
       />
       {error && <p>{error}</p>}
     </div>

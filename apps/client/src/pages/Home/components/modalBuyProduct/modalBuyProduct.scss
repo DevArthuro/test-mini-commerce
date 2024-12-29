@@ -212,9 +212,19 @@
 
 @media (min-width: 600px) and (max-width: 900px) {
   .modal-form__expire {
-    gap: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     .modal-form__slash {
       font-size: 1.5rem;
+    }
+    .modal-form__input {
+      &--expire {
+        width: 120px;
+        display: inline;
+      }
     }
   }
 
@@ -228,5 +238,81 @@
 
   .modal-form__input--half {
     width: 50%;
+  }
+}
+
+@media (max-width: 599px) {
+  .modal__content {
+    max-width: 360px; /* Ajusta el ancho máximo del modal para pantallas menores a 400px */
+  }
+
+  .modal-form__expire {
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .modal-form__expire input {
+    width: 48%;
+    font-size: 1rem;
+  }
+
+  .modal-form__input--half {
+    width: 100%;
+  }
+
+  .modal-form__card-info {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 400px) {
+  .modal__content {
+    max-width: 360px; /* Asegúrate de que el modal no ocupe más de 360px en pantallas de 400px o menos */
+    padding: 1rem; /* Reduce el padding si es necesario */
+  }
+}
+
+.modal__close-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: black;
+  color: white;
+  font-size: 1.25rem;
+  border-radius: 50%;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: white;
+    color: black;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.modal-form__button {
+  background-color: #007bff;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%; 
+  text-align: center; 
+  font-weight: bold; 
+  &:hover {
+    opacity: 0.8; 
   }
 }

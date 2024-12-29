@@ -7,6 +7,8 @@ import { ModalFormValues } from "../../../../types/modalForm";
 import CustomPhoneInput from "./formInputs/customPhoneInput";
 import CountrySelector from "./formInputs/countrybyCodeInput";
 import DocumentTypeSelector from "./formInputs/customSelectTypeDocument";
+import { useContext } from "react";
+import { contextModalState } from "../../../../context/modalConext";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -69,7 +71,6 @@ const paymentSchema = z.object({
   }),
 });
 
-
 const ModalBuyProduct = () => {
   const {
     register,
@@ -81,6 +82,8 @@ const ModalBuyProduct = () => {
     resolver: zodResolver(paymentSchema),
   });
 
+  const { handlerCloseModal } = useContext(contextModalState);
+
   const onSubmit = (data: any) => {
     console.log("Form data:", data);
   };
@@ -90,6 +93,9 @@ const ModalBuyProduct = () => {
   return (
     <div className="modal">
       <div className="modal__content">
+        <button className="modal__close-btn" onClick={handlerCloseModal}>
+          X
+        </button>
         <form className="modal-form" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="modal-form__title">Card Information</h2>
           <section className="modal-form__section">
@@ -99,6 +105,7 @@ const ModalBuyProduct = () => {
               {...register("cardInfo.number")}
               as="input"
               className="modal-form__input"
+              placeholder="4242 4242 4242 4242"
             />
           </section>
 
@@ -110,6 +117,7 @@ const ModalBuyProduct = () => {
                 {...register("cardInfo.cvc")}
                 as="input"
                 className="modal-form__input modal-form__input--half"
+                placeholder="XXX"
               />
               <div className="modal-form__expire">
                 <FormField
@@ -140,6 +148,7 @@ const ModalBuyProduct = () => {
               {...register("cardInfo.cardName")}
               as="input"
               className="modal-form__input"
+              placeholder="my card"
             />
           </section>
 
@@ -151,6 +160,7 @@ const ModalBuyProduct = () => {
               {...register("customer.name")}
               as="input"
               className="modal-form__input"
+              placeholder="type your name..."
             />
             <FormField
               label="Last Name"
@@ -158,6 +168,7 @@ const ModalBuyProduct = () => {
               {...register("customer.lastname")}
               as="input"
               className="modal-form__input"
+              placeholder="type your lastname..."
             />
             <FormField
               label="Email"
@@ -165,6 +176,7 @@ const ModalBuyProduct = () => {
               {...register("customer.email")}
               as="input"
               className="modal-form__input"
+              placeholder="type your email..."
             />
             <CustomPhoneInput
               label="Phone Number"
@@ -178,7 +190,7 @@ const ModalBuyProduct = () => {
             <section className="modal-form__section">
               <div className="modal-form__input--type-document">
                 <DocumentTypeSelector
-                  label="Document Type"
+                  label="Type"
                   error={errorsField.customer?.typeDocument?.message}
                   register={register}
                   name="customer.typeDocument"
@@ -190,6 +202,7 @@ const ModalBuyProduct = () => {
                   {...register("customer.document")}
                   as="input"
                   className="modal-form__input--document"
+                  placeholder="type your document..."
                 />
               </div>
             </section>
@@ -217,6 +230,7 @@ const ModalBuyProduct = () => {
               {...register("delivery.region")}
               as="input"
               className="modal-form__input"
+              placeholder="type your region..."
             />
             <FormField
               label="City"
@@ -224,6 +238,7 @@ const ModalBuyProduct = () => {
               {...register("delivery.city")}
               as="input"
               className="modal-form__input"
+              placeholder="type your city..."
             />
             <FormField
               label="Address"
@@ -231,11 +246,12 @@ const ModalBuyProduct = () => {
               {...register("delivery.address")}
               as="input"
               className="modal-form__input"
+              placeholder="type your address..."
             />
           </section>
-
+          <div></div>
           <button className="modal-form__button" type="submit">
-            Submit
+            Go to the summary
           </button>
         </form>
       </div>
