@@ -9,6 +9,9 @@ import CountrySelector from "./formInputs/countrybyCodeInput";
 import DocumentTypeSelector from "./formInputs/customSelectTypeDocument";
 import { useContext } from "react";
 import { contextModalState } from "../../../../context/modalConext";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../store/store";
+import { fetchCreateOrder } from "../../../../store/slice/orders";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -63,6 +66,8 @@ const paymentSchema = z.object({
     document: z.string().min(5, "Document number is required"),
   }),
   delivery: z.object({
+    country: z.string().optional(),
+    countryCode: z.string().optional(),
     region: z.string().min(2, "Region is required"),
     city: z.string().min(2, "City is required"),
     address: z.string().min(5, "Address is required"),
@@ -80,10 +85,21 @@ const ModalBuyProduct = () => {
     resolver: zodResolver(paymentSchema),
   });
 
-  const { handlerCloseModal } = useContext(contextModalState);
+  const dispatch = useDispatch<AppDispatch>()
+
+  const { handlerCloseModal, idProduct, quantity } =
+    useContext(contextModalState);
 
   const onSubmit = (data: any) => {
-    console.log("Form data:", data);
+    dispatch(fetchCreateOrder({
+      productId: idProduct,
+      quantity,
+      ...data,
+      cardInfo: {
+        ...data.cardInfo,
+        expYear: (data.cardInfo.expYear as string).slice(-2)
+      }
+    }));
   };
 
   const errorsField = errors as FieldErrors<ModalFormValues>;
