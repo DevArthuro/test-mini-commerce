@@ -58,9 +58,11 @@ export const orderSlice = createSlice({
     builder
       .addCase(fetchCreateOrder.pending, (state) => {
         state.loading = true;
+        state.error = ""
       })
       .addCase(fetchCreateOrder.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = ""
         state.data = { orderId: action.payload, order: null };
       })
       .addCase(fetchCreateOrder.rejected, (state, action) => {
@@ -70,9 +72,11 @@ export const orderSlice = createSlice({
       })
       .addCase(fetchOrderByReference.pending, (state) => {
         state.loading = true;
+        state.error = "";
       })
       .addCase(fetchOrderByReference.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = ""
         state.data = {
           orderId: state.data?.orderId as string,
           order: action.payload as ResponseCreateOrder["data"],
