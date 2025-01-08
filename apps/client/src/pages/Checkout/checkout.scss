@@ -83,4 +83,28 @@
       margin: 0.5rem 0;
     }
   }
+
+  &__button {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    
+    button {
+      background: #1cd425;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #17b620;
+      }
+    }
+  }
 }

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../store/store";
 import { clearStateTransaction, fetchtransactionById } from "../../store/slice/transactions";
 import { PaymentStatus } from "../../types/payments";
-import "./checkout.scss"; // Agrega los estilos necesarios
+import "./checkout.scss";
 import Loading from "../../components/loading";
 import { clearStateOrder } from "../../store/slice/orders";
 import { clearStateProduct } from "../../store/slice/products";
@@ -27,18 +27,16 @@ const Checkout = () => {
       }, 4000);
 
       return () => clearTimeout(timer);
-    } else {
-      const redirectTimer = setTimeout(() => {
-        dispatch(clearStateOrder())
-        dispatch(clearStateProduct())
-        dispatch(clearStateTransaction())
-        navigation("/navigate");
-      }, 4000);
-
-      return () => clearTimeout(redirectTimer);
-    }
+    } 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transaction, IdTransaction]);
+
+  const handlerClickReturnHome = () => {
+    dispatch(clearStateOrder());
+    dispatch(clearStateProduct())
+    dispatch(clearStateTransaction())
+    navigation("/");
+  }
 
   if (!transaction) {
     return <Loading isActive={true} />;
@@ -87,6 +85,15 @@ const Checkout = () => {
         <p>Name: {fullName}</p>
         <p>Email: {email}</p>
         <p>Phone: {phoneNumber}</p>
+      </div>
+
+      <div className="checkout__button">
+        <button
+          className="checkout__button-return-home"
+          onClick={handlerClickReturnHome}
+        >
+          Return Home
+        </button>
       </div>
     </div>
   );
