@@ -91,6 +91,7 @@ const Checkout = () => {
         <button
           className="checkout__button-return-home"
           onClick={handlerClickReturnHome}
+          disabled={transaction.status === PaymentStatus.PENDING}
         >
           Return Home
         </button>
