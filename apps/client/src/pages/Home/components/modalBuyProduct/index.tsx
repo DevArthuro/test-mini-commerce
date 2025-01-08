@@ -14,6 +14,7 @@ import { AppDispatch } from "../../../../store/store";
 import { fetchCreateOrder } from "../../../../store/slice/orders";
 import { orderDataIdOrder, ordersLoading } from "../../../../store/selectors";
 import { useNavigate } from "react-router-dom";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -80,17 +81,16 @@ const paymentSchema = z.object({
 });
 
 const ModalBuyProduct = () => {
-
   const orderId = useSelector(orderDataIdOrder);
-  const orderIsLoading = useSelector(ordersLoading)
-  const navigate = useNavigate()
-  
+  const orderIsLoading = useSelector(ordersLoading);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (orderId) {
       navigate("/summary");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
 
   const {
     register,
@@ -102,25 +102,29 @@ const ModalBuyProduct = () => {
     resolver: zodResolver(paymentSchema),
   });
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const { handlerCloseModal, idProduct, quantity } =
     useContext(contextModalState);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    dispatch(fetchCreateOrder({
-      productId: idProduct,
-      quantity,
-      ...data,
-      cardInfo: {
-        ...data.cardInfo,
-        expYear: (data.cardInfo.expYear as string).slice(-2)
-      }
-    }));
+    if (!isValidPhoneNumber(watch("customer.phoneNumber") ?? "")) {
+      return;
+    }
+    dispatch(
+      fetchCreateOrder({
+        productId: idProduct,
+        quantity,
+        ...data,
+        cardInfo: {
+          ...data.cardInfo,
+          expYear: (data.cardInfo.expYear as string).slice(-2),
+        },
+      })
+    );
   };
 
-    
   const errorsField = errors as FieldErrors<ModalFormValues>;
 
   return (
