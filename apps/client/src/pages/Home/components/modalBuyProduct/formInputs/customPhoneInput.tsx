@@ -1,4 +1,4 @@
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { isValidPhoneNumber} from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
 interface CustomPhoneInputProps {
@@ -15,6 +15,7 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
   label,
   className
 }) => {
+
   return (
     <div className={className}>
       {label && <label>{label}</label>}
@@ -23,11 +24,13 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
         countryCallingCodeEditable={false}
         defaultCountry="CO"
         value={value}
-        onChange={(e) => onChange(e)}
+        onChange={(e) => {
+          onChange(e);
+        }}
         placeholder="type your phone  number..."
         limitMaxLength={true}
       />
-      {value && value.length < 13 && <p>Phone number is required</p>}
+      {!isValidPhoneNumber(value ?? "") && <p>Invalid phone number</p>}
     </div>
   );
 }
