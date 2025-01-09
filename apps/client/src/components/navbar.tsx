@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import "./navbar.scss";
 import Loading from "./loading";
+import ModalError from "./modalError";
 
 const Navbar = () => {
 
@@ -18,6 +19,7 @@ const Navbar = () => {
         <Outlet />
       </Suspense>
       <Loading />
+      <ModalError/>
     </div>
   );
 };
