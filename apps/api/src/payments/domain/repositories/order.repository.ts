@@ -7,7 +7,7 @@ export abstract class OrderRepository {
   abstract create(
     order: OrderInteface,
     customer: Customer,
-    product: Product,
+    products: Product[],
   ): Promise<Order>;
   abstract findById(id: string): Promise<Order | null>;
   abstract findByReference(reference: string): Promise<Order | null>;
