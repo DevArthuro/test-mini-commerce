@@ -55,19 +55,36 @@ export class CreateOrderCase {
       }
       throw error;
     }
-    const product = await this.productRepository.findById(dto.productId);
-    if (!product) {
+    const products = await Promise.all(
+      dto.products.map((product) =>
+        this.productRepository.findById(product.productId),
+      ),
+    );
+
+    if (!products || products.length === 0) {
       throw new ProductsException(
         'Product not found',
         ERROR_PRODUCTS_TYPE.PRODUCT_NOT_FOUND,
       );
     }
-    if (dto.quantity <= 0 || product.stock < dto.quantity) {
-      throw new ProductsException(
-        'The stock is not available',
-        ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
+
+    products.forEach((product) => {
+      const productDto = dto.products.find(
+        (productSearch) => productSearch.productId === product.id,
       );
-    }
+      if (!productDto) {
+        throw new ProductsException(
+          'Product not found',
+          ERROR_PRODUCTS_TYPE.PRODUCT_NOT_FOUND,
+        );
+      }
+      if (productDto.quantity <= 0 || product.stock < dto.quantity) {
+        throw new ProductsException(
+          'The stock is not available',
+          ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
+        );
+      }
+    });
     try {
       payment = await this.paymentAdapter.getTokenizedCard(card);
     } catch (error) {
@@ -80,7 +97,7 @@ export class CreateOrderCase {
       const order = await this.orderRepository.create(
         { quantity: dto.quantity, tokenizedCard: payment.tokenizedCard },
         customer,
-        product,
+        products,
       );
 
       return order.toValue();
