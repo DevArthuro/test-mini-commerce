@@ -72,7 +72,6 @@ model Order {
   feeDelivery  Decimal     @db.Decimal(10, 2)
   feeBought    Decimal     @db.Decimal(10, 2)
   reference    String      @unique
-  quantity     Int
   tokenizedCard String
   status       String
   createdAt    DateTime    @default(now())
