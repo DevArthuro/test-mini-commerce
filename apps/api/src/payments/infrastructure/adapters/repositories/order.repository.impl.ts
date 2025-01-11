@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ProductsInterface } from 'src/payments/aplication/dto/createOrder.dto';
 import { OrderInteface } from 'src/payments/domain/dto/order.dto';
 import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
@@ -67,16 +68,14 @@ export class InMemoryOrderRepository implements OrderRepository {
   async create(
     order: OrderInteface,
     customer: Customer,
-    product: Product,
+    products: ProductsInterface[],
   ): Promise<Order> {
     const orderCreated = await this.prisma.order.create({
       data: {
         customerId: customer.id,
-        productId: product.id,
+        products: products.map((product) => ({ id: product.productId, quantity: product.quantity })),
         feeBought: 0.03,
-        feeDelivery: 0.05,
-        quantity: order.quantity,
-        reference: `Mini_commerce_${v4().slice(-8)}`,
+        feeDelivery: 0.05,        reference: `Mini_commerce_${v4().slice(-8)}`,
         status: OrderStatus.PENDING,
         tokenizedCard: order.tokenizedCard,
       },
