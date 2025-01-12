@@ -1,11 +1,21 @@
 import { Product } from "./products";
 
 export interface RequestBodyCreateOrder {
-  productId: string;
+  products: ProductsReq[];
   cardInfo: CardInfo;
   customer: CustomerOrder;
   delivery: DeliveryOrder;
+}
+
+export interface ProductsReq {
+  productId: string;
   quantity: number;
+}
+
+export interface ProductsRes {
+  total: number;
+  quantity: number;
+  product: Product;
 }
 
 export interface DeliveryOrder {
@@ -48,10 +58,11 @@ export interface ResponseCreateOrder {
       phoneNumber: string;
       fullDocument: string;
     };
-    product: Product;
+    products: ProductsRes[];
     totalOrder: number;
+    feeBought: string;
+    feeDelivery: string;
     reference: string;
-    quantity: number;
     status: OrderStatus;
   };
   status: number;
