@@ -12,3 +12,8 @@ export interface ResponseProduct {
 	status: number
 	error: boolean
 }
+
+export type ProductOrder = {
+    total: number;
+    quantity: number
+} & Product
