@@ -13,6 +13,7 @@ import "./summary.scss";
 import { OrderStatus } from "../../types/orders";
 import { fetchCreateTransaction } from "../../store/slice/transactions";
 import Loading from "../../components/loading";
+import ScrollToastProducts from "../../components/scrollToastProducts";
 
 const SummaryPage = () => {
   const transaction = useSelector(transactionData);
@@ -59,11 +60,6 @@ const SummaryPage = () => {
       dispatch(fetchCreateTransaction({ orderReference: orders?.reference }));
     }
   };
-
-  const totalPrice = orders?.product.price * orders?.quantity;
-  const deliveryFee = totalPrice * 0.05;
-  const storeFee = totalPrice * 0.03;
-  const grandTotal = totalPrice + deliveryFee + storeFee;
 
   return (
     <div className="summary">
@@ -114,41 +110,17 @@ const SummaryPage = () => {
             </p>
           </div>
           <div className="summary__section">
-            <h2 className="summary__subtitle">Product Details</h2>
-            <p>
-              <strong>Product Name:</strong> {orders.product.name}
-            </p>
-            <p>
-              <strong>Description:</strong> {orders.product.description}
-            </p>
-            <p>
-              <strong>Unit price:</strong> ${orders.product.price}
-            </p>
-            <p>
-              <strong>Quantity:</strong> {orders.quantity}
-            </p>
-          </div>
-          <div className="summary__section">
-            <h2 className="summary__subtitle">Order Summary</h2>
+            <h2 className="summary__subtitle">Order Summar</h2>
             <p>
               <strong>Status:</strong> {showAccecibleStatus(orders.status)}
             </p>
             <p>
               <strong>Reference:</strong> {orders.reference}
             </p>
-            <p>
-              <strong>Total:</strong> ${orders.totalOrder}
-            </p>
-            <p>
-              <strong>Delivery Fee (5%):</strong> ${deliveryFee.toFixed(2)}
-            </p>
-            <p>
-              <strong>Store Fee (3%):</strong> ${storeFee.toFixed(2)}
-            </p>
-            <hr />
-            <p>
-              <strong>Grand Total:</strong> ${grandTotal.toFixed(2)}
-            </p>
+          </div>
+          <div className="summary__section">
+            <h2 className="summary__subtitle">Cart Summary</h2>
+            <ScrollToastProducts />
           </div>
           <button className="summary__pay-button" onClick={handleSubmitPay}>
             Confirm
