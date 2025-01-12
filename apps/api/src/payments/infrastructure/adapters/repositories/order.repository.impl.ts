@@ -105,7 +105,6 @@ export class InMemoryOrderRepository implements OrderRepository {
       },
       include: {
         customer: true,
-        product: true,
       },
     });
 
@@ -119,7 +118,6 @@ export class InMemoryOrderRepository implements OrderRepository {
       where: { id },
       include: {
         customer: true,
-        product: true,
       },
     });
 
@@ -135,7 +133,6 @@ export class InMemoryOrderRepository implements OrderRepository {
       where: { reference },
       include: {
         customer: true,
-        product: true,
       },
     });
 
@@ -152,7 +149,6 @@ export class InMemoryOrderRepository implements OrderRepository {
       data: { status },
       include: {
         customer: true,
-        product: true,
       },
     });
 
