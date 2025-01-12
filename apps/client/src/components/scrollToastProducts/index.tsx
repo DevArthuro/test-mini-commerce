@@ -4,9 +4,9 @@ import {
   ProductsFormatOrder,
 } from "../../utils/products";
 import "./scrollToastProduct.scss";
-import { productsData } from "../../store/selectors";
+import { ordersData, productsData } from "../../store/selectors";
 import { useContext, useState } from "react";
-import { contextModalState } from "../../context/modalConext";
+import { contextModalState, ProductBuy } from "../../context/modalConext";
 import { FEE_BOUGHT, FEE_DELIVERY } from "../../utils/fee";
 import ShowLogo from "../../assets/show.svg";
 import HiddenLogo from "../../assets/hidden.svg";
@@ -14,9 +14,28 @@ import HiddenLogo from "../../assets/hidden.svg";
 const ScrollToastProducts = () => {
   const products = useSelector(productsData);
   const [openCartDetails, setCartDetails] = useState(false);
+  const order = useSelector(ordersData)
   const { products: productsCart } = useContext(contextModalState);
 
   const [productsFormat] = useState<ProductsFormatOrder>(() => {
+
+    if (Object.keys(productsCart).length === 0 && order) {
+      console.log(productsCart);
+      const formatProductCart: ProductBuy = {}
+
+      order?.order?.products.forEach((product) => {
+        formatProductCart[product.product.id] = {
+          quantity: product.quantity
+        }
+      });
+
+      const productsFormatOrder = getProductFormatCalculate(
+        products,
+        formatProductCart
+      );
+
+      return productsFormatOrder;
+    }
     const productsFormatOrder = getProductFormatCalculate(
       products,
       productsCart
