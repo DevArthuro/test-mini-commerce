@@ -5,7 +5,10 @@ import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';
 import { Order, OrderStatus } from 'src/payments/domain/entities/order.entity';
-import { Product } from 'src/payments/domain/entities/product.entity';
+import {
+  Product,
+  ProductBought,
+} from 'src/payments/domain/entities/product.entity';
 import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 } from 'uuid';
@@ -21,6 +24,31 @@ export class InMemoryOrderRepository implements OrderRepository {
     const card = await this.prisma.card.findUnique({
       where: { id: order.customer.cardId },
     });
+    const products = await Promise.all<ProductBought[]>(
+      order.products.map(
+        async (productOrder: ProductsInterface): Promise<ProductBought> => {
+          const product = await this.prisma.product.findFirst({
+            where: { id: productOrder.productId },
+          });
+
+          const total = Number(product.price) * productOrder.quantity;
+
+          return new ProductBought(
+            product.id,
+            total,
+            productOrder.quantity,
+            new Product(
+              product.id,
+              product.name,
+              product.description,
+              product.stock,
+              Number(product.price),
+              product.imageUrl,
+            ),
+          );
+        },
+      ),
+    );
     return new Order(
       order.id,
       new Customer(
@@ -48,19 +76,11 @@ export class InMemoryOrderRepository implements OrderRepository {
         order.customer.typeDocument,
         order.customer.document,
       ),
-      new Product(
-        order.product.id,
-        order.product.name,
-        order.product.description,
-        order.product.stock,
-        Number(order.product.price),
-        order.product.imageUrl,
-      ),
+      products,
       Number(order.feeDelivery),
       Number(order.feeBought),
       order.tokenizedCard,
       order.reference,
-      order.quantity,
       OrderStatus[order.status],
     );
   }
@@ -73,9 +93,13 @@ export class InMemoryOrderRepository implements OrderRepository {
     const orderCreated = await this.prisma.order.create({
       data: {
         customerId: customer.id,
-        products: products.map((product) => ({ id: product.productId, quantity: product.quantity })),
+        products: products.map((product) => ({
+          id: product.productId,
+          quantity: product.quantity,
+        })),
         feeBought: 0.03,
-        feeDelivery: 0.05,        reference: `Mini_commerce_${v4().slice(-8)}`,
+        feeDelivery: 0.05,
+        reference: `Mini_commerce_${v4().slice(-8)}`,
         status: OrderStatus.PENDING,
         tokenizedCard: order.tokenizedCard,
       },
