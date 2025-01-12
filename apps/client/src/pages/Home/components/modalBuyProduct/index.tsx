@@ -140,10 +140,7 @@ const ModalBuyProduct = () => {
         <button className="modal__close-btn" onClick={handlerCloseModal}>
           X
         </button>
-        <div>
-          <h2>Products</h2>
-          <ScrollToastProducts />
-        </div>
+        <ScrollToastProducts />
         <form className="modal-form" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="modal-form__title">Card Information</h2>
           <section className="modal-form__section">
