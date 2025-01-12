@@ -1,4 +1,4 @@
-import { Product } from "./products";
+import { ProductsRes } from "./orders";
 
 export interface RequestBodyCreatePayment {
   orderReference: string;
@@ -33,11 +33,12 @@ export interface ResponseCreatePayment {
     id: string;
     order: {
       customer: CustomerPayment;
-      product: Product;
+      products: ProductsRes[];
       paymentAmount: number;
       reference: string;
+      feeBought: string;
+      feeDelivery: string;
       status: PaymentStatus;
-      quantity: number;
       paymentDate: string | null;
     };
     status: PaymentStatus;

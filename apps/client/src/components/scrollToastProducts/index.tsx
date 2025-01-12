@@ -11,7 +11,7 @@ import { FEE_BOUGHT, FEE_DELIVERY } from "../../utils/fee";
 import ShowLogo from "../../assets/show.svg";
 import HiddenLogo from "../../assets/hidden.svg";
 
-const ScrollToastProducts = () => {
+const ScrollToastProducts: React.FC<{title?: string}> = ({title}) => {
   const products = useSelector(productsData);
   const [openCartDetails, setCartDetails] = useState(false);
   const order = useSelector(ordersData)
@@ -49,7 +49,7 @@ const ScrollToastProducts = () => {
       {productsFormat && (
         <div className="product__toast">
           <div className="product__toast__header">
-            <h2 className="product__toast__header-title">Cart Details</h2>
+            <h2 className="product__toast__header-title">{title ? title : "Cart Details"}</h2>
             <figure
               title="click here to show or hidden"
               className="product__toast__header-logo"
