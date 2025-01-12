@@ -5,7 +5,10 @@ import { CustomerInterface } from 'src/payments/domain/dto/customer.dto';
 import { DeliveryInterface } from 'src/payments/domain/dto/delivery.dto';
 
 export class CreateOrderDTO {
-  @ApiProperty()
+  @ApiProperty({
+    isArray: true,
+    type: () => ProductsInterface,
+  })
   @IsArray()
   products: ProductsInterface[];
 
@@ -20,10 +23,6 @@ export class CreateOrderDTO {
   @ApiProperty()
   @IsObject()
   delivery: DeliveryInterface;
-
-  @ApiProperty()
-  @IsNumber()
-  quantity: number;
 }
 
 export class ProductsInterface {
