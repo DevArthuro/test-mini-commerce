@@ -15,6 +15,7 @@ import { fetchCreateOrder } from "../../../../store/slice/orders";
 import { orderDataIdOrder, ordersLoading } from "../../../../store/selectors";
 import { useNavigate } from "react-router-dom";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { ProductsReq } from "../../../../types/orders";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -104,7 +105,7 @@ const ModalBuyProduct = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { handlerCloseModal, idProduct, quantity } =
+  const { handlerCloseModal, products } =
     useContext(contextModalState);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,11 +113,15 @@ const ModalBuyProduct = () => {
     if (!isValidPhoneNumber(watch("customer.phoneNumber") ?? "")) {
       return;
     }
+
+    const productFormat = Object.entries(products).map(([id, value]): ProductsReq => {
+      return {productId: id, quantity: value.quantity}
+    })
+
     dispatch(
       fetchCreateOrder({
-        productId: idProduct,
-        quantity,
         ...data,
+        products: productFormat,
         cardInfo: {
           ...data.cardInfo,
           expYear: (data.cardInfo.expYear as string).slice(-2),

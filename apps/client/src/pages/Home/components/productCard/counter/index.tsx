@@ -9,6 +9,7 @@ const Counter: React.FC<{
   decrease: () => void;
 }> = ({ limitStock, quantity, increase, decrease, productId }) => {
   const isActiveDecrease = useMemo(() => quantity === 0, [quantity]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const isActiveIncrease = useMemo(() => quantity === limitStock, [quantity]);
 
   const { addProductCart, deleteProductCart } = useContext(contextModalState);
