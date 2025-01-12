@@ -7,6 +7,7 @@
 
   &__grid {
     display: grid;
+    position: relative;
     grid-template-columns: 1fr;
     gap: 20px;
     width: 100%;
@@ -23,6 +24,25 @@
         @media (min-width: 1200px) {
         grid-template-columns: repeat(3, 1fr); 
         }
+    }
+
+    .custom-card_button {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        border: none;
+        padding: 10px;
+        font-weight: bolder;
+        width: 250px;
+        height: 50px;
+        border-radius: 15px;
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .custom-card_button-disabled {
+        display: none;
     }
 
     &__error {

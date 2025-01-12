@@ -63,7 +63,6 @@ const ProductsPage = () => {
   }
 
   const addProductCart = (productId: string, quantity: number) => {
-    console.log(productId, quantity)
     setModalState((prev) => ({
       ...prev,
       products: {
@@ -94,6 +93,7 @@ const ProductsPage = () => {
                   {products.map((product) => (
                     <ProductCard {...product} key={product.id} />
                   ))}
+                  <PayButton />
                 </div>
               ) : (
                 <p className="products__no-products">Any products available</p>
@@ -103,7 +103,6 @@ const ProductsPage = () => {
         </div>
         {modalState.openModal && <ModalBuyProduct />}
       </ContextModalProvider>
-      <PayButton />
     </div>
   );
 };
