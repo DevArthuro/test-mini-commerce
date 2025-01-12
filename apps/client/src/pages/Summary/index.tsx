@@ -119,7 +119,6 @@ const SummaryPage = () => {
             </p>
           </div>
           <div className="summary__section">
-            <h2 className="summary__subtitle">Cart Summary</h2>
             <ScrollToastProducts />
           </div>
           <button className="summary__pay-button" onClick={handleSubmitPay}>
