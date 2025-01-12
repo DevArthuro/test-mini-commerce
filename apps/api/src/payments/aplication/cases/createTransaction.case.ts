@@ -41,14 +41,18 @@ export class CreateTransactionCase {
       dto.orderReference,
     );
 
-    const product = await this.productRepository.findById(order.product.id);
+    await Promise.all(order.products.map(async (productOrder) => {
 
-    if (product.stock < order.quantity) {
-      throw new ProductsException(
-        'product stock not available',
-        ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
-      );
-    }
+      const product = await this.productRepository.findById(productOrder.id);
+      if (product.stock < productOrder.quantity) {
+        throw new ProductsException(
+          'product stock not available',
+          ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
+        );
+      }
+    }))
+
+
 
     if (!order) {
       throw new OrderException(
@@ -92,10 +96,12 @@ export class CreateTransactionCase {
       transaction.status === TransactionStatus.PENDING ||
       transaction.status === TransactionStatus.APPROVED
     ) {
-      await this.productRepository.updateStockDecrease(
-        transaction.order.product.id,
-        transaction.order.quantity,
-      );
+      await Promise.all(transaction.order.products.map(async (productOrder) => {
+        await this.productRepository.updateStockDecrease(
+          productOrder.id,
+          productOrder.quantity,
+        );
+      }))
     }
 
     transaction = await this.transactionRepository.findById(transaction.id);
