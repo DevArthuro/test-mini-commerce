@@ -3,7 +3,7 @@ import { createContext } from "react";
 export interface modalContext {
   openModal: boolean;
   products: ProductBuy;
-  handlerOpenModal: (idProduct: string, quantity: number) => void;
+  handlerOpenModal: () => void;
   handlerCloseModal: () => void;
   addProductCart: (productId: string, quantity: number) => void;
   deleteProductCart: (productId: string) => void;
