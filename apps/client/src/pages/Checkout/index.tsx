@@ -9,6 +9,7 @@ import "./checkout.scss";
 import Loading from "../../components/loading";
 import { clearStateOrder } from "../../store/slice/orders";
 import { clearStateProduct } from "../../store/slice/products";
+import ScrollToastProducts from "../../components/scrollToastProducts";
 
 const Checkout = () => {
   const transaction = useSelector(transactionData);
@@ -44,17 +45,10 @@ const Checkout = () => {
 
   const {
     order: {
-      product: { name, description, price, imageUrl },
-      quantity,
       customer: { fullName, email, phoneNumber },
     },
     status,
   } = transaction;
-
-  const totalPrice = price * quantity;
-  const deliveryFee = totalPrice * 0.05;
-  const storeFee = totalPrice * 0.03;
-  const grandTotal = totalPrice + deliveryFee + storeFee;
 
   return (
     <div className="checkout">
@@ -62,22 +56,7 @@ const Checkout = () => {
       <h2>Status: {status}</h2>
 
       <div className="checkout__product">
-        <img src={imageUrl} alt={name} className="checkout__product-image" />
-        <div className="checkout__product-details">
-          <h3>{name}</h3>
-          <p>{description}</p>
-          <p>Unit Price: ${price.toLocaleString()}</p>
-          <p>Quantity: {quantity}</p>
-        </div>
-      </div>
-
-      <div className="checkout__summary">
-        <h2>Order Summary</h2>
-        <p>Total Price: ${totalPrice.toLocaleString()}</p>
-        <p>Delivery Fee (5%): ${deliveryFee.toFixed(2)}</p>
-        <p>Store Fee (3%): ${storeFee.toFixed(2)}</p>
-        <hr />
-        <h3>Grand Total: ${grandTotal.toFixed(2)}</h3>
+        <ScrollToastProducts title="Transaction Items" />
       </div>
 
       <div className="checkout__customer">
