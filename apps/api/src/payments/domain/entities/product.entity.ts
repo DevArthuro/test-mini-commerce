@@ -20,6 +20,23 @@ export class Product {
   }
 }
 
+export class ProductBought {
+  constructor(
+    public readonly id: string,
+    public readonly total: number,
+    public readonly quantity: number,
+    public readonly product: Product,
+  ) {}
+
+  public toValue(): PRODUCT_BOUGHT_VISIBILITY_INFO {
+    return {
+      total: this.total,
+      quantity: this.quantity,
+      product: this.product.toValue(),
+    }
+  }
+}
+
 export interface PRODUCT_VISIBILITY_INFO {
   id: string;
   name: string;
@@ -27,4 +44,10 @@ export interface PRODUCT_VISIBILITY_INFO {
   stock: number;
   price: number;
   imageUrl: string;
+}
+
+export interface PRODUCT_BOUGHT_VISIBILITY_INFO {
+  total: number;
+  quantity: number;
+  product: PRODUCT_VISIBILITY_INFO;
 }

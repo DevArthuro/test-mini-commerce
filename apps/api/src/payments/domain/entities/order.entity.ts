@@ -1,17 +1,16 @@
 import { Customer, VISIBILITY_CUSTOMER_INFO } from './customer.entity';
-import { Product, PRODUCT_VISIBILITY_INFO } from './product.entity';
+import { PRODUCT_BOUGHT_VISIBILITY_INFO, PRODUCT_VISIBILITY_INFO, ProductBought } from './product.entity';
 import { TransactionStatus } from './transaction.entity';
 
 export class Order {
   constructor(
     public readonly id: string,
     public readonly customer: Customer,
-    public readonly product: Product,
+    public readonly products: ProductBought[],
     public readonly feeDelivery: number,
     public readonly feeBought: number,
     public readonly tokenizedCard: string,
     public readonly reference: string,
-    public readonly quantity: number,
     public readonly status: OrderStatus,
   ) {}
 
@@ -24,7 +23,7 @@ export class Order {
   }
 
   public toCalculateOrder(): number {
-    const totalProduct = this.product.price * this.quantity;
+    const totalProduct = this.products.reduce((calculate, product) => product.total + calculate, 0);
     const totalFeeDelivery = totalProduct * this.feeDelivery;
     const totalFeeBought = totalProduct * this.feeBought;
     return totalProduct + totalFeeDelivery + totalFeeBought;
@@ -51,10 +50,9 @@ export class Order {
   public toValue(): VISIBILITY_ORDER_INFO {
     return {
       customer: this.customer.toValue(),
-      product: this.product.toValue(),
+      products: this.products.map((product) => product.toValue()),
       totalOrder: this.toCalculateOrder(),
       reference: this.reference,
-      quantity: this.quantity,
       status: this.status,
     };
   }
@@ -68,9 +66,8 @@ export enum OrderStatus {
 
 export interface VISIBILITY_ORDER_INFO {
   customer: VISIBILITY_CUSTOMER_INFO;
-  product: PRODUCT_VISIBILITY_INFO;
+  products: PRODUCT_BOUGHT_VISIBILITY_INFO[];
   totalOrder: number;
   reference: string;
-  quantity: number;
   status: OrderStatus;
 }
