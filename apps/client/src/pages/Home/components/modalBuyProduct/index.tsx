@@ -16,6 +16,7 @@ import { orderDataIdOrder, ordersLoading } from "../../../../store/selectors";
 import { useNavigate } from "react-router-dom";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { ProductsReq } from "../../../../types/orders";
+import ScrollToastProducts from "../../../../components/scrollToastProducts";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -84,6 +85,7 @@ const paymentSchema = z.object({
 const ModalBuyProduct = () => {
   const orderId = useSelector(orderDataIdOrder);
   const orderIsLoading = useSelector(ordersLoading);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -138,6 +140,10 @@ const ModalBuyProduct = () => {
         <button className="modal__close-btn" onClick={handlerCloseModal}>
           X
         </button>
+        <div>
+          <h2>Products</h2>
+          <ScrollToastProducts />
+        </div>
         <form className="modal-form" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="modal-form__title">Card Information</h2>
           <section className="modal-form__section">
