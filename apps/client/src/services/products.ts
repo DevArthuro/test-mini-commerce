@@ -12,7 +12,6 @@ export class Products {
     try {
       const response =
         await this.fetchInstance.get<ResponseProduct>(`/products`);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return (error as Error).message;
