@@ -10,11 +10,12 @@ export class Orders {
   }
   public async createOrder(
     body: RequestBodyCreateOrder
-  ): Promise<Pick<ResponseCreateOrder["data"], "customer" | "product" | "quantity" | "reference" | "status" | "totalOrder"> | string> {
+  ): Promise<ResponseCreateOrder["data"] | string> {
     try {
-      const response = await this.fetchInstance.post<
-        ResponseCreateOrder
-      >(`/orders/create`, body);
+      const response = await this.fetchInstance.post<ResponseCreateOrder>(
+        `/orders/create`,
+        body
+      );
       return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -24,10 +25,12 @@ export class Orders {
     }
   }
 
-  public async getOrderByReference(id: string): Promise<ResponseCreateOrder["data"] | string> {
+  public async getOrderByReference(
+    id: string
+  ): Promise<ResponseCreateOrder["data"] | string> {
     try {
       const response = await this.fetchInstance.get<ResponseCreateOrder>(
-        `/orders/${id}`,
+        `/orders/${id}`
       );
       return response.data.data;
     } catch (error) {
