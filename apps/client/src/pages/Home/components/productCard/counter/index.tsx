@@ -11,7 +11,7 @@ const Counter: React.FC<{
   const isActiveDecrease = useMemo(() => quantity === 0, [quantity]);
   const isActiveIncrease = useMemo(() => quantity === limitStock, [quantity]);
 
-  const { products, addProductCart, deleteProductCart } = useContext(contextModalState);
+  const { addProductCart, deleteProductCart } = useContext(contextModalState);
 
   enum TYPE_ACTION_CHANGE_QUANTITY {
     INCREASE = "INCREASE",
@@ -33,8 +33,6 @@ const Counter: React.FC<{
         addProductCart(productId, quantity - 1);
         break
     }
-
-    console.log(products);
   }
 
   return (
