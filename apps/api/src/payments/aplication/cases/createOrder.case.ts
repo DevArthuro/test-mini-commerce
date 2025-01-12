@@ -78,7 +78,7 @@ export class CreateOrderCase {
           ERROR_PRODUCTS_TYPE.PRODUCT_NOT_FOUND,
         );
       }
-      if (productDto.quantity <= 0 || product.stock < dto.quantity) {
+      if (productDto.quantity <= 0 || product.stock < productDto.quantity) {
         throw new ProductsException(
           'The stock is not available',
           ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
@@ -95,7 +95,7 @@ export class CreateOrderCase {
     }
     try {
       const order = await this.orderRepository.create(
-        { quantity: dto.quantity, tokenizedCard: payment.tokenizedCard },
+        { tokenizedCard: payment.tokenizedCard },
         customer,
         dto.products,
       );
