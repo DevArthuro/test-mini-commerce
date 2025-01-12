@@ -97,7 +97,7 @@ export class CreateOrderCase {
       const order = await this.orderRepository.create(
         { quantity: dto.quantity, tokenizedCard: payment.tokenizedCard },
         customer,
-        products,
+        dto.products,
       );
 
       return order.toValue();
