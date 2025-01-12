@@ -19,7 +19,7 @@ const Navbar = () => {
         <Outlet />
       </Suspense>
       <Loading />
-      <ModalError/>
+      <ModalError />
     </div>
   );
 };
