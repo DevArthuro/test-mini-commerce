@@ -67,3 +67,24 @@ $primary-color: #4caf50;
     font-size: 14px;
   }
 }
+
+.custom-card_button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    border: none;
+    padding: 10px;
+    font-weight: bolder;
+    width: 250px;
+    height: 50px;
+    border-radius: 15px;
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+}
+
+.custom-card_button-disabled {
+    opacity: 0.7;
+}

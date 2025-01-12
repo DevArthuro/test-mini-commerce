@@ -5,6 +5,8 @@ export interface modalContext {
   products: ProductBuy;
   handlerOpenModal: (idProduct: string, quantity: number) => void;
   handlerCloseModal: () => void;
+  addProductCart: (productId: string, quantity: number) => void;
+  deleteProductCart: (productId: string) => void;
 }
 
 export type ProductBuy = Record<string, { quantity: number }>;
@@ -14,6 +16,8 @@ export const contextModalState = createContext<modalContext>({
   products: {},
   handlerOpenModal: () => {},
   handlerCloseModal: () => {},
+  addProductCart: () => {},
+  deleteProductCart: () => {}
 });
 
 export const ContextModalProvider = contextModalState.Provider;
