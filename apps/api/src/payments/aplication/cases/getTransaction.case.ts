@@ -73,10 +73,14 @@ export class GetTransactionCase {
         );
 
         if (orderUpdated.status === OrderStatus.FAILED) {
-          await this.productRespository.updateStockIncrease(
-            transactionUpdated.order.product.id,
-            transactionUpdated.order.quantity,
-          );
+           await Promise.all(
+             transaction.order.products.map(async (productOrder) => {
+               await this.productRespository.updateStockIncrease(
+                 productOrder.id,
+                 productOrder.quantity,
+               );
+             }),
+           );
         }
 
         transactionUpdated = await this.transactionRepository.findById(
