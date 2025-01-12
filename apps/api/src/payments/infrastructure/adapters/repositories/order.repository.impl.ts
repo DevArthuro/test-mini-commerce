@@ -33,7 +33,7 @@ export class InMemoryOrderRepository implements OrderRepository {
 
           const total = Number(product.price) * productOrder.quantity;
 
-          return new ProductBought(
+          const productBought = new ProductBought(
             product.id,
             total,
             productOrder.quantity,
@@ -46,6 +46,7 @@ export class InMemoryOrderRepository implements OrderRepository {
               product.imageUrl,
             ),
           );
+          return productBought;
         },
       ),
     );
@@ -94,7 +95,7 @@ export class InMemoryOrderRepository implements OrderRepository {
       data: {
         customerId: customer.id,
         products: products.map((product) => ({
-          id: product.productId,
+          productId: product.productId,
           quantity: product.quantity,
         })),
         feeBought: 0.03,

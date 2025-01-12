@@ -52,6 +52,8 @@ export class Order {
       customer: this.customer.toValue(),
       products: this.products.map((product) => product.toValue()),
       totalOrder: this.toCalculateOrder(),
+      feeBought: `${this.feeBought * 100}%` ,
+      feeDelivery: `${this.feeDelivery * 100}%`,
       reference: this.reference,
       status: this.status,
     };
@@ -70,4 +72,6 @@ export interface VISIBILITY_ORDER_INFO {
   totalOrder: number;
   reference: string;
   status: OrderStatus;
+  feeDelivery: string;
+  feeBought: string;
 }
