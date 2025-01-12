@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { ProductsInterface } from 'src/payments/aplication/dto/createOrder.dto';
 import { TransactionInterface } from 'src/payments/domain/dto/transaction.dto';
 import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';
 import { Order, OrderStatus } from 'src/payments/domain/entities/order.entity';
-import { Product } from 'src/payments/domain/entities/product.entity';
+import { Product, ProductBought } from 'src/payments/domain/entities/product.entity';
 import {
   Transaction,
   TransactionStatus,
@@ -126,6 +127,32 @@ export class InMemoryTransactionRepository implements TransactionRepository {
   ): Promise<Transaction> {
     const order = transaction.order;
 
+    const products = await Promise.all<ProductBought[]>(
+      order.products.map(
+        async (productOrder: ProductsInterface): Promise<ProductBought> => {
+          const product = await this.prisma.product.findFirst({
+            where: { id: productOrder.productId },
+          });
+
+          const total = Number(product.price) * productOrder.quantity;
+
+          return new ProductBought(
+            product.id,
+            total,
+            productOrder.quantity,
+            new Product(
+              product.id,
+              product.name,
+              product.description,
+              product.stock,
+              Number(product.price),
+              product.imageUrl,
+            ),
+          );
+        },
+      ),
+    );
+
     return new Transaction(
       transaction.id,
       new Order(
@@ -155,19 +182,11 @@ export class InMemoryTransactionRepository implements TransactionRepository {
           order.customer.typeDocument,
           order.customer.document,
         ),
-        new Product(
-          order.product.id,
-          order.product.name,
-          order.product.description,
-          order.product.stock,
-          Number(order.product.price),
-          order.product.imageUrl,
-        ),
+        products,
         Number(order.feeDelivery),
         Number(order.feeBought),
         order.tokenizedCard,
         order.reference,
-        order.quantity,
         OrderStatus[order.status],
       ),
       TransactionStatus[transaction.status],
