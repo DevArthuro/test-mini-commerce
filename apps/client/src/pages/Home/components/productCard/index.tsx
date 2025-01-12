@@ -1,7 +1,6 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { Product } from "../../../../types/products";
 import Counter from "./counter";
-import { contextModalState } from "../../../../context/modalConext";
 import "./productCard.scss";
 
 const ProductCard: React.FC<Product> = ({
@@ -13,12 +12,6 @@ const ProductCard: React.FC<Product> = ({
   stock,
 }) => {
   const [quantity, setQuantity] = useState(0);
-
-  const { openModal, handlerOpenModal } = useContext(contextModalState);
-
-  const handlerBuyProduct = useCallback(() => {
-    handlerOpenModal(id, quantity);
-  }, [quantity]);
 
   const increaseQuantity = useCallback(() => {
     setQuantity((lastQuantity) => lastQuantity + 1);
@@ -56,15 +49,9 @@ const ProductCard: React.FC<Product> = ({
             increase={increaseQuantity}
             limitStock={stock}
             quantity={quantity}
+            productId={id}
           />
         </div>
-        <button
-          className={`custom-card_button ${quantity === 0 ? "custom-card_button-disabled" : null}`}
-          disabled={quantity === 0 || openModal}
-          onClick={handlerBuyProduct}
-        >
-          {quantity > 0 ? "Pay with credit card" : `Increase the counter`}
-        </button>
       </div>
     </div>
   );
