@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Product } from "../../../../types/products";
 import Counter from "./counter";
 import "./productCard.scss";
+import { contextModalState } from "../../../../context/modalConext";
 
 const ProductCard: React.FC<Product> = ({
   name,
@@ -12,6 +13,7 @@ const ProductCard: React.FC<Product> = ({
   stock,
 }) => {
   const [quantity, setQuantity] = useState(0);
+  const { products } = useContext(contextModalState);
 
   const increaseQuantity = useCallback(() => {
     setQuantity((lastQuantity) => lastQuantity + 1);
@@ -20,6 +22,11 @@ const ProductCard: React.FC<Product> = ({
   const decreaseQuantity = useCallback(() => {
     setQuantity((lastQuantity) => lastQuantity - 1);
   }, []);
+
+  useEffect(() => {
+    if (quantity > 1 && !products[id]) setQuantity(0)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products]);
 
   return (
     <div className="custom-card">
