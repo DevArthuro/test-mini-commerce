@@ -18,6 +18,7 @@ import {
 } from 'src/payments/domain/errors/OrderExeption.error';
 import { GetTransactionByIdDTO } from '../dto/getTransaction.dto';
 import { Injectable } from '@nestjs/common';
+import { InvoiceFacturation } from 'src/payments/domain/ports/invoiceFacturation,port';
 
 @Injectable()
 export class GetTransactionCase {
@@ -26,6 +27,7 @@ export class GetTransactionCase {
     private readonly orderRepository: OrderRepository,
     private readonly paymentAdapter: PaymentGatewayPort,
     private readonly productRespository: ProductRepository,
+    private readonly invoiceRepository: InvoiceFacturation
   ) {}
 
   async execute(
