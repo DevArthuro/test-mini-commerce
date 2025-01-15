@@ -8,10 +8,6 @@ services:
     command: ["/bin/sh", "-c", "npm run prisma:migrate --workspace api && npm run prisma:seed --workspace api && npm run start:prod --workspace api"]
     ports:
       - "8080:3500"
-    environment:
-      - NODE_ENV=Development
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/minicommerce?schema=public
-      - PORT=3500
     env_file:
       - ./apps/api/.env
     depends_on:
