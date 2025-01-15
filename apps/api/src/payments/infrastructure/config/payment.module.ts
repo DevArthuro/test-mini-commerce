@@ -22,6 +22,8 @@ import { InMemoryTransactionRepository } from '../adapters/repositories/transact
 import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
 import { GetOrderByReference } from 'src/payments/aplication/cases/getOrderByReference.case';
 import { GetTransactionCase } from 'src/payments/aplication/cases/getTransaction.case';
+import { Factus } from '../adapters/services/factus-invoice.service';
+import { InvoiceFacturation } from 'src/payments/domain/ports/invoiceFacturation,port';
 
 @Module({
   controllers: [ProductController, OrderController, PaymentController],
@@ -60,6 +62,10 @@ import { GetTransactionCase } from 'src/payments/aplication/cases/getTransaction
     {
       provide: PaymentGatewayPort,
       useClass: Wompi,
+    },
+    Factus, {
+      provide: InvoiceFacturation,
+      useClass: Factus,
     },
     InMemoryTransactionRepository,
     {
