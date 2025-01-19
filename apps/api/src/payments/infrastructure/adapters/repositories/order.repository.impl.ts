@@ -83,6 +83,7 @@ export class InMemoryOrderRepository implements OrderRepository {
       order.tokenizedCard,
       order.reference,
       OrderStatus[order.status],
+      order.created_at,
     );
   }
 
