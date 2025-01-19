@@ -63,7 +63,7 @@ export interface ResponseTransaction {
   data: {
     id: string;
     created_at: Date;
-    finalized_at: Date | null;
+    finalized_at: string | null;
     amount_in_cents: number;
     reference: string;
     customer_email: string;

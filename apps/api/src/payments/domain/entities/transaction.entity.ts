@@ -6,7 +6,7 @@ export class Transaction {
     public readonly order: Order,
     public readonly status: TransactionStatus,
     public readonly referenceService: string,
-    public readonly finalizedAt: Date | null,
+    public readonly finalizedAt: string | null,
     public readonly paymentMethod: PaymentMethod,
   ) {}
 
@@ -44,5 +44,5 @@ export interface VISIBILITY_TRANSACTION_INFO {
   id: string;
   order: VISIBILITY_ORDER_INFO;
   status: TransactionStatus;
-  finalizedAt: Date;
+  finalizedAt: string;
 }
