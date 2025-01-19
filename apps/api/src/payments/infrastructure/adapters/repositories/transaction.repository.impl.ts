@@ -29,6 +29,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
         orderId: order.id,
         status: transaction.status,
         referencePayment: transaction.referenceService,
+        paymentMethod: transaction.paymentMethod,
         finalizedAt: transaction.finalizedAt,
       },
       include: {
@@ -192,6 +193,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
       TransactionStatus[transaction.status],
       transaction.referencePayment,
       transaction.finalizedAt,
+      transaction.paymentMethod,
     );
   }
 }

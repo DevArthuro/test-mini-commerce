@@ -82,6 +82,7 @@ model Transaction {
   id               String    @id @default(uuid())
   orderId          String
   status           String
+  paymentMethod    String
   referencePayment String    @unique
   finalizedAt      DateTime?
   createdAt        DateTime  @default(now())

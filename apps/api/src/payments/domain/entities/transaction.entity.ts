@@ -7,6 +7,7 @@ export class Transaction {
     public readonly status: TransactionStatus,
     public readonly referenceService: string,
     public readonly finalizedAt: Date | null,
+    public readonly paymentMethod: PaymentMethod,
   ) {}
 
   public isFinalized(): boolean {
@@ -32,6 +33,11 @@ export enum TransactionStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
   FINALIZED = 'FINALIZED',
+}
+
+export enum PaymentMethod {
+  CREDIT = 'CREDIT',
+  DEBIT = 'DEBIT',
 }
 
 export interface VISIBILITY_TRANSACTION_INFO {

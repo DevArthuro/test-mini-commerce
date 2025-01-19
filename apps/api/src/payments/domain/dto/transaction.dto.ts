@@ -5,6 +5,9 @@ export class TransactionInterface {
   @IsString()
   referenceService: string;
 
+  @IsString()
+  paymentMethod: string;
+
   @IsEnum(TransactionStatus)
   status: TransactionStatus;
 
