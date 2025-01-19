@@ -6,7 +6,7 @@ import {
 import { PaymentGatewayPort } from 'src/payments/domain/ports/paymentGateway.port';
 import {
   Currency,
-  PaymentMethod,
+  PaymentMethod as PaymentMethodWompi,
   RequestTokenizedCard,
   RequestTransaction,
   ResponseMerchants,
@@ -19,6 +19,7 @@ import { Injectable } from '@nestjs/common';
 import axios, { Axios, AxiosError } from 'axios';
 import { Order } from 'src/payments/domain/entities/order.entity';
 import {
+  PaymentMethod,
   Transaction,
   TransactionStatus,
 } from 'src/payments/domain/entities/transaction.entity';
@@ -102,11 +103,11 @@ export class Wompi implements PaymentGatewayPort {
       },
       customer_email: order.customer.email,
       payment_method: {
-        type: PaymentMethod.CARD,
+        type: PaymentMethodWompi.CARD,
         installments: 1,
         token: order.getTokenizedCard(),
       },
-      payment_method_type: PaymentMethod.CARD,
+      payment_method_type: PaymentMethodWompi.CARD,
       redirect_url: null,
       reference: order.reference,
       shipping_address: {
@@ -138,7 +139,9 @@ export class Wompi implements PaymentGatewayPort {
         transaction.data.data.finalized_at,
         transaction.data.data.amount_in_cents,
         transaction.data.data.currency,
-        String(transaction.data.data.payment_method),
+        this.parsePaymentMethod(
+          transaction.data.data.payment_method.extra.card_type,
+        ),
         this.getStatusSerialized(transaction.data.data.status),
       );
 
@@ -148,6 +151,17 @@ export class Wompi implements PaymentGatewayPort {
         throw new Error('WOMPI_ERROR');
       }
       throw error;
+    }
+  }
+
+  public parsePaymentMethod(paymentMethodWompi: string) {
+    switch (paymentMethodWompi) {
+      case 'CREDIT':
+        return PaymentMethod.CREDIT;
+      case 'DEBIT':
+        return PaymentMethod.DEBIT;
+      default:
+        return PaymentMethod.CREDIT;
     }
   }
 
@@ -167,7 +181,8 @@ export class Wompi implements PaymentGatewayPort {
         transaction.order,
         statusSerialize,
         transactionResponse.data.data.id,
-        transactionResponse.data.data.finalized_at
+        transactionResponse.data.data.finalized_at,
+        transaction.paymentMethod,
       );
 
       return TransactionEntity;

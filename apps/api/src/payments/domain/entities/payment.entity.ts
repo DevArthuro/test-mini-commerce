@@ -1,4 +1,4 @@
-import { TransactionStatus } from './transaction.entity';
+import { PaymentMethod, TransactionStatus } from './transaction.entity';
 
 export class PaymentTokenized {
   constructor(
@@ -21,7 +21,7 @@ export class PaymentTransaction {
     public readonly finalizedAt: Date | null,
     public readonly amount: number,
     public readonly currency: string,
-    public readonly paymentMethod: string,
+    public readonly paymentMethod: PaymentMethod,
     public readonly status: TransactionStatus,
   ) {}
 
