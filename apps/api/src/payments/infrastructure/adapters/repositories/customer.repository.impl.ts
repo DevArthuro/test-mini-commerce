@@ -21,7 +21,7 @@ export class InMemoryCustomerRepository implements CustomerRepository {
         name: customer.name,
         lastname: customer.lastname,
         phoneNumber: customer.phoneNumber,
-        typeDocument: customer.typeDocument,
+        typeDocument: customer.typeDocument.toString(),
         cardId: card.id,
         deliveryId: delivery.id,
       },

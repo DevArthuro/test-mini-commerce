@@ -8,19 +8,7 @@ interface DocumentTypeSelectorProps {
   name: string;
 }
 
-const documentTypes: string[] = [
-  "PP",
-  "RUC",
-  "RG",
-  "RC",
-  "TI",
-  "CC",
-  "TE",
-  "CE",
-  "NIT",
-  "DNI",
-  "OTHER",
-];
+const documentTypes: string[] = ["PP", "RC", "TI", "CC", "TE", "CE", "NIT"];
 
 const DocumentTypeSelector = forwardRef<
   HTMLSelectElement,

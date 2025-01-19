@@ -65,12 +65,9 @@ const paymentSchema = z.object({
       .string()
       .regex(/^\+[1-9]\d{1,14}$/, "Invalid phone number")
       .min(12, "Invalid phone number"),
-    typeDocument: z.enum(
-      ["PP", "RUC", "RG", "OTHER", "RC", "TI", "CC", "TE", "CE", "NIT", "DNI"],
-      {
-        message: "Invalid document type",
-      }
-    ),
+    typeDocument: z.enum(["PP", "RC", "TI", "CC", "TE", "CE", "NIT"], {
+      message: "Invalid document type",
+    }),
     document: z.string().min(5, "Document number is required"),
   }),
   delivery: z.object({
@@ -107,8 +104,7 @@ const ModalBuyProduct = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { handlerCloseModal, products } =
-    useContext(contextModalState);
+  const { handlerCloseModal, products } = useContext(contextModalState);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
@@ -116,9 +112,11 @@ const ModalBuyProduct = () => {
       return;
     }
 
-    const productFormat = Object.entries(products).map(([id, value]): ProductsReq => {
-      return {productId: id, quantity: value.quantity}
-    })
+    const productFormat = Object.entries(products).map(
+      ([id, value]): ProductsReq => {
+        return { productId: id, quantity: value.quantity };
+      }
+    );
 
     dispatch(
       fetchCreateOrder({
