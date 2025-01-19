@@ -1,3 +1,4 @@
+import { TYPE_DOCUMENT } from '../dto/customer.dto';
 import { Card, VISIBILITY_CARD_INFO } from './card.entity';
 import { Delivery, VISIBILITY_DELIVERY_INFO } from './delivery.entity';
 
@@ -10,7 +11,7 @@ export class Customer {
     public readonly lastname: string,
     public readonly email: string,
     public readonly phoneNumber: string,
-    public readonly typeDocument: string,
+    public readonly typeDocument: TYPE_DOCUMENT,
     public readonly document: string,
   ) {}
 
