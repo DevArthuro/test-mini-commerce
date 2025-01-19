@@ -1,5 +1,9 @@
 import { Customer, VISIBILITY_CUSTOMER_INFO } from './customer.entity';
-import { PRODUCT_BOUGHT_VISIBILITY_INFO, PRODUCT_VISIBILITY_INFO, ProductBought } from './product.entity';
+import {
+  PRODUCT_BOUGHT_VISIBILITY_INFO,
+  PRODUCT_VISIBILITY_INFO,
+  ProductBought,
+} from './product.entity';
 import { TransactionStatus } from './transaction.entity';
 
 export class Order {
@@ -12,6 +16,7 @@ export class Order {
     public readonly tokenizedCard: string,
     public readonly reference: string,
     public readonly status: OrderStatus,
+    public readonly created_at: string,
   ) {}
 
   public getTokenizedCard(): string {
@@ -23,7 +28,10 @@ export class Order {
   }
 
   public toCalculateOrder(): number {
-    const totalProduct = this.products.reduce((calculate, product) => product.total + calculate, 0);
+    const totalProduct = this.products.reduce(
+      (calculate, product) => product.total + calculate,
+      0,
+    );
     const totalFeeDelivery = totalProduct * this.feeDelivery;
     const totalFeeBought = totalProduct * this.feeBought;
     return totalProduct + totalFeeDelivery + totalFeeBought;
@@ -52,7 +60,7 @@ export class Order {
       customer: this.customer.toValue(),
       products: this.products.map((product) => product.toValue()),
       totalOrder: this.toCalculateOrder(),
-      feeBought: `${this.feeBought * 100}%` ,
+      feeBought: `${this.feeBought * 100}%`,
       feeDelivery: `${this.feeDelivery * 100}%`,
       reference: this.reference,
       status: this.status,

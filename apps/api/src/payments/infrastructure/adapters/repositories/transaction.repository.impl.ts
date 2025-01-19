@@ -5,7 +5,10 @@ import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';
 import { Order, OrderStatus } from 'src/payments/domain/entities/order.entity';
-import { Product, ProductBought } from 'src/payments/domain/entities/product.entity';
+import {
+  Product,
+  ProductBought,
+} from 'src/payments/domain/entities/product.entity';
 import {
   Transaction,
   TransactionStatus,
@@ -184,6 +187,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
         order.tokenizedCard,
         order.reference,
         OrderStatus[order.status],
+        order.created_at,
       ),
       TransactionStatus[transaction.status],
       transaction.referencePayment,
