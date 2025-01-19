@@ -18,7 +18,7 @@ export class PaymentTransaction {
   constructor(
     public readonly id: string,
     public readonly createdAt: Date,
-    public readonly finalizedAt: Date | null,
+    public readonly finalizedAt: string | null,
     public readonly amount: number,
     public readonly currency: string,
     public readonly paymentMethod: PaymentMethod,

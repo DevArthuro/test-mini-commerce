@@ -100,7 +100,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
   async updateStatus(
     id: string,
     status: TransactionStatus,
-    finalized_at: Date,
+    finalized_at: string,
   ): Promise<Transaction | null> {
     const transaction = await this.prisma.transaction.update({
       where: { id },

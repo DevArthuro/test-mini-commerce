@@ -12,6 +12,6 @@ export abstract class TransactionRepository {
   abstract updateStatus(
     id: string,
     status: TransactionStatus,
-    finalized_at: Date,
+    finalized_at: string,
   ): Promise<Transaction | null>;
 }

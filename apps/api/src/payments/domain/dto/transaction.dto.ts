@@ -11,6 +11,6 @@ export class TransactionInterface {
   @IsEnum(TransactionStatus)
   status: TransactionStatus;
 
-  @IsDate()
-  finalizedAt: Date;
+  @IsString()
+  finalizedAt: string;
 }
