@@ -126,7 +126,6 @@ export class InMemoryTransactionRepository implements TransactionRepository {
     transaction: any,
   ): Promise<Transaction> {
     const order = transaction.order;
-
     const products = await Promise.all<ProductBought[]>(
       order.products.map(
         async (productOrder: ProductsInterface): Promise<ProductBought> => {
@@ -188,7 +187,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
         order.tokenizedCard,
         order.reference,
         OrderStatus[order.status],
-        order.created_at,
+        order.createdAt,
       ),
       TransactionStatus[transaction.status],
       transaction.referencePayment,
