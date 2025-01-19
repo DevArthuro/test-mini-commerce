@@ -1,3 +1,1 @@
-export abstract class InvoiceFacturation {
-  
-}
+export abstract class InvoiceFacturation {}

@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import axios, { Axios } from "axios";
-import { InvoiceFacturation } from "src/payments/domain/ports/invoiceFacturation,port";
-import { AUTH_INTERFACE } from "./interfaces/factus";
+import { Injectable } from '@nestjs/common';
+import axios, { Axios } from 'axios';
+import { InvoiceFacturation } from 'src/payments/domain/ports/invoiceFacturation,port';
+import { AUTH_INTERFACE } from './interfaces/factus';
 
 @Injectable()
 export class Factus implements InvoiceFacturation {
@@ -28,54 +28,58 @@ export class Factus implements InvoiceFacturation {
 
   private async getRefreshAuthToken(): Promise<AUTH_INTERFACE | null> {
     try {
-      const response = await this.axiosIntance.post<AUTH_INTERFACE>("/oauth/token", {
-        grant_type: "password",
-        client_id: this.client_id,
-        client_secret: this.client_secret,
-        refresh_token: this.tokenRefresh
-      });
+      const response = await this.axiosIntance.post<AUTH_INTERFACE>(
+        '/oauth/token',
+        {
+          grant_type: 'refresh_token',
+          client_id: this.client_id,
+          client_secret: this.client_secret,
+          refresh_token: this.tokenRefresh,
+        },
+      );
 
       const data = response.data;
 
-      return data
+      return data;
     } catch (error) {
-      return
+      return;
     }
   }
 
   private async getAuthToken(): Promise<string | null> {
-    let refresh  = false;
-    if (this.dueTokenDate && this.dueTokenDate > new Date().getMilliseconds()) {
+    let refresh = false;
+    if (this.dueTokenDate && this.dueTokenDate > new Date().setSeconds(0)) {
       return this.getBearerToken();
-    } else if ( this.dueTokenDate && this.tokenRefresh) {
+    } else if (this.dueTokenDate && this.tokenRefresh) {
       refresh = true;
     }
     try {
       let response: AUTH_INTERFACE;
       if (refresh) {
-        response = await this.getRefreshAuthToken()
+        response = await this.getRefreshAuthToken();
       } else {
+        const responseToken = await this.axiosIntance.post<AUTH_INTERFACE>(
+          '/oauth/token',
+          {
+            grant_type: 'password',
+            client_id: this.client_id,
+            client_secret: this.client_secret,
+            username: this.user,
+            password: this.password,
+          },
+        );
 
-        const responseToken = await this.axiosIntance.post<AUTH_INTERFACE>("/oauth/token", {
-          grant_type: "password",
-          client_id: this.client_id,
-          client_secret: this.client_secret,
-          username: this.user,
-          password: this.password
-        })
-  
-        const response = responseToken.data;
+        response = responseToken.data;
       }
 
-      this.token = response.access_token
+      this.token = response.access_token;
       this.tokenType = response.token_type;
       this.tokenRefresh = response.refresh_token;
-      this.dueTokenDate = new Date().getMilliseconds() + 3000
+      this.dueTokenDate = new Date().setSeconds(response.expires_in);
 
       return this.getBearerToken();
-
     } catch (error) {
-      return 
+      return;
     }
   }
 }
