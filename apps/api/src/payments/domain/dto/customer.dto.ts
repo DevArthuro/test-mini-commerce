@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Length, Matches } from 'class-validator';
 
 export enum TYPE_DOCUMENT {
-  'PP',
-  'RC',
-  'TI',
-  'CC',
-  'TE',
-  'CE',
-  'NIT',
+  PP = 'PP',
+  RC = 'RC',
+  TI = 'TI',
+  CC = 'CC',
+  TE = 'TE',
+  CE = 'CE',
+  NIT = 'NIT',
 }
 
 export class CustomerInterface {
