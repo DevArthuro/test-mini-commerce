@@ -21,6 +21,7 @@ import {
   ERROR_PRODUCTS_TYPE,
   ProductsException,
 } from 'src/payments/domain/errors/ProductsExeption.error';
+import { PaymentTransaction } from 'src/payments/domain/entities/payment.entity';
 
 @Injectable()
 export class CreateTransactionCase {
@@ -34,7 +35,7 @@ export class CreateTransactionCase {
   async execute(
     dto: CreateTransactionDTO,
   ): Promise<VISIBILITY_TRANSACTION_INFO | null> {
-    let paymentIntent;
+    let paymentIntent: PaymentTransaction;
     let transaction: Transaction;
 
     const order = await this.orderRepository.findByReference(
@@ -81,7 +82,7 @@ export class CreateTransactionCase {
           referenceService: paymentIntent.id,
           finalizedAt: paymentIntent.finalizedAt,
           status: paymentIntent.status,
-          paymentMethod: paymentIntent,
+          paymentMethod: paymentIntent.paymentMethod,
         },
         order,
       );

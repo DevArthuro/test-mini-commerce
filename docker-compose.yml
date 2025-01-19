@@ -1,11 +1,16 @@
-version: '3.9'
+version: "3.9"
 
 services:
   app:
     build:
       context: .
     container_name: turbo_app
-    command: ["/bin/sh", "-c", "npm run prisma:migrate --workspace api && npm run prisma:seed --workspace api && npm run start:prod --workspace api"]
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "npm run prisma:migrate --workspace api && npm run prisma:seed --workspace api && npm run start:prod --workspace api",
+      ]
     ports:
       - "8080:3500"
     environment:
@@ -18,7 +23,7 @@ services:
         condition: service_healthy
     networks:
       - commerce_network
-  
+
   postgres:
     container_name: postgres
     image: postgres:16rc1
