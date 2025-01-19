@@ -29,8 +29,8 @@ export class InMemoryTransactionRepository implements TransactionRepository {
         orderId: order.id,
         status: transaction.status,
         referencePayment: transaction.referenceService,
-        paymentMethod: transaction.paymentMethod,
         finalizedAt: transaction.finalizedAt,
+        paymentMethod: transaction.paymentMethod,
       },
       include: {
         order: {
