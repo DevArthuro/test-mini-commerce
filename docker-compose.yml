@@ -9,6 +9,7 @@ services:
     ports:
       - "8080:3500"
     environment:
+      - VITE_BASE_API_URL=http://app:3500/api/v1
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/minicommerce?schema=public
     env_file:
       - ./apps/api/.env
