@@ -41,18 +41,17 @@ export class CreateTransactionCase {
       dto.orderReference,
     );
 
-    await Promise.all(order.products.map(async (productOrder) => {
-
-      const product = await this.productRepository.findById(productOrder.id);
-      if (product.stock < productOrder.quantity) {
-        throw new ProductsException(
-          'product stock not available',
-          ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
-        );
-      }
-    }))
-
-
+    await Promise.all(
+      order.products.map(async (productOrder) => {
+        const product = await this.productRepository.findById(productOrder.id);
+        if (product.stock < productOrder.quantity) {
+          throw new ProductsException(
+            'product stock not available',
+            ERROR_PRODUCTS_TYPE.STOCK_NOT_AVAILABLE,
+          );
+        }
+      }),
+    );
 
     if (!order) {
       throw new OrderException(
@@ -82,6 +81,7 @@ export class CreateTransactionCase {
           referenceService: paymentIntent.id,
           finalizedAt: paymentIntent.finalizedAt,
           status: paymentIntent.status,
+          paymentMethod: paymentIntent,
         },
         order,
       );
@@ -96,12 +96,14 @@ export class CreateTransactionCase {
       transaction.status === TransactionStatus.PENDING ||
       transaction.status === TransactionStatus.APPROVED
     ) {
-      await Promise.all(transaction.order.products.map(async (productOrder) => {
-        await this.productRepository.updateStockDecrease(
-          productOrder.id,
-          productOrder.quantity,
-        );
-      }))
+      await Promise.all(
+        transaction.order.products.map(async (productOrder) => {
+          await this.productRepository.updateStockDecrease(
+            productOrder.id,
+            productOrder.quantity,
+          );
+        }),
+      );
     }
 
     transaction = await this.transactionRepository.findById(transaction.id);
