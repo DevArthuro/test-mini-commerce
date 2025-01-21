@@ -27,7 +27,7 @@ export class GetTransactionCase {
     private readonly orderRepository: OrderRepository,
     private readonly paymentAdapter: PaymentGatewayPort,
     private readonly productRespository: ProductRepository,
-    private readonly invoiceRepository: InvoiceFacturation
+    private readonly invoiceRepository: InvoiceFacturation,
   ) {}
 
   async execute(
@@ -75,19 +75,25 @@ export class GetTransactionCase {
         );
 
         if (orderUpdated.status === OrderStatus.FAILED) {
-           await Promise.all(
-             transaction.order.products.map(async (productOrder) => {
-               await this.productRespository.updateStockIncrease(
-                 productOrder.id,
-                 productOrder.quantity,
-               );
-             }),
-           );
+          await Promise.all(
+            transaction.order.products.map(async (productOrder) => {
+              await this.productRespository.updateStockIncrease(
+                productOrder.id,
+                productOrder.quantity,
+              );
+            }),
+          );
         }
 
         transactionUpdated = await this.transactionRepository.findById(
           dto.transactionId,
         );
+
+        if (transactionUpdated.status === TransactionStatus.APPROVED) {
+          // const createInvoice =
+          //   await this.invoiceRepository.createInvoice(transactionUpdated);
+          // console.log(JSON.stringify(createInvoice));
+        }
       } catch (error) {
         await this.transactionRepository.updateStatus(
           transaction.id,
@@ -100,6 +106,11 @@ export class GetTransactionCase {
         );
       }
     }
+
+    const createInvoice = await this.invoiceRepository.createInvoice(
+      transactionUpdated ? transactionUpdated : paymentIntent,
+    );
+    console.log(JSON.stringify(createInvoice));
 
     return transactionUpdated
       ? transactionUpdated.toValue()
