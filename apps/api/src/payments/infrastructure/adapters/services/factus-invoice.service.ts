@@ -102,7 +102,6 @@ export class Factus implements InvoiceFacturation {
   private parseIdentificationId(
     typeDocument: TYPE_DOCUMENT,
   ): TYPE_DOCUMENT_FACTUS {
-    console.log(TYPE_DOCUMENT.CC);
     switch (typeDocument) {
       case TYPE_DOCUMENT.CC:
         return TYPE_DOCUMENT_FACTUS['Cédula ciudadanía'];
@@ -214,7 +213,6 @@ export class Factus implements InvoiceFacturation {
     const docuementIdFactus = this.parseIdentificationId(
       transaction.order.customer.typeDocument,
     );
-    console.log(docuementIdFactus);
     const body: CREATE_INVOICE = {
       customer: {
         address: transaction.order.customer.delivery.address,
