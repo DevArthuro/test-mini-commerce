@@ -186,20 +186,24 @@ export class Factus implements InvoiceFacturation {
     const totalTaxes = extraTaxes.reduce((total, tax) => total + tax, 0);
     const taxByEveryProduct = totalTaxes / products.length;
 
-    const itemsInvoice = products.map(
-      (product): ITEMS_INVOICE => ({
+    const itemsInvoice = products.map((product): ITEMS_INVOICE => {
+      const price =
+        product.product.price * product.quantity +
+        product.product.price * taxByEveryProduct;
+
+      return {
         code_reference: product.id,
         is_excluded: 1,
         name: product.product.name,
-        price: product.product.price,
+        price: price / product.quantity,
         quantity: product.quantity,
         tax_rate: `${Number(taxByEveryProduct * 100).toFixed(2)}`,
         discount_rate: 0,
         unit_measure_id: 70,
         standard_code_id: 1,
         tribute_id: 1,
-      }),
-    );
+      };
+    });
 
     return itemsInvoice;
   }
