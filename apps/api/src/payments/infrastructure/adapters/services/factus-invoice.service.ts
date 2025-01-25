@@ -185,7 +185,7 @@ export class Factus implements InvoiceFacturation {
     extraTaxes: number[],
   ): ITEMS_INVOICE[] {
     const totalTaxes = extraTaxes.reduce((total, tax) => total + tax, 0);
-    const taxByEveryProduct = totalTaxes / products.length;
+    const taxByEveryProduct = totalTaxes;
 
     const itemsInvoice = products.map((product): ITEMS_INVOICE => {
       const price = product.total + product.total * taxByEveryProduct;
