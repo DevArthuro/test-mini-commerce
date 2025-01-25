@@ -92,7 +92,6 @@ export class GetTransactionCase {
         if (transactionUpdated.status === TransactionStatus.APPROVED) {
           const createInvoice =
             await this.invoiceRepository.createInvoice(transactionUpdated);
-          console.log(JSON.stringify(createInvoice));
         }
       } catch (error) {
         await this.transactionRepository.updateStatus(
