@@ -8,6 +8,7 @@ import {
   NUMERIC_RANGE,
   NUMERIC_RANGE_ENUM,
   PAYMENT_METHOD_CODE_FACTUS,
+  RESPONSE_CREATE_INVOICE,
   RESPONSE_NUMERIC_RANGE,
   TYPE_DOCUMENT_FACTUS,
 } from './interfaces/factus';
@@ -212,9 +213,11 @@ export class Factus implements InvoiceFacturation {
     );
 
     const numericRange = await this.getNumericRange(paymentMethodParse);
+
     const docuementIdFactus = this.parseIdentificationId(
       transaction.order.customer.typeDocument,
     );
+
     const body: CREATE_INVOICE = {
       customer: {
         address: transaction.order.customer.delivery.address,
@@ -249,6 +252,20 @@ export class Factus implements InvoiceFacturation {
         transaction.order.feeDelivery,
       ]),
     };
+
+    const token = await this.getAuthToken();
+
+    const response = await this.axiosIntance.post<RESPONSE_CREATE_INVOICE>(
+      '/v1/bills/validate',
+      body,
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
+
+    const data = response.data;
 
     return body;
   }
