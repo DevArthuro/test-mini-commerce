@@ -207,7 +207,7 @@ export class Factus implements InvoiceFacturation {
     return itemsInvoice;
   }
 
-  async createInvoice(transaction: Transaction): Promise<CREATE_INVOICE> {
+  async createInvoice(transaction: Transaction): Promise<Invoice | null> {
     const paymentMethodParse = this.parsePaymentMethod(
       transaction.paymentMethod,
     );
@@ -253,20 +253,33 @@ export class Factus implements InvoiceFacturation {
       ]),
     };
 
-    const token = await this.getAuthToken();
+    try {
+      const token = await this.getAuthToken();
 
-    const response = await this.axiosIntance.post<RESPONSE_CREATE_INVOICE>(
-      '/v1/bills/validate',
-      body,
-      {
-        headers: {
-          Authorization: token,
+      const response = await this.axiosIntance.post<RESPONSE_CREATE_INVOICE>(
+        '/v1/bills/validate',
+        body,
+        {
+          headers: {
+            Authorization: token,
+          },
         },
-      },
-    );
+      );
 
-    const data = response.data;
+      const data = response.data;
 
-    return body;
+      const invoiceEntity = new Invoice(
+        data.data.bill.number,
+        [
+          { link: data.data.bill.public_url, referenceName: 'Factus Invoice' },
+          { link: data.data.bill.qr, referenceName: 'QR Invoice' },
+        ],
+        transaction,
+      );
+
+      return invoiceEntity;
+    } catch (error) {
+      return;
+    }
   }
 }
