@@ -56,17 +56,23 @@
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-
-    p {
-      font-size: 1rem;
-      color: #333;
-      margin: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: center;
+    align-items: center;
+    img {
+      max-width: 250px;
     }
-
-    h3 {
-      font-size: 1.25rem;
-      color: #111;
-      margin-top: 1rem;
+    .links {
+      display: flex;
+      flex-direction: row;
+      gap: 50px;
+      justify-content: space-between;
+      a {
+        outline: none;
+        color: black;
+      }
     }
   }
 
@@ -90,7 +96,7 @@
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    
+
     button {
       background: #1cd425;
       color: #fff;
