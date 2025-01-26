@@ -13,12 +13,16 @@ import {
   Transaction,
   TransactionStatus,
 } from 'src/payments/domain/entities/transaction.entity';
+import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
 import { TransactionRepository } from 'src/payments/domain/repositories/transaction.repository';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class InMemoryTransactionRepository implements TransactionRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private orderRepository: OrderRepository,
+  ) {}
 
   async create(
     transaction: TransactionInterface,
@@ -152,6 +156,10 @@ export class InMemoryTransactionRepository implements TransactionRepository {
       ),
     );
 
+    const orderReq = await this.orderRepository.findByReference(
+      order.reference,
+    );
+
     return new Transaction(
       transaction.id,
       new Order(
@@ -188,6 +196,7 @@ export class InMemoryTransactionRepository implements TransactionRepository {
         order.reference,
         OrderStatus[order.status],
         order.createdAt,
+        orderReq.invoice ?? null,
       ),
       TransactionStatus[transaction.status],
       transaction.referencePayment,
