@@ -4,18 +4,23 @@ import { OrderInteface } from 'src/payments/domain/dto/order.dto';
 import { Card } from 'src/payments/domain/entities/card.entity';
 import { Customer } from 'src/payments/domain/entities/customer.entity';
 import { Delivery } from 'src/payments/domain/entities/delivery.entity';
+import { Invoice } from 'src/payments/domain/entities/invoice.entity';
 import { Order, OrderStatus } from 'src/payments/domain/entities/order.entity';
 import {
   Product,
   ProductBought,
 } from 'src/payments/domain/entities/product.entity';
+import { InvoiceFacturation } from 'src/payments/domain/ports/invoiceFacturation,port';
 import { OrderRepository } from 'src/payments/domain/repositories/order.repository';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 } from 'uuid';
 
 @Injectable()
 export class InMemoryOrderRepository implements OrderRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private invoiceFacturation: InvoiceFacturation,
+  ) {}
 
   private async parsePrismaClientToEntity(order: any): Promise<Order> {
     const delivery = await this.prisma.delivery.findUnique({
@@ -50,6 +55,13 @@ export class InMemoryOrderRepository implements OrderRepository {
         },
       ),
     );
+
+    let invoiceEntity: Invoice | null;
+
+    invoiceEntity = await this.invoiceFacturation.getInvoice(
+      order.referenceInvoice,
+    );
+
     return new Order(
       order.id,
       new Customer(
@@ -84,6 +96,7 @@ export class InMemoryOrderRepository implements OrderRepository {
       order.reference,
       OrderStatus[order.status],
       order.created_at,
+      invoiceEntity,
     );
   }
 
