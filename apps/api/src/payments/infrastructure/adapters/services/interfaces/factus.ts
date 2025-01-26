@@ -89,6 +89,7 @@ export interface ITEMS_INVOICE {
 
 export enum StatusCreateInvoice {
   Created = 'Created',
+  OK = 'OK',
 }
 
 export interface RESPONSE_CREATE_INVOICE {
@@ -220,3 +221,5 @@ export interface RESPONSE_CREATE_INVOICE {
     debit_notes: [];
   };
 }
+
+export interface RESPONSE_GET_INVOICE extends RESPONSE_CREATE_INVOICE {}

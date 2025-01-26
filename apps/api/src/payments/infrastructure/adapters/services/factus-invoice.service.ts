@@ -9,6 +9,7 @@ import {
   NUMERIC_RANGE_ENUM,
   PAYMENT_METHOD_CODE_FACTUS,
   RESPONSE_CREATE_INVOICE,
+  RESPONSE_GET_INVOICE,
   RESPONSE_NUMERIC_RANGE,
   TYPE_DOCUMENT_FACTUS,
 } from './interfaces/factus';
@@ -268,14 +269,35 @@ export class Factus implements InvoiceFacturation {
 
       const data = response.data;
 
-      const invoiceEntity = new Invoice(
-        data.data.bill.number,
-        [
-          { link: data.data.bill.public_url, referenceName: 'Factus Invoice' },
-          { link: data.data.bill.qr, referenceName: 'QR Invoice' },
-        ],
-        transaction,
+      const invoiceEntity = new Invoice(data.data.bill.number, [
+        { link: data.data.bill.public_url, referenceName: 'Factus Invoice' },
+        { link: data.data.bill.qr, referenceName: 'QR Invoice' },
+      ]);
+
+      return invoiceEntity;
+    } catch (error) {
+      return;
+    }
+  }
+
+  async getInvoice(referenceInvoice: string): Promise<Invoice | null> {
+    try {
+      const token = await this.getAuthToken();
+      const response = await this.axiosIntance.get<RESPONSE_GET_INVOICE>(
+        `/v1/bills/show/${referenceInvoice}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        },
       );
+
+      const data = response.data;
+
+      const invoiceEntity = new Invoice(data.data.bill.number, [
+        { link: data.data.bill.public_url, referenceName: 'Factus Invoice' },
+        { link: data.data.bill.qr, referenceName: 'QR Invoice' },
+      ]);
 
       return invoiceEntity;
     } catch (error) {
