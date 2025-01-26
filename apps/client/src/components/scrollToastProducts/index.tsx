@@ -11,22 +11,20 @@ import { FEE_BOUGHT, FEE_DELIVERY } from "../../utils/fee";
 import ShowLogo from "../../assets/show.svg";
 import HiddenLogo from "../../assets/hidden.svg";
 
-const ScrollToastProducts: React.FC<{title?: string}> = ({title}) => {
+const ScrollToastProducts: React.FC<{ title?: string }> = ({ title }) => {
   const products = useSelector(productsData);
   const [openCartDetails, setCartDetails] = useState(false);
-  const order = useSelector(ordersData)
+  const order = useSelector(ordersData);
   const { products: productsCart } = useContext(contextModalState);
 
   const [productsFormat] = useState<ProductsFormatOrder>(() => {
-
     if (Object.keys(productsCart).length === 0 && order) {
-      console.log(productsCart);
-      const formatProductCart: ProductBuy = {}
+      const formatProductCart: ProductBuy = {};
 
       order?.order?.products.forEach((product) => {
         formatProductCart[product.product.id] = {
-          quantity: product.quantity
-        }
+          quantity: product.quantity,
+        };
       });
 
       const productsFormatOrder = getProductFormatCalculate(
@@ -49,7 +47,9 @@ const ScrollToastProducts: React.FC<{title?: string}> = ({title}) => {
       {productsFormat && (
         <div className="product__toast">
           <div className="product__toast__header">
-            <h2 className="product__toast__header-title">{title ? title : "Cart Details"}</h2>
+            <h2 className="product__toast__header-title">
+              {title ? title : "Cart Details"}
+            </h2>
             <figure
               title="click here to show or hidden"
               className="product__toast__header-logo"
