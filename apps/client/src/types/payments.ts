@@ -28,6 +28,19 @@ export interface CardInfo {
   cardName: string;
 }
 
+export enum TypesInvoce {
+  FACTUS = "Factus Invoice",
+  INVOICE_DIAN = "DIAN Invoice",
+  QR_DIAN = "QR Invoice",
+}
+export interface Invoice {
+  id: string;
+  linksInvoice: {
+    link: string;
+    referenceName: TypesInvoce;
+  }[];
+}
+
 export interface ResponseCreatePayment {
   data: {
     id: string;
@@ -40,6 +53,7 @@ export interface ResponseCreatePayment {
       feeDelivery: string;
       status: PaymentStatus;
       paymentDate: string | null;
+      invoice: Invoice;
     };
     status: PaymentStatus;
     finalizedAt: string | null;
