@@ -12,4 +12,8 @@ export abstract class OrderRepository {
   abstract findById(id: string): Promise<Order | null>;
   abstract findByReference(reference: string): Promise<Order | null>;
   abstract updateStatus(id: string, status: OrderStatus): Promise<Order | null>;
+  abstract updateColumn(
+    orderReference: string,
+    column: { name: string; value: any }[],
+  ): Promise<Order | null>;
 }
