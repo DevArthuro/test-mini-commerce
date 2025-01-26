@@ -116,8 +116,10 @@ export class GetTransactionCase {
       }
     }
 
-    return transactionUpdated
-      ? transactionUpdated.toValue()
-      : paymentIntent.toValue();
+    const getTransaction = await this.transactionRepository.findById(
+      paymentIntent.id,
+    );
+
+    return getTransaction.toValue();
   }
 }

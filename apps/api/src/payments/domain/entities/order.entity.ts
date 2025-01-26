@@ -1,7 +1,7 @@
 import { Customer, VISIBILITY_CUSTOMER_INFO } from './customer.entity';
+import { Invoice, VISIBILITY_INVOICE_INFO } from './invoice.entity';
 import {
   PRODUCT_BOUGHT_VISIBILITY_INFO,
-  PRODUCT_VISIBILITY_INFO,
   ProductBought,
 } from './product.entity';
 import { TransactionStatus } from './transaction.entity';
@@ -17,6 +17,7 @@ export class Order {
     public readonly reference: string,
     public readonly status: OrderStatus,
     public readonly created_at: string,
+    public readonly invoice?: Invoice,
   ) {}
 
   public getTokenizedCard(): string {
@@ -56,6 +57,12 @@ export class Order {
   }
 
   public toValue(): VISIBILITY_ORDER_INFO {
+    const aditionalFields: { invoice?: VISIBILITY_INVOICE_INFO } = {};
+
+    if (this.invoice) {
+      aditionalFields.invoice = this.invoice.toValue();
+    }
+
     return {
       customer: this.customer.toValue(),
       products: this.products.map((product) => product.toValue()),
@@ -64,6 +71,7 @@ export class Order {
       feeDelivery: `${this.feeDelivery * 100}%`,
       reference: this.reference,
       status: this.status,
+      ...aditionalFields,
     };
   }
 }
@@ -77,6 +85,7 @@ export enum OrderStatus {
 export interface VISIBILITY_ORDER_INFO {
   customer: VISIBILITY_CUSTOMER_INFO;
   products: PRODUCT_BOUGHT_VISIBILITY_INFO[];
+  invoice?: VISIBILITY_INVOICE_INFO;
   totalOrder: number;
   reference: string;
   status: OrderStatus;

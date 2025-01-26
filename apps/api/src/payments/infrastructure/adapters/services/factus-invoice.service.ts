@@ -282,6 +282,7 @@ export class Factus implements InvoiceFacturation {
 
   async getInvoice(referenceInvoice: string): Promise<Invoice | null> {
     try {
+      if (!referenceInvoice) return;
       const token = await this.getAuthToken();
       const response = await this.axiosIntance.get<RESPONSE_GET_INVOICE>(
         `/v1/bills/show/${referenceInvoice}`,
