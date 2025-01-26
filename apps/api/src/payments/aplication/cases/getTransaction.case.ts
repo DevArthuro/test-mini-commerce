@@ -94,7 +94,7 @@ export class GetTransactionCase {
             await this.invoiceRepository.createInvoice(transactionUpdated);
 
           await this.orderRepository.updateColumn(
-            createInvoice.transaction.order.reference,
+            transactionUpdated.order.reference,
             [
               {
                 name: 'referenceInvoice',
