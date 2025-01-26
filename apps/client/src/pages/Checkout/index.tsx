@@ -3,8 +3,11 @@ import { transactionData, transactionId } from "../../store/selectors";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../store/store";
-import { clearStateTransaction, fetchtransactionById } from "../../store/slice/transactions";
-import { PaymentStatus } from "../../types/payments";
+import {
+  clearStateTransaction,
+  fetchtransactionById,
+} from "../../store/slice/transactions";
+import { PaymentStatus, TypesInvoce } from "../../types/payments";
 import "./checkout.scss";
 import Loading from "../../components/loading";
 import { clearStateOrder } from "../../store/slice/orders";
@@ -28,16 +31,16 @@ const Checkout = () => {
       }, 4000);
 
       return () => clearTimeout(timer);
-    } 
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transaction, IdTransaction]);
 
   const handlerClickReturnHome = () => {
     dispatch(clearStateOrder());
-    dispatch(clearStateProduct())
-    dispatch(clearStateTransaction())
+    dispatch(clearStateProduct());
+    dispatch(clearStateTransaction());
     navigation("/");
-  }
+  };
 
   if (!transaction) {
     return <Loading isActive={true} />;
@@ -49,6 +52,22 @@ const Checkout = () => {
     },
     status,
   } = transaction;
+
+  const INVOICE_DIAN =
+    transaction.order.invoice &&
+    transaction.order.invoice.linksInvoice.find(
+      ({ referenceName }) => referenceName === TypesInvoce.INVOICE_DIAN
+    )!;
+  const INVOICE_FACTUS =
+    transaction.order.invoice &&
+    transaction.order.invoice.linksInvoice.find(
+      ({ referenceName }) => referenceName === TypesInvoce.FACTUS
+    )!;
+  const QR_DIAN =
+    transaction.order.invoice &&
+    transaction.order.invoice.linksInvoice.find(
+      ({ referenceName }) => referenceName === TypesInvoce.QR_DIAN
+    )!;
 
   return (
     <div className="checkout">
@@ -65,6 +84,23 @@ const Checkout = () => {
         <p>Email: {email}</p>
         <p>Phone: {phoneNumber}</p>
       </div>
+
+      {transaction.order?.invoice?.linksInvoice &&
+        transaction.order?.invoice?.linksInvoice.length > 0 && (
+          <div className="checkout__summary">
+            <h2>Invoice Details</h2>
+            <img src={QR_DIAN.link} alt="qr dian" />
+
+            <div className="links">
+              <a href={INVOICE_FACTUS.link} target="_blank">
+                Invoice Facturation Mini commerce
+              </a>
+              <a href={INVOICE_DIAN.link} target="_blank">
+                Invoice Facturation DIAN details
+              </a>
+            </div>
+          </div>
+        )}
 
       <div className="checkout__button">
         <button

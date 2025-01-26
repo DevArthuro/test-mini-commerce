@@ -271,7 +271,8 @@ export class Factus implements InvoiceFacturation {
 
       const invoiceEntity = new Invoice(data.data.bill.number, [
         { link: data.data.bill.public_url, referenceName: 'Factus Invoice' },
-        { link: data.data.bill.qr, referenceName: 'QR Invoice' },
+        { link: data.data.bill.qr, referenceName: 'DIAN Invoice' },
+        { link: data.data.bill.qr_image, referenceName: 'QR Invoice' },
       ]);
 
       return invoiceEntity;
@@ -297,7 +298,8 @@ export class Factus implements InvoiceFacturation {
 
       const invoiceEntity = new Invoice(data.data.bill.number, [
         { link: data.data.bill.public_url, referenceName: 'Factus Invoice' },
-        { link: data.data.bill.qr, referenceName: 'QR Invoice' },
+        { link: data.data.bill.qr, referenceName: 'DIAN Invoice' },
+        { link: data.data.bill.qr_image, referenceName: 'QR Invoice' },
       ]);
 
       return invoiceEntity;
