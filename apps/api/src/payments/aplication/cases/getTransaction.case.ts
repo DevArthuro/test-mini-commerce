@@ -92,6 +92,16 @@ export class GetTransactionCase {
         if (transactionUpdated.status === TransactionStatus.APPROVED) {
           const createInvoice =
             await this.invoiceRepository.createInvoice(transactionUpdated);
+
+          await this.orderRepository.updateColumn(
+            createInvoice.transaction.order.reference,
+            [
+              {
+                name: 'referenceInvoice',
+                value: createInvoice.id,
+              },
+            ],
+          );
         }
       } catch (error) {
         await this.transactionRepository.updateStatus(

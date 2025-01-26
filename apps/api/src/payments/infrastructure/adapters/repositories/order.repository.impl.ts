@@ -156,4 +156,30 @@ export class InMemoryOrderRepository implements OrderRepository {
 
     return this.parsePrismaClientToEntity(order);
   }
+
+  async updateColumn(
+    orderReference: string,
+    column: { name: string; value: any }[],
+  ): Promise<Order | null> {
+    const columnByValue = column.reduce((object, { name, value }) => {
+      return {
+        ...object,
+        [name]: value,
+      };
+    }, {});
+
+    const order = await this.prisma.order.update({
+      data: {
+        ...columnByValue,
+      },
+      where: {
+        reference: orderReference,
+      },
+      include: {
+        customer: true,
+      },
+    });
+
+    return this.parsePrismaClientToEntity(order);
+  }
 }
